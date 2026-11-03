@@ -15,7 +15,7 @@ Arquitectura y decisiones: [arquitectura.md](arquitectura.md) · Diseño de la w
 | 0   | [Fundaciones del monorepo](fase-0-fundaciones.md)              | ✅ Terminada   |
 | 1   | [Modelo y datos compartidos](fase-1-modelo-y-datos.md)         | ✅ Terminada   |
 | 2   | [Overlay MVP (sin backend)](fase-2-overlay-mvp.md)             | ✅ Terminada   |
-| 3   | [API y base de datos](fase-3-api-y-db.md)                      | 🟨 En progreso |
+| 3   | [API y base de datos](fase-3-api-y-db.md)                      | ✅ Terminada   |
 | 4   | [Web](fase-4-web.md)                                           | ⬜ Pendiente   |
 | 5   | [Integración overlay ↔ API](fase-5-integracion-overlay-api.md) | ⬜ Pendiente   |
 | 6   | [Release y deploy](fase-6-release-y-deploy.md)                 | ⬜ Pendiente   |

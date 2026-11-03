@@ -57,3 +57,13 @@ jobs:
 
       - run: cargo clippy --all-targets -- -D warnings
         working-directory: apps/overlay/src-tauri
+
+  # Busca claves, contraseñas y tokens en todo el historial. El repo es público.
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: gitleaks
+        run: docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:latest git /repo --redact --no-banner -v

@@ -1,0 +1,16 @@
+# Postgres local para desarrollo. Las credenciales son solo de desarrollo local.
+# Uso: docker compose up -d
+# DATABASE_URL=postgresql://aoe2:aoe2@localhost:5432/aoe2overlay
+services:
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: aoe2
+      POSTGRES_PASSWORD: aoe2
+      POSTGRES_DB: aoe2overlay
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql
+volumes:
+  pgdata:

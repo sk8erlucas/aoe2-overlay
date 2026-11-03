@@ -16,7 +16,7 @@
 
 ### Deploy
 
-- [ ] DB en Neon y migraciones en el deploy
+- [ ] DB: servidor propio (Postgres 18). Activar SSL o limitar el puerto por firewall. Correr las migraciones en cada deploy
 - [ ] API en Fly.io o Railway, con variables de entorno y healthcheck
 - [ ] Web en Vercel, con dominio propio (opcional)
 - [ ] Backups de la DB
@@ -25,7 +25,7 @@
 
 - [ ] README final con capturas o GIF, badges e instalación
 - [ ] Disclaimer de las Microsoft Game Content Usage Rules
-- [ ] `SECURITY.md` (cómo reportar vulnerabilidades)
+- [x] `SECURITY.md` (cómo reportar vulnerabilidades)
 - [ ] CHANGELOG y versionado semántico
 - [ ] Issues iniciales etiquetadas `good first issue`
 

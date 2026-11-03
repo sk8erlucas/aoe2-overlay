@@ -27,6 +27,22 @@ Comandos útiles:
 | `pnpm test`      | Tests                                     |
 | `pnpm format`    | Formatea con Prettier                     |
 
+### API y base de datos
+
+Usá tu propia base local: nunca la de producción.
+
+```bash
+docker compose up -d                    # Postgres local
+cp apps/api/.env.example apps/api/.env  # y completá DATABASE_URL y BETTER_AUTH_SECRET
+pnpm --filter @age-overlay/api db:migrate
+pnpm --filter @age-overlay/api db:seed
+pnpm --filter @age-overlay/api dev      # http://localhost:3001/api/docs
+```
+
+Los tests de la API (`pnpm --filter @age-overlay/api test`) usan Postgres en memoria (PGlite): no necesitan Docker ni `.env`.
+
+Si cambiás `apps/api/src/db/schema.ts`, generá la migración con `pnpm --filter @age-overlay/api db:generate` y commiteala.
+
 ## Flujo de trabajo
 
 1. Hacé un fork y creá una rama desde `main`: `feat/overlay-hotkeys`, `fix/reloj-velocidad`, etc.
@@ -40,7 +56,7 @@ Comandos útiles:
 
 ## Aportar estrategias
 
-Las estrategias base viven en `strategies/` como JSON (disponible desde la Fase 1). El formato se documenta en `strategies/README.md`. También vas a poder crearlas desde la web.
+Las estrategias base viven en `strategies/` como JSON. El formato se documenta en `strategies/README.md`. También vas a poder crearlas desde la web.
 
 - Los tiempos se escriben en **tiempo de juego** (el reloj que muestra el juego).
 - Escribí los textos con tus propias palabras. No copies guías de terceros sin permiso.
@@ -49,6 +65,12 @@ Las estrategias base viven en `strategies/` como JSON (disponible desde la Fase 
 
 No subas imágenes, íconos, sonidos ni otros assets extraídos del juego. Usamos solo nombres de civilizaciones y mapas como texto.
 
+## Secretos: el repo es público
+
+- **Nunca** commitees `.env`, contraseñas, URLs de bases con credenciales ni tokens. Solo `.env.example` con valores vacíos.
+- El CI corre gitleaks sobre todo el historial y falla si encuentra algo.
+- Si se te escapó un secreto, avisá a los mantenedores en privado: hay que rotarlo.
+
 ## Seguridad
 
-Si encontrás una vulnerabilidad, no abras una issue pública. Usá _Report a vulnerability_ en la pestaña Security de GitHub.
+Si encontrás una vulnerabilidad, no abras una issue pública. Ver [SECURITY.md](SECURITY.md).

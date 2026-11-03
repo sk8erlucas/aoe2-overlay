@@ -44,7 +44,7 @@ age_overlay/
   - Si falta `time`, se estima con `estimateStepTimes`: 25 s por aldeano desde los 3 iniciales, más los avances de edad (130/160/190 s).
   - Los tiempos están en **segundos de juego**. Conversión: `tiempoReal = tiempoJuego / velocidad`.
   - Las `notes` aceptan íconos `@categoria/archivo.png@`. Se muestran como texto mientras no haya un set de íconos propio (ver "Pendiente" abajo).
-- **Tabla `strategies` (Fase 3):** guarda el JSON completo (`jsonb`) más columnas derivadas para filtrar: slug, authorId, civs[], maps[], map_types[], positions[], votes, visibility, verified, createdAt y updatedAt.
+- **Tabla `strategies`:** guarda el JSON completo (`jsonb`) más columnas derivadas para filtrar: slug, authorId, civs[], maps[], map_types[], positions[], votes, visibility, verified, createdAt y updatedAt.
 - **User**, **Session** y **Account** (Better Auth), con rol `user | moderator | admin`.
 - **Vote** (userId, strategyId, valor ±1), **Favorite**, **Report**.
 
@@ -82,7 +82,7 @@ Las estrategias de la comunidad usan íconos del juego (`@resource/MaleVillDE.jp
 
 ## Hosting
 
-- Web en **Vercel**, API en **Fly.io o Railway**, Postgres en **Neon**.
+- Web en **Vercel**, API en **Fly.io o Railway**, Postgres en un **servidor propio** (Postgres 18). La conexión se configura solo por variables de entorno, nunca en el repo.
 - Instalador en **GitHub Releases**, compilado por GitHub Actions (`tauri-action`), con auto-update.
 
 ## Legal
