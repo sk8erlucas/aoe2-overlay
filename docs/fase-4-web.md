@@ -4,18 +4,24 @@
 
 **Depende de:** Fase 3.
 
+**Diseño:** ver [diseno-web.md](diseno-web.md).
+
 ## Tareas
 
 ### Base
 
 - [ ] Crear `apps/web` con Next.js (App Router) + Tailwind
 - [ ] Cliente API tipado (desde `shared`)
-- [ ] Layout, navegación, tema oscuro y responsive
+- [ ] Sistema visual según [diseno-web.md](diseno-web.md): paleta rojo/crema/tinta + oro, Anton + Archivo con `next/font`, grano de papel, reglas y etiquetas laterales
+- [ ] Layout, navegación y responsive (móvil ≤ 767px)
 
 ### Landing y descarga
 
-- [ ] Home: qué es, capturas y botón **Descargar** (último GitHub Release)
-- [ ] Guía de instalación: borderless, aviso de SmartScreen y hotkeys
+- [ ] Hero rojo con título "AOE2 / OVERLAY" estirado, caballero que se arma con el scroll y partículas WebGL
+- [ ] Sección "Qué es" en crema: logo, 6 datos (con el número de estrategias desde la API) y tarjeta con botón **Descargar** (último GitHub Release)
+- [ ] Ilustración propia del caballero, cortada en capas (base + 5 piezas), y loop de partículas propio
+- [ ] Animación de entrada y soporte de `prefers-reduced-motion`
+- [ ] Guía de instalación: aviso de SmartScreen y hotkeys
 - [ ] Footer con disclaimer de Microsoft, enlace al repo y licencia
 
 ### Estrategias

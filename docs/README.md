@@ -6,7 +6,7 @@ Herramienta open source para Age of Empires II: DE:
 - **Web** para descargar el overlay y para crear, explorar y votar estrategias.
 - **API + DB** para usuarios, estrategias, votos y sugerencias.
 
-Arquitectura y decisiones: [arquitectura.md](arquitectura.md)
+Arquitectura y decisiones: [arquitectura.md](arquitectura.md) · Diseño de la web: [diseno-web.md](diseno-web.md)
 
 ## Fases
 
@@ -14,12 +14,13 @@ Arquitectura y decisiones: [arquitectura.md](arquitectura.md)
 | --- | -------------------------------------------------------------- | -------------- |
 | 0   | [Fundaciones del monorepo](fase-0-fundaciones.md)              | ✅ Terminada   |
 | 1   | [Modelo y datos compartidos](fase-1-modelo-y-datos.md)         | ✅ Terminada   |
-| 2   | [Overlay MVP (sin backend)](fase-2-overlay-mvp.md)             | 🟨 En progreso |
-| 3   | [API y base de datos](fase-3-api-y-db.md)                      | ⬜ Pendiente   |
+| 2   | [Overlay MVP (sin backend)](fase-2-overlay-mvp.md)             | ✅ Terminada   |
+| 3   | [API y base de datos](fase-3-api-y-db.md)                      | 🟨 En progreso |
 | 4   | [Web](fase-4-web.md)                                           | ⬜ Pendiente   |
 | 5   | [Integración overlay ↔ API](fase-5-integracion-overlay-api.md) | ⬜ Pendiente   |
 | 6   | [Release y deploy](fase-6-release-y-deploy.md)                 | ⬜ Pendiente   |
 | 7   | [Futuro](fase-7-futuro.md)                                     | ⬜ Pendiente   |
+| 8   | [Pruebas manuales](fase-8-pruebas-manuales.md)                 | 🟨 En progreso |
 
 Estados: ⬜ Pendiente · 🟨 En progreso · ✅ Terminada
 

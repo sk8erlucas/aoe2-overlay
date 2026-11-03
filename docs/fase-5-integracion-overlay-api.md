@@ -14,6 +14,7 @@
 - [ ] Login opcional (flujo device-code: el overlay muestra un código y se confirma en la web)
 - [ ] Favoritas del usuario arriba en la lista
 - [ ] Abrir una estrategia de la web en el overlay (deep link `ageoverlay://strategy/<slug>`)
+- [ ] Overlay: recordar posición y tamaño de la ventana entre sesiones (pendiente de la Fase 2)
 
 ## Criterio de terminado
 

@@ -23,8 +23,6 @@
 - [x] No roba foco al juego (`WS_EX_NOACTIVATE` en modo juego + mostrar con `SW_SHOWNOACTIVATE`)
 - [x] Single-instance
 - [x] Ícono en la bandeja del sistema con Mostrar/Ocultar, Modo edición/juego, Volver a la esquina y Salir
-- [ ] Recordar posición y tamaño entre sesiones (hoy arranca siempre arriba a la derecha)
-- [ ] Verificar el redimensionado en modo edición
 
 ### Reloj
 
@@ -58,12 +56,11 @@
 ## Criterio de terminado
 
 - [x] Con AoE2, el overlay se ve arriba a la derecha
-- [ ] Los clics pasan al juego y el juego no pierde el foco
-- [ ] Las hotkeys funcionan con el juego enfocado
-- [ ] El reloj coincide con el del juego (±2 s) a velocidad 1.7 durante 5 minutos
 - [x] `pnpm --filter @age-overlay/overlay tauri:build` genera el instalador (NSIS 1,25 MB y MSI 1,76 MB)
 
 ## Notas
+
+- **Fase cerrada el 2026-11-03.** Las pruebas en partida (clics, hotkeys, precisión del reloj, redimensionado) pasaron a la [Fase 8: pruebas manuales](fase-8-pruebas-manuales.md). Recordar la posición de la ventana pasó a la [Fase 5](fase-5-integracion-overlay-api.md).
 
 - **Verificado sin el juego (2026-11-03):**
   - La ventana aparece arriba a la derecha sin tomar el foco.
