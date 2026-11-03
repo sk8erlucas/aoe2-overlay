@@ -13,7 +13,7 @@
 - [x] `README.md`: qué es, capturas (más adelante), cómo correrlo en local
 - [x] `CONTRIBUTING.md`: setup, convenciones de commits y cómo aportar estrategias
 - [x] `CODE_OF_CONDUCT.md`
-- [ ] Crear el repo público en GitHub y hacer el primer push
+- [x] Crear el repo público en GitHub y hacer el primer push
 
 ### Tooling
 
@@ -31,9 +31,9 @@
 ## Criterio de terminado
 
 - [x] `pnpm install && pnpm lint && pnpm typecheck` funciona en limpio
-- [ ] El CI corre en verde en GitHub
+- [x] El CI corre en verde en GitHub
 
 ## Notas
 
 - TypeScript fijado en `~6.0` porque `typescript-eslint` todavía no soporta TypeScript 7.
-- Falta crear el repo en GitHub (no está instalado `gh`) y verificar el CI allí.
+- Repo: https://github.com/sk8erlucas/aoe2-overlay

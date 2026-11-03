@@ -11,7 +11,7 @@
 ## Setup
 
 ```bash
-git clone <url-del-repo>
+git clone https://github.com/sk8erlucas/aoe2-overlay.git
 cd age_overlay
 corepack enable
 pnpm install
