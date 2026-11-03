@@ -75,28 +75,8 @@ Las estrategias de la comunidad usan íconos del juego (`@resource/MaleVillDE.jp
 
 - Ventana: `transparent`, `decorations: false`, `alwaysOnTop`, `skipTaskbar`, `focus: false`, `shadow: false`. Se posiciona arriba a la derecha del monitor primario.
 - **Click-through** con `set_ignore_cursor_events(true)`. Una hotkey global alterna entre modo juego (click-through) y modo edición (interactivo).
-- No roba foco: `WS_EX_NOACTIVATE` vía el crate `windows` si hace falta.
-- **Pantalla completa:** con el juego en _Borderless_ funciona siempre. En "pantalla completa" puede funcionar igual si Windows aplica _fullscreen optimizations_ (hay que verificarlo en la Fase 2). Si no, existe el **modo inyección** (ver abajo).
-
-### Modo inyección (opcional, para pantalla completa exclusiva)
-
-Es la misma técnica que usan Discord, Steam y OBS:
-
-- Una DLL (Rust o C++) se inyecta en `AoE2DE_s.exe`.
-- Intercepta `IDXGISwapChain::Present` de DirectX 11.
-- Dibuja el overlay dentro del frame del juego con ImGui.
-- El estado (estrategia, reloj, paso actual) le llega desde la app de Tauri por _named pipe_.
-
-Riesgos:
-
-- Falsos positivos de antivirus. Se mitiga con firma de código y código abierto.
-- Zona gris respecto a los términos de servicio del juego.
-- Más mantenimiento.
-
-Decisiones:
-
-- **Desactivado por defecto.** El usuario lo activa a mano, con un aviso explícito de riesgos.
-- No lee ni modifica la memoria del juego: solo dibuja.
+- No roba foco: `WS_EX_NOACTIVATE` en modo juego y se muestra con `SW_SHOWNOACTIVATE`.
+- **Pantalla completa:** probado con AoE2 y el overlay se ve bien. No hace falta inyectar nada en el proceso del juego: es una ventana común "siempre encima", sin tocar el juego.
 - Plugins: global-shortcut, store, updater, single-instance.
 - Offline-first: incluye las estrategias base y cachea las descargadas de la API.
 

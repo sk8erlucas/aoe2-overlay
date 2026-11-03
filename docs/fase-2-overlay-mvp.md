@@ -53,12 +53,11 @@
 
 ### Prueba de pantalla completa
 
-- [ ] Probar el overlay con AoE2 en modo "Pantalla completa" (Windows 11, fullscreen optimizations activadas)
-- [ ] Anotar el resultado aquí. Si no se ve, priorizar la [Fase 2b](fase-2b-modo-inyeccion.md)
+- [x] Probar el overlay con AoE2 (2026-11-03): se ve bien, así que no hace falta el modo inyección (descartado)
 
 ## Criterio de terminado
 
-- [ ] Con AoE2 en borderless, el overlay se ve arriba a la derecha
+- [x] Con AoE2, el overlay se ve arriba a la derecha
 - [ ] Los clics pasan al juego y el juego no pierde el foco
 - [ ] Las hotkeys funcionan con el juego enfocado
 - [ ] El reloj coincide con el del juego (±2 s) a velocidad 1.7 durante 5 minutos
@@ -70,7 +69,7 @@
   - La ventana aparece arriba a la derecha sin tomar el foco.
   - Las hotkeys globales funcionan con otra ventana enfocada.
   - En modo juego la ventana tiene `WS_EX_TRANSPARENT` (click-through), `WS_EX_NOACTIVATE` y `WS_EX_TOPMOST`.
-- **Falta la prueba con AoE2 real:** son los ítems del criterio de terminado y la prueba de pantalla completa.
+- **Probado con AoE2 (2026-11-03):** el overlay se ve bien sobre el juego. Falta confirmar los clics, las hotkeys en partida y la precisión del reloj.
 - Mostrar la ventana desde el `setup` de Rust no funciona (queda oculta). Por eso el frontend la muestra cuando React terminó de montar (`show_overlay`).
 - Hotkeys por defecto: `Ctrl+Alt` + O (modo), P (reloj), R (reset), L/J (±5 s), PageDown/PageUp (paso), H (ocultar). Se evitaron las flechas porque algunos drivers de Intel usan `Ctrl+Alt+flecha` para rotar la pantalla.
 - Para capturar la ventana en modo click-through hay que usar `BitBlt` con `CAPTUREBLT`, porque es una ventana _layered_. Sirve para tests o capturas automáticas.

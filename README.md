@@ -64,7 +64,7 @@ Atajos por defecto (configurables en _Ajustes_):
 | `Ctrl+Alt+PageDown` / `PageUp` | Paso siguiente / anterior                                 |
 | `Ctrl+Alt+H`                   | Mostrar / ocultar                                         |
 
-> El juego tiene que estar en **ventana sin bordes (borderless)**. Con pantalla completa exclusiva el overlay puede no verse (ver [Fase 2b](docs/fase-2b-modo-inyeccion.md)).
+> El overlay es una ventana común "siempre encima": no se inyecta en el juego ni lee su memoria.
 
 ## Contribuir
 
