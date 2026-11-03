@@ -18,6 +18,9 @@ apps/
   api/       # Backend (Fastify + PostgreSQL)              — próximamente
 packages/
   config/    # Configuración compartida (TypeScript, ESLint, Prettier)
+  shared/    # Esquema de estrategias, reloj, sugerencias
+  game-data/ # Civilizaciones y mapas
+strategies/  # Estrategias base en JSON (ver strategies/README.md)
 docs/        # Roadmap por fases y arquitectura
 ```
 

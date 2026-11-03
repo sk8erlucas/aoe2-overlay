@@ -34,16 +34,42 @@ age_overlay/
 
 ## Modelo de datos
 
-- **Step**: `{ gameTimeSec, pop?, villagers?: { food, wood, gold, stone }, text, icon? }`
-  - El tiempo se guarda en **segundos de juego** (el reloj que muestra el juego).
-  - Conversión: `tiempoReal = tiempoJuego / velocidad`.
-- **Strategy**: id, slug, title, description, authorId, civs[] (vacío = cualquiera), mapTypes[] (open/closed/water/hybrid), maps[], vsCivs[], positions[] (1v1/flank/pocket), difficulty, tags[], steps[], version, visibility, verified, createdAt, updatedAt.
+**Decisión (Fase 1):** adoptamos el **formato de la comunidad** (Build Order Guide / RTS Overlay) como formato base, más extensiones opcionales propias. Así se pueden importar las estrategias existentes sin convertirlas. La especificación completa está en [strategies/README.md](../strategies/README.md) y el esquema en `packages/shared/src/schema.ts`.
+
+- **Strategy** (JSON):
+  - `name`, `civilization` (civ en inglés, lista de civs o `"Generic"`), `author`, `source?`, `description?`, `build_order[]`
+  - Extensiones: `maps?`, `map_types?`, `vs_civilizations?`, `positions?`, `difficulty?`, `tags?`
+- **Step**: `{ villager_count, age (1-4), time?, resources: { wood, food, gold, stone, builder? }, notes[] }`
+  - Los pasos se indexan por **cantidad de aldeanos**, no por tiempo.
+  - Si falta `time`, se estima con `estimateStepTimes`: 25 s por aldeano desde los 3 iniciales, más los avances de edad (130/160/190 s).
+  - Los tiempos están en **segundos de juego**. Conversión: `tiempoReal = tiempoJuego / velocidad`.
+  - Las `notes` aceptan íconos `@categoria/archivo.png@`. Se muestran como texto mientras no haya un set de íconos propio (ver "Pendiente" abajo).
+- **Tabla `strategies` (Fase 3):** guarda el JSON completo (`jsonb`) más columnas derivadas para filtrar: slug, authorId, civs[], maps[], map_types[], positions[], votes, visibility, verified, createdAt y updatedAt.
 - **User**, **Session** y **Account** (Better Auth), con rol `user | moderator | admin`.
 - **Vote** (userId, strategyId, valor ±1), **Favorite**, **Report**.
 
 ### Score de sugerencias
 
-Se suman puntos por coincidir con civ propia, mapa exacto (o, si no, tipo de mapa), civ rival y posición. Después se pondera por votos. Las estrategias que contradicen un filtro explícito, como una civ distinta, se descartan.
+Se implementa en `packages/shared/src/suggest.ts` y lo comparten el overlay (offline) y la API.
+
+| Criterio                          | Puntos                |
+| --------------------------------- | --------------------- |
+| Civ exacta                        | +50                   |
+| Estrategia genérica               | +10                   |
+| Mapa exacto                       | +30                   |
+| Tipo de mapa                      | +20                   |
+| Civ rival                         | +15                   |
+| Posición (coincide / no coincide) | +10 / −10             |
+| Votos                             | +5 × log10(1 + votos) |
+
+Se descartan las estrategias de otra civ y las de otro tipo de mapa (salvo que el mapa exacto esté en su lista).
+
+### Pendiente: íconos
+
+Las estrategias de la comunidad usan íconos del juego (`@resource/MaleVillDE.jpg@`). Las _Game Content Usage Rules_ de Microsoft permiten usar assets en proyectos de fans no comerciales, pero esos assets no pueden quedar bajo la licencia MIT. Opciones a decidir antes de la Fase 2:
+
+1. Íconos propios u open source (sin riesgo legal).
+2. Assets del juego en una carpeta separada, con su propio aviso de licencia.
 
 ## Overlay: detalles técnicos
 

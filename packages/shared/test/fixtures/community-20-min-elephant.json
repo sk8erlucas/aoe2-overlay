@@ -1,0 +1,42 @@
+{
+  "name": " 20-Min Elephant",
+  "civilization": "Malay",
+  "author": "pooplord",
+  "source": "https://www.youtube.com/watch?v=RDkHALBkmeE",
+  "description": "https://www.youtube.com/watch?v=RDkHALBkmeE",
+  "build_order": [
+    {
+      "villager_count": 6,
+      "age": 1,
+      "resources": { "wood": 0, "food": 6, "gold": 0, "stone": 0 },
+      "notes": ["Create 6 @resource/MaleVillDE.jpg@ on @animal/Sheep_aoe2DE.png@"]
+    },
+    {
+      "villager_count": 10,
+      "age": 1,
+      "resources": { "wood": 4, "food": 6, "gold": 0, "stone": 0 },
+      "notes": [
+        "Create 4 @resource/MaleVillDE.jpg@ on @resource/Aoe2de_wood.png@",
+        "Lure 2 @animal/Deer_aoe2DE.png@"
+      ]
+    },
+    {
+      "villager_count": 30,
+      "age": 1,
+      "resources": { "wood": 9, "food": 15, "gold": 6, "stone": 0 },
+      "notes": ["Click up to feudalAge"]
+    },
+    {
+      "villager_count": 30,
+      "age": 2,
+      "resources": { "wood": 4, "food": 15, "gold": 6, "stone": 0, "builder": 5 },
+      "notes": ["In @age/FeudalAgeIconDE_alpha.png@"]
+    },
+    {
+      "villager_count": 30,
+      "age": 3,
+      "resources": { "wood": 9, "food": 10, "gold": 10, "stone": 0, "builder": 1 },
+      "notes": ["In @age/CastleAgeIconDE_alpha.png@", "Train ∞ battleElephant"]
+    }
+  ]
+}

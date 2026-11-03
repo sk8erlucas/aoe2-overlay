@@ -1,0 +1,91 @@
+{
+  "name": "Fast Castle Boom",
+  "civilization": "Generic",
+  "author": "AoE2 Overlay",
+  "description": "Avance rápido a Castillos y 2 centros urbanos extra para crecer en economía. Ideal para mapas cerrados.",
+  "maps": ["arena", "black_forest", "hideout", "fortress"],
+  "map_types": ["closed", "hybrid"],
+  "positions": ["1v1", "pocket"],
+  "difficulty": "beginner",
+  "tags": ["castillos", "boom", "economía"],
+  "build_order": [
+    {
+      "villager_count": 6,
+      "age": 1,
+      "resources": { "wood": 0, "food": 6, "gold": 0, "stone": 0 },
+      "notes": [
+        "6 aldeanos a las ovejas bajo el centro urbano",
+        "Los 3 iniciales construyen 2 casas"
+      ]
+    },
+    {
+      "villager_count": 10,
+      "age": 1,
+      "resources": { "wood": 4, "food": 6, "gold": 0, "stone": 0 },
+      "notes": ["4 aldeanos a madera con campamento maderero"]
+    },
+    {
+      "villager_count": 11,
+      "age": 1,
+      "resources": { "wood": 4, "food": 7, "gold": 0, "stone": 0 },
+      "notes": ["Atraer el primer jabalí"]
+    },
+    {
+      "villager_count": 15,
+      "age": 1,
+      "resources": { "wood": 4, "food": 11, "gold": 0, "stone": 0 },
+      "notes": ["4 aldeanos a las bayas con molino"]
+    },
+    {
+      "villager_count": 16,
+      "age": 1,
+      "resources": { "wood": 4, "food": 12, "gold": 0, "stone": 0 },
+      "notes": ["Atraer el segundo jabalí"]
+    },
+    {
+      "villager_count": 22,
+      "age": 1,
+      "resources": { "wood": 8, "food": 14, "gold": 0, "stone": 0 },
+      "notes": ["2 aldeanos a comida y 4 a madera"]
+    },
+    {
+      "villager_count": 27,
+      "age": 1,
+      "resources": { "wood": 8, "food": 16, "gold": 3, "stone": 0 },
+      "notes": [
+        "2 aldeanos a granjas y 3 al oro con campamento minero",
+        "Investigar telar y avanzar a Feudal"
+      ]
+    },
+    {
+      "villager_count": 27,
+      "age": 2,
+      "resources": { "wood": 6, "food": 16, "gold": 3, "stone": 0, "builder": 2 },
+      "notes": ["Mientras avanzás: 2 aldeanos de madera construyen el cuartel"]
+    },
+    {
+      "villager_count": 27,
+      "age": 2,
+      "resources": { "wood": 6, "food": 16, "gold": 3, "stone": 0, "builder": 2 },
+      "notes": ["En Feudal: los mismos 2 aldeanos construyen mercado y herrería"]
+    },
+    {
+      "villager_count": 29,
+      "age": 2,
+      "resources": { "wood": 8, "food": 15, "gold": 3, "stone": 3 },
+      "notes": [
+        "Los constructores vuelven a madera; 1 aldeano de comida y 2 nuevos a la piedra",
+        "Con 800 de comida y 200 de oro: avanzar a Castillos"
+      ]
+    },
+    {
+      "villager_count": 29,
+      "age": 3,
+      "resources": { "wood": 4, "food": 15, "gold": 3, "stone": 3, "builder": 4 },
+      "notes": [
+        "En Castillos: 4 aldeanos de madera construyen 2 centros urbanos",
+        "Producir aldeanos sin parar desde los 3 centros urbanos"
+      ]
+    }
+  ]
+}

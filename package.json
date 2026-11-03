@@ -15,11 +15,15 @@
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "validate:strategies": "tsx scripts/validate-strategies.ts"
   },
   "devDependencies": {
     "@age-overlay/config": "workspace:*",
+    "@age-overlay/game-data": "workspace:*",
+    "@age-overlay/shared": "workspace:*",
     "prettier": "^3.9.10",
+    "tsx": "^4.23.15",
     "turbo": "^2.11.10",
     "typescript": "~6.0.3"
   }

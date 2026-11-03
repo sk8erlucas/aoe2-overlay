@@ -1,0 +1,23 @@
+{
+  "name": "@age-overlay/game-data",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@age-overlay/config": "workspace:*",
+    "eslint": "^10.14.0",
+    "typescript": "~6.0.3",
+    "vitest": "^5.1.0"
+  },
+  "dependencies": {
+    "@age-overlay/shared": "workspace:*"
+  }
+}

@@ -8,32 +8,45 @@
 
 ### `packages/shared`
 
-- [ ] Esquema Zod `Step` (gameTimeSec, pop, villagers, text, icon)
-- [ ] Esquema Zod `Strategy` (ver [arquitectura.md](arquitectura.md#modelo-de-datos))
-- [ ] Enums: `MapType`, `Position`, `Difficulty`
-- [ ] Utilidades de tiempo: `gameToReal(sec, speed)`, `realToGame(sec, speed)`, `formatClock(sec)`, constante `DEFAULT_SPEED = 1.7`
-- [ ] `getCurrentStep(steps, gameTimeSec)` → paso actual, siguiente y segundos restantes
-- [ ] `scoreStrategy(strategy, context)` y `suggest(strategies, context)` para las sugerencias
-- [ ] Tests con Vitest para tiempo, paso actual y score
+- [x] Esquema Zod `Strategy` compatible con el formato de la comunidad + extensiones (ver [strategies/README.md](../strategies/README.md))
+- [x] Esquema Zod `Step` (villager_count, age, time opcional, resources con builder, notes)
+- [x] Constantes: `AGES`, `MAP_TYPES`, `POSITIONS`, `DIFFICULTIES`, `GENERIC_CIVS`
+- [x] Utilidades de tiempo: `gameToReal`, `realToGame`, `formatClock`, `parseClock`, `DEFAULT_SPEED = 1.7`
+- [x] `estimateStepTimes(steps)`: estima el tiempo de cada paso a partir de los aldeanos y los avances de edad
+- [x] `getStepAt(times, gameSeconds)`: paso actual, siguiente y segundos restantes
+- [x] `parseNote` / `noteToText`: soporte de íconos `@categoria/archivo.png@` con etiquetas en español
+- [x] `scoreStrategy` y `suggest` para las sugerencias
+- [x] Tests con Vitest (29 tests), con un fixture en el formato de la comunidad
 
 ### `packages/game-data`
 
-- [ ] `civs.json`: id, nombre ES/EN y bonus resumido (texto propio)
-- [ ] `maps.json`: id, nombre ES/EN y tipo (open/closed/water/hybrid), incluyendo Selva Negra, Arabia, Arena, etc.
-- [ ] Export tipado desde TS
+- [x] Civs: id, nombre EN/ES (53 civs ranked, hasta The Last Chieftains)
+- [x] Mapas: id, nombre EN/ES y tipo (open/closed/hybrid/water), incluyendo Selva Negra, Arabia, Arena, etc.
+- [x] `findCiv`, `findMap`, `mapTypeOf` (buscan por id, inglés o español)
+- [x] Tests
+- [ ] Bonus de cada civ resumido (pasa a "opcional", no bloquea la Fase 2)
 
 ### `strategies/`
 
-- [ ] Formato documentado en `strategies/README.md`
-- [ ] Estrategias base escritas por nosotros:
-  - [ ] Scouts (Feudal)
-  - [ ] Arqueros (Feudal)
-  - [ ] Drush → Fast Castle
-  - [ ] Fast Castle Boom
-  - [ ] Hombres de armas → Arqueros
-- [ ] Script `pnpm validate:strategies` que valida todos los JSON con Zod, ejecutado en CI
+- [x] Formato documentado en `strategies/README.md`
+- [x] Estrategias base escritas por nosotros (en español, sin íconos):
+  - [x] Scouts (Feudal)
+  - [x] Arqueros (Feudal)
+  - [x] Drush → Fast Castle
+  - [x] Fast Castle Boom
+  - [x] Hombres de armas → Arqueros
+- [x] Script `pnpm validate:strategies`: valida esquema, nombres de archivo, civs y mapas, y avisa si los recursos no suman los aldeanos. Corre en CI
+- [ ] Que un jugador con experiencia revise las 5 estrategias base
 
 ## Criterio de terminado
 
-- [ ] Tests de `shared` en verde
-- [ ] Todas las estrategias de `strategies/` pasan la validación
+- [x] Tests de `shared` en verde
+- [x] Todas las estrategias de `strategies/` pasan la validación
+
+## Notas
+
+- **Decisión:** usamos el formato de la comunidad (Build Order Guide / RTS Overlay) como base, para poder importar estrategias existentes. Los pasos van por cantidad de aldeanos y el tiempo es opcional; si falta, se estima.
+- **No hace falta DB en esta fase.** El esquema de la Fase 3 se deriva de este: el JSON completo en `jsonb` más columnas para filtrar.
+- Los paquetes internos exportan TypeScript directo (`exports: ./src/index.ts`), sin paso de build. Vite, Next (`transpilePackages`) y tsx los consumen así.
+- La lista de civs y mapas puede quedar desactualizada con DLCs nuevas: se agregan en `packages/game-data/src/`.
+- Pendiente decidir el tema íconos (ver [arquitectura.md](arquitectura.md#pendiente-íconos)).

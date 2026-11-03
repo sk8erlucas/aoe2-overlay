@@ -13,7 +13,7 @@ Arquitectura y decisiones: [arquitectura.md](arquitectura.md)
 | #   | Fase                                                                          | Estado       |
 | --- | ----------------------------------------------------------------------------- | ------------ |
 | 0   | [Fundaciones del monorepo](fase-0-fundaciones.md)                             | ✅ Terminada |
-| 1   | [Modelo y datos compartidos](fase-1-modelo-y-datos.md)                        | ⬜ Pendiente |
+| 1   | [Modelo y datos compartidos](fase-1-modelo-y-datos.md)                        | ✅ Terminada |
 | 2   | [Overlay MVP (sin backend)](fase-2-overlay-mvp.md)                            | ⬜ Pendiente |
 | 2b  | [Modo inyección para pantalla completa (opcional)](fase-2b-modo-inyeccion.md) | ⬜ Pendiente |
 | 3   | [API y base de datos](fase-3-api-y-db.md)                                     | ⬜ Pendiente |

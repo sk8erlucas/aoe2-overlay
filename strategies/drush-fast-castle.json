@@ -1,0 +1,93 @@
+{
+  "name": "Drush → Fast Castle",
+  "civilization": "Generic",
+  "author": "AoE2 Overlay",
+  "description": "3 milicias en Alta Edad Media para molestar al rival y avance rápido a Castillos.",
+  "maps": ["arabia"],
+  "map_types": ["open", "hybrid"],
+  "positions": ["1v1", "flank"],
+  "difficulty": "intermediate",
+  "tags": ["drush", "castillos", "milicias"],
+  "build_order": [
+    {
+      "villager_count": 6,
+      "age": 1,
+      "resources": { "wood": 0, "food": 6, "gold": 0, "stone": 0 },
+      "notes": [
+        "6 aldeanos a las ovejas bajo el centro urbano",
+        "Los 3 iniciales construyen 2 casas"
+      ]
+    },
+    {
+      "villager_count": 9,
+      "age": 1,
+      "resources": { "wood": 3, "food": 6, "gold": 0, "stone": 0 },
+      "notes": ["3 aldeanos a madera con campamento maderero"]
+    },
+    {
+      "villager_count": 10,
+      "age": 1,
+      "resources": { "wood": 3, "food": 7, "gold": 0, "stone": 0 },
+      "notes": ["Atraer el primer jabalí"]
+    },
+    {
+      "villager_count": 11,
+      "age": 1,
+      "resources": { "wood": 3, "food": 7, "gold": 0, "stone": 0, "builder": 1 },
+      "notes": ["1 aldeano construye el cuartel"]
+    },
+    {
+      "villager_count": 14,
+      "age": 1,
+      "resources": { "wood": 3, "food": 11, "gold": 0, "stone": 0 },
+      "notes": [
+        "El constructor del cuartel y 3 aldeanos nuevos a las bayas con molino",
+        "Entrenar 3 milicias"
+      ]
+    },
+    {
+      "villager_count": 15,
+      "age": 1,
+      "resources": { "wood": 3, "food": 12, "gold": 0, "stone": 0 },
+      "notes": ["Atraer el segundo jabalí", "Mandar las milicias a la base rival"]
+    },
+    {
+      "villager_count": 20,
+      "age": 1,
+      "resources": { "wood": 5, "food": 12, "gold": 3, "stone": 0 },
+      "notes": [
+        "2 aldeanos a madera y 3 al oro con campamento minero",
+        "Investigar telar y avanzar a Feudal"
+      ]
+    },
+    {
+      "villager_count": 20,
+      "age": 2,
+      "resources": { "wood": 8, "food": 9, "gold": 3, "stone": 0 },
+      "notes": ["Mientras avanzás: 3 aldeanos de comida a madera para preparar granjas"]
+    },
+    {
+      "villager_count": 20,
+      "age": 2,
+      "resources": { "wood": 6, "food": 9, "gold": 3, "stone": 0, "builder": 2 },
+      "notes": ["En Feudal: 2 aldeanos de madera construyen mercado y herrería"]
+    },
+    {
+      "villager_count": 27,
+      "age": 2,
+      "resources": { "wood": 8, "food": 13, "gold": 6, "stone": 0 },
+      "notes": [
+        "Nuevos aldeanos: 4 a granjas y 3 al oro",
+        "Con 800 de comida y 200 de oro: avanzar a Castillos"
+      ]
+    },
+    {
+      "villager_count": 27,
+      "age": 3,
+      "resources": { "wood": 8, "food": 13, "gold": 6, "stone": 0 },
+      "notes": [
+        "En Castillos: elegir caballeros, ballesteros o centros urbanos extra según el rival"
+      ]
+    }
+  ]
+}

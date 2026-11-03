@@ -1,0 +1,86 @@
+{
+  "name": "Hombres de armas → Arqueros",
+  "civilization": "Generic",
+  "author": "AoE2 Overlay",
+  "description": "3 hombres de armas al llegar a Feudal para presionar temprano, y luego transición a arqueros.",
+  "maps": ["arabia"],
+  "map_types": ["open"],
+  "positions": ["1v1", "flank"],
+  "difficulty": "intermediate",
+  "tags": ["feudal", "infantería", "arqueros", "agresiva"],
+  "build_order": [
+    {
+      "villager_count": 6,
+      "age": 1,
+      "resources": { "wood": 0, "food": 6, "gold": 0, "stone": 0 },
+      "notes": [
+        "6 aldeanos a las ovejas bajo el centro urbano",
+        "Los 3 iniciales construyen 2 casas"
+      ]
+    },
+    {
+      "villager_count": 10,
+      "age": 1,
+      "resources": { "wood": 4, "food": 6, "gold": 0, "stone": 0 },
+      "notes": ["4 aldeanos a madera con campamento maderero"]
+    },
+    {
+      "villager_count": 11,
+      "age": 1,
+      "resources": { "wood": 4, "food": 7, "gold": 0, "stone": 0 },
+      "notes": ["Atraer el primer jabalí"]
+    },
+    {
+      "villager_count": 15,
+      "age": 1,
+      "resources": { "wood": 4, "food": 11, "gold": 0, "stone": 0 },
+      "notes": ["4 aldeanos a las bayas con molino"]
+    },
+    {
+      "villager_count": 16,
+      "age": 1,
+      "resources": { "wood": 4, "food": 12, "gold": 0, "stone": 0 },
+      "notes": ["Atraer el segundo jabalí"]
+    },
+    {
+      "villager_count": 17,
+      "age": 1,
+      "resources": { "wood": 4, "food": 12, "gold": 0, "stone": 0, "builder": 1 },
+      "notes": ["1 aldeano construye el cuartel", "Entrenar 3 milicias"]
+    },
+    {
+      "villager_count": 21,
+      "age": 1,
+      "resources": { "wood": 7, "food": 12, "gold": 2, "stone": 0 },
+      "notes": [
+        "El constructor y 2 nuevos a madera; 2 al oro con campamento minero",
+        "Investigar telar y avanzar a Feudal"
+      ]
+    },
+    {
+      "villager_count": 21,
+      "age": 2,
+      "resources": { "wood": 7, "food": 9, "gold": 5, "stone": 0 },
+      "notes": ["Mientras avanzás: 3 aldeanos de comida al oro"]
+    },
+    {
+      "villager_count": 21,
+      "age": 2,
+      "resources": { "wood": 5, "food": 9, "gold": 5, "stone": 0, "builder": 2 },
+      "notes": [
+        "En Feudal: investigar hombres de armas y atacar con ellos",
+        "2 aldeanos de madera construyen 2 galerías de tiro"
+      ]
+    },
+    {
+      "villager_count": 27,
+      "age": 2,
+      "resources": { "wood": 9, "food": 13, "gold": 5, "stone": 0 },
+      "notes": [
+        "Los constructores vuelven a madera",
+        "Nuevos aldeanos: 4 a granjas y 2 a madera",
+        "Producir arqueros sin parar e investigar emplumado"
+      ]
+    }
+  ]
+}

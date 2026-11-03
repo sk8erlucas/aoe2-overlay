@@ -1,0 +1,88 @@
+{
+  "name": "Exploradores en Feudal (Scouts)",
+  "civilization": "Generic",
+  "author": "AoE2 Overlay",
+  "description": "Apertura clásica de mapas abiertos: avanzar a Feudal con 21 aldeanos y presionar con exploradores a caballo.",
+  "maps": ["arabia"],
+  "map_types": ["open"],
+  "positions": ["1v1", "flank"],
+  "difficulty": "beginner",
+  "tags": ["feudal", "caballería", "agresiva"],
+  "build_order": [
+    {
+      "villager_count": 6,
+      "age": 1,
+      "resources": { "wood": 0, "food": 6, "gold": 0, "stone": 0 },
+      "notes": [
+        "6 aldeanos a las ovejas bajo el centro urbano",
+        "Los 3 iniciales construyen 2 casas y vuelven a las ovejas",
+        "Explorar con el explorador buscando ovejas, jabalíes y bayas"
+      ]
+    },
+    {
+      "villager_count": 10,
+      "age": 1,
+      "resources": { "wood": 4, "food": 6, "gold": 0, "stone": 0 },
+      "notes": ["4 aldeanos a madera: el primero construye el campamento maderero"]
+    },
+    {
+      "villager_count": 11,
+      "age": 1,
+      "resources": { "wood": 4, "food": 7, "gold": 0, "stone": 0 },
+      "notes": ["1 aldeano atrae el primer jabalí al centro urbano"]
+    },
+    {
+      "villager_count": 15,
+      "age": 1,
+      "resources": { "wood": 4, "food": 11, "gold": 0, "stone": 0 },
+      "notes": ["4 aldeanos a las bayas: el primero construye el molino"]
+    },
+    {
+      "villager_count": 16,
+      "age": 1,
+      "resources": { "wood": 4, "food": 12, "gold": 0, "stone": 0 },
+      "notes": ["1 aldeano atrae el segundo jabalí"]
+    },
+    {
+      "villager_count": 18,
+      "age": 1,
+      "resources": { "wood": 4, "food": 14, "gold": 0, "stone": 0 },
+      "notes": ["2 aldeanos a comida bajo el centro urbano"]
+    },
+    {
+      "villager_count": 21,
+      "age": 1,
+      "resources": { "wood": 7, "food": 14, "gold": 0, "stone": 0 },
+      "notes": [
+        "3 aldeanos a madera; uno construye el cuartel en el camino",
+        "Investigar telar y avanzar a Feudal"
+      ]
+    },
+    {
+      "villager_count": 21,
+      "age": 2,
+      "resources": { "wood": 10, "food": 11, "gold": 0, "stone": 0 },
+      "notes": ["Mientras avanzás: 3 aldeanos de las ovejas a madera", "Construir una casa"]
+    },
+    {
+      "villager_count": 21,
+      "age": 2,
+      "resources": { "wood": 8, "food": 11, "gold": 0, "stone": 0, "builder": 2 },
+      "notes": [
+        "En Feudal: 2 aldeanos de madera construyen el establo",
+        "Investigar hacha de doble filo",
+        "Producir exploradores sin parar"
+      ]
+    },
+    {
+      "villager_count": 27,
+      "age": 2,
+      "resources": { "wood": 12, "food": 15, "gold": 0, "stone": 0 },
+      "notes": [
+        "Los constructores vuelven a madera",
+        "Nuevos aldeanos: 4 a granjas y 2 a madera",
+        "Opcional: segundo establo e investigar linajes (bloodlines)"
+      ]
+    }
+  ]
+}
