@@ -14,6 +14,15 @@ const envSchema = z.object({
         .map((o) => o.trim())
         .filter(Boolean),
     ),
+  /**
+   * Dominio padre compartido por la web y la API (ej. "aoe2overlay.com" para
+   * aoe2overlay.com + api.aoe2overlay.com). Vacío en desarrollo.
+   */
+  COOKIE_DOMAIN: z
+    .string()
+    .trim()
+    .optional()
+    .transform((v) => v || undefined),
   PORT: z.coerce.number().int().default(3001),
   HOST: z.string().default("0.0.0.0"),
   LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"]).default("info"),

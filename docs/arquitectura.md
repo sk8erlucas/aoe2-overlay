@@ -82,7 +82,7 @@ Las estrategias de la comunidad usan íconos del juego (`@resource/MaleVillDE.jp
 
 ## Hosting
 
-- Web en **Vercel**, API en **Fly.io o Railway**, Postgres en un **servidor propio** (Postgres 18). La conexión se configura solo por variables de entorno, nunca en el repo.
+- Web y API en **Dokploy** (Docker, ver [deploy-dokploy.md](deploy-dokploy.md)), Postgres en un **servidor propio** (Postgres 18). La conexión se configura solo por variables de entorno, nunca en el repo.
 - Instalador en **GitHub Releases**, compilado por GitHub Actions (`tauri-action`), con auto-update.
 
 ## Legal

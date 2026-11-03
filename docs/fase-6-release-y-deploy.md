@@ -2,37 +2,50 @@
 
 **Objetivo:** publicar la versión 0.1.0: instalador descargable, web y API online.
 
-**Depende de:** Fase 5 (o Fase 2 para un release solo del overlay).
+**Depende de:** Fase 4. La Fase 5 puede venir después.
+
+**Guía paso a paso:** [deploy-dokploy.md](deploy-dokploy.md)
 
 ## Tareas
 
-### Instalador
+### Preparado en el repo
 
-- [ ] Workflow `release.yml` con `tauri-action` en `windows-latest` al crear un tag `v*`
-- [ ] Publicación en GitHub Releases (NSIS .exe y .msi)
+- [x] `apps/api/Dockerfile`: instala solo lo necesario y al arrancar corre migraciones → estrategias base → servidor; healthcheck en `/api/health`
+- [x] `apps/web/Dockerfile`: Next.js `standalone` en imagen mínima; `NEXT_PUBLIC_API_URL` como build arg
+- [x] `.dockerignore` que excluye todos los `.env` (los secretos nunca entran en una imagen)
+- [x] `COOKIE_DOMAIN` en la API para compartir la sesión entre `tudominio.com` y `api.tudominio.com`
+- [x] Workflow `release.yml` con `tauri-action` en `windows-latest` al crear un tag `v*`
+- [x] Verificado: el build standalone de la web y el comando de arranque de la API funcionan contra la base real. No se pudo probar `docker build` local por un problema de certificados de la red de la PC; en el servidor no aplica
+
+### A cargo del dueño del proyecto (ver la guía)
+
+- [ ] DNS: registros `A` para `tudominio.com` y `api.tudominio.com`
+- [ ] Generar un `BETTER_AUTH_SECRET` nuevo para producción
+- [ ] Dokploy: servicio `api` con sus variables y dominio
+- [ ] Dokploy: servicio `web` con el build arg y dominio
+- [ ] Autodeploy en ambos servicios
+- [ ] Registrarse y darse rol de admin
+- [ ] Publicar el primer release: `git tag v0.1.0 && git push origin v0.1.0`
+- [ ] Base de datos: usar la conexión interna de Dokploy y cerrar el puerto público 5489 (o activar SSL / limitar por firewall)
+- [ ] Backups automáticos de la base (Dokploy → base → Backups)
+
+### Después
+
 - [ ] Generar la clave de firma del updater y guardarla en GitHub Secrets
 - [ ] `tauri-plugin-updater` leyendo `latest.json` del release
 - [ ] (Opcional) Firma de código Authenticode para evitar SmartScreen
 
-### Deploy
-
-- [ ] DB: servidor propio (Postgres 18). Activar SSL o limitar el puerto por firewall. Correr las migraciones en cada deploy
-- [ ] API en Fly.io o Railway, con variables de entorno y healthcheck
-- [ ] Web en Vercel, con dominio propio (opcional)
-- [ ] Web y API bajo el mismo dominio padre (ej. `aoe2overlay.com` y `api.aoe2overlay.com`) y Better Auth con `crossSubDomainCookies` para compartir la sesión
-- [ ] Variables de la web: `NEXT_PUBLIC_API_URL`; de la API: `CORS_ORIGINS` con la URL de la web
-- [ ] Backups de la DB
-
 ### Proyecto open source
 
 - [ ] README final con capturas o GIF, badges e instalación
-- [ ] Disclaimer de las Microsoft Game Content Usage Rules
+- [x] Disclaimer de las Microsoft Game Content Usage Rules (README, footer de la web y `apps/web/public/game-assets/README.md`)
 - [x] `SECURITY.md` (cómo reportar vulnerabilidades)
 - [ ] CHANGELOG y versionado semántico
 - [ ] Issues iniciales etiquetadas `good first issue`
 
 ## Criterio de terminado
 
+- [ ] `https://tudominio.com` y `https://api.tudominio.com/api/health` responden
 - [ ] El tag `v0.1.0` genera el instalador en Releases
 - [ ] Instalar desde la web funciona en una PC limpia
 - [ ] Publicar `v0.1.1` hace que el overlay instalado ofrezca la actualización

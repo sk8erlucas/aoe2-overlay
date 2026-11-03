@@ -1,0 +1,24 @@
+# Nunca meter secretos en una imagen
+**/.env
+**/.env.*
+!**/.env.example
+
+# Dependencias y builds (se generan dentro de la imagen)
+**/node_modules
+**/.next
+**/dist
+**/.turbo
+**/coverage
+**/*.tsbuildinfo
+
+# Overlay de escritorio (no se usa en los servidores)
+apps/overlay/src-tauri/target
+apps/overlay/src-tauri/gen
+
+# Varios
+.git
+.github
+docs
+**/*.log
+.vscode
+.idea

@@ -6,7 +6,7 @@ Herramienta open source para Age of Empires II: DE:
 - **Web** para descargar el overlay y para crear, explorar y votar estrategias.
 - **API + DB** para usuarios, estrategias, votos y sugerencias.
 
-Arquitectura y decisiones: [arquitectura.md](arquitectura.md) · Diseño de la web: [diseno-web.md](diseno-web.md)
+Arquitectura y decisiones: [arquitectura.md](arquitectura.md) · Diseño de la web: [diseno-web.md](diseno-web.md) · Deploy: [deploy-dokploy.md](deploy-dokploy.md)
 
 ## Fases
 
@@ -18,7 +18,7 @@ Arquitectura y decisiones: [arquitectura.md](arquitectura.md) · Diseño de la w
 | 3   | [API y base de datos](fase-3-api-y-db.md)                             | ✅ Terminada   |
 | 4   | [Web](fase-4-web.md)                                                  | ✅ Terminada   |
 | 5   | [Integración overlay ↔ API](fase-5-integracion-overlay-api.md)        | ⬜ Pendiente   |
-| 6   | [Release y deploy](fase-6-release-y-deploy.md)                        | ⬜ Pendiente   |
+| 6   | [Release y deploy](fase-6-release-y-deploy.md)                        | 🟨 En progreso |
 | 7   | [Futuro](fase-7-futuro.md)                                            | ⬜ Pendiente   |
 | 8   | [Pruebas manuales](fase-8-pruebas-manuales.md)                        | 🟨 En progreso |
 | 9   | [Estrategias de la comunidad (plan)](fase-9-estrategias-comunidad.md) | ⬜ Pendiente   |

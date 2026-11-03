@@ -6,7 +6,9 @@ import type { Env } from "./env";
 
 export function createAuth(
   db: Database,
-  env: Pick<Env, "BETTER_AUTH_SECRET" | "BETTER_AUTH_URL" | "CORS_ORIGINS">,
+  env: Pick<Env, "BETTER_AUTH_SECRET" | "BETTER_AUTH_URL" | "CORS_ORIGINS"> & {
+    COOKIE_DOMAIN?: string;
+  },
 ) {
   return betterAuth({
     secret: env.BETTER_AUTH_SECRET,
@@ -36,6 +38,10 @@ export function createAuth(
     advanced: {
       // En producción la API va detrás de HTTPS: cookies Secure.
       useSecureCookies: env.BETTER_AUTH_URL.startsWith("https://"),
+      // En producción la web (dominio.com) y la API (api.dominio.com) comparten la sesión.
+      ...(env.COOKIE_DOMAIN && {
+        crossSubDomainCookies: { enabled: true, domain: env.COOKIE_DOMAIN },
+      }),
     },
   });
 }
