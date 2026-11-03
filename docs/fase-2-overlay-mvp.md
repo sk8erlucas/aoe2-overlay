@@ -8,43 +8,48 @@
 
 ### Scaffold
 
-- [ ] Crear `apps/overlay` con Tauri v2 + React + Vite + TS
-- [ ] Consumir `@age-overlay/shared` y `@age-overlay/game-data`
-- [ ] Prerrequisitos documentados (Rust, WebView2, Build Tools de VS)
+- [x] Crear `apps/overlay` con Tauri v2 + React + Vite + TS
+- [x] Consumir `@age-overlay/shared` y `@age-overlay/game-data`
+- [x] Prerrequisitos documentados (Rust, WebView2, Build Tools de VS) en el README
+- [x] Ícono propio (`apps/overlay/app-icon.svg` → `pnpm tauri icon`)
+- [x] Job de CI en Windows: `cargo clippy -D warnings`
 
 ### Ventana
 
-- [ ] Transparente, sin bordes, siempre encima, sin sombra, fuera de la barra de tareas
-- [ ] Posición inicial arriba a la derecha del monitor primario
-- [ ] Click-through (`set_ignore_cursor_events`) en modo juego
-- [ ] Hotkey global para alternar modo juego y modo edición (en edición se puede mover y redimensionar)
-- [ ] No roba foco al juego (`WS_EX_NOACTIVATE` si hace falta)
-- [ ] Single-instance
-- [ ] Ícono en la bandeja del sistema con Mostrar/Ocultar, Configuración y Salir
+- [x] Transparente, sin bordes, siempre encima, sin sombra, fuera de la barra de tareas
+- [x] Posición inicial arriba a la derecha del monitor primario
+- [x] Click-through (`set_ignore_cursor_events`) en modo juego
+- [x] Hotkey global para alternar modo juego y modo edición (en edición se arrastra desde la barra de título)
+- [x] No roba foco al juego (`WS_EX_NOACTIVATE` en modo juego + mostrar con `SW_SHOWNOACTIVATE`)
+- [x] Single-instance
+- [x] Ícono en la bandeja del sistema con Mostrar/Ocultar, Modo edición/juego, Volver a la esquina y Salir
+- [ ] Recordar posición y tamaño entre sesiones (hoy arranca siempre arriba a la derecha)
+- [ ] Verificar el redimensionado en modo edición
 
 ### Reloj
 
-- [ ] Start/Pausa, Reset, +5 s y −5 s con hotkeys globales configurables
-- [ ] Velocidad configurable (por defecto 1.7); el reloj muestra tiempo de juego
-- [ ] Paso siguiente/anterior manual (por si se adelanta o atrasa)
+- [x] Start/Pausa, Reset, +5 s y −5 s con hotkeys globales configurables
+- [x] Velocidad configurable (por defecto 1.7); el reloj muestra tiempo de juego. Cambiarla no hace saltar el reloj
+- [x] Paso siguiente/anterior manual: mueve el reloj al tiempo de ese paso
 
 ### Vista de pasos
 
-- [ ] Paso actual destacado y siguiente en gris
-- [ ] Cuenta regresiva al siguiente paso
-- [ ] Distribución de aldeanos (comida, madera, oro, piedra) y población
-- [ ] Aviso visual al cambiar de paso; sonido opcional
+- [x] Paso actual destacado y siguiente atenuado
+- [x] Cuenta regresiva al siguiente paso
+- [x] Aldeanos totales y distribución (madera, comida, oro, piedra, construyendo)
+- [x] Aviso visual al cambiar de paso; sonido opcional
+- [x] Íconos `@...@` de la comunidad mostrados como etiquetas de texto
 
 ### Pre-partida (modo edición)
 
-- [ ] Selectores: mapa, mi civ, civ rival (opcional), posición (opcional)
-- [ ] Lista de estrategias sugeridas (score local) y elección de una
-- [ ] Botón para empezar la partida y pasar a modo juego
+- [x] Selectores: mapa, mi civ, civ rival (opcional), posición (opcional)
+- [x] Lista de estrategias sugeridas (score local) y elección de una
+- [x] Botón para empezar la partida y pasar a modo juego
 
 ### Configuración
 
-- [ ] Persistencia con `tauri-plugin-store`: opacidad, escala, hotkeys, velocidad y posición
-- [ ] Pantalla de configuración
+- [x] Persistencia con `tauri-plugin-store`: opacidad, escala, sonido, hotkeys, velocidad y última selección
+- [x] Pantalla de configuración (las hotkeys inválidas o en uso se marcan en rojo)
 
 ### Prueba de pantalla completa
 
@@ -57,4 +62,15 @@
 - [ ] Los clics pasan al juego y el juego no pierde el foco
 - [ ] Las hotkeys funcionan con el juego enfocado
 - [ ] El reloj coincide con el del juego (±2 s) a velocidad 1.7 durante 5 minutos
-- [ ] `pnpm --filter overlay tauri build` genera el instalador
+- [x] `pnpm --filter @age-overlay/overlay tauri:build` genera el instalador (NSIS 1,25 MB y MSI 1,76 MB)
+
+## Notas
+
+- **Verificado sin el juego (2026-11-03):**
+  - La ventana aparece arriba a la derecha sin tomar el foco.
+  - Las hotkeys globales funcionan con otra ventana enfocada.
+  - En modo juego la ventana tiene `WS_EX_TRANSPARENT` (click-through), `WS_EX_NOACTIVATE` y `WS_EX_TOPMOST`.
+- **Falta la prueba con AoE2 real:** son los ítems del criterio de terminado y la prueba de pantalla completa.
+- Mostrar la ventana desde el `setup` de Rust no funciona (queda oculta). Por eso el frontend la muestra cuando React terminó de montar (`show_overlay`).
+- Hotkeys por defecto: `Ctrl+Alt` + O (modo), P (reloj), R (reset), L/J (±5 s), PageDown/PageUp (paso), H (ocultar). Se evitaron las flechas porque algunos drivers de Intel usan `Ctrl+Alt+flecha` para rotar la pantalla.
+- Para capturar la ventana en modo click-through hay que usar `BitBlt` con `CAPTUREBLT`, porque es una ventana _layered_. Sirve para tests o capturas automáticas.

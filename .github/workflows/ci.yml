@@ -28,3 +28,32 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm validate:strategies
+
+  # Compila la parte nativa del overlay (Rust/Tauri) en Windows.
+  overlay-rust:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Tauri embebe el frontend compilado, así que hay que generarlo antes.
+      - run: pnpm --filter @age-overlay/overlay build
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: apps/overlay/src-tauri
+
+      - run: cargo clippy --all-targets -- -D warnings
+        working-directory: apps/overlay/src-tauri

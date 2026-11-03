@@ -13,7 +13,7 @@ Overlay open source de **estrategias de apertura (build orders)** para **Age of 
 
 ```
 apps/
-  overlay/   # App de escritorio (Tauri v2 + React)       — próximamente
+  overlay/   # App de escritorio (Tauri v2 + React)
   web/       # Sitio web (Next.js)                         — próximamente
   api/       # Backend (Fastify + PostgreSQL)              — próximamente
 packages/
@@ -32,7 +32,10 @@ Requisitos:
 
 - [Node.js](https://nodejs.org) 22 o superior
 - [pnpm](https://pnpm.io) (`corepack enable`)
-- Para el overlay (más adelante): [Rust](https://rustup.rs) y los [prerrequisitos de Tauri](https://tauri.app/start/prerequisites/)
+- Para el overlay:
+  - [Rust](https://rustup.rs): `winget install Rustlang.Rustup`
+  - [Build Tools de Visual Studio](https://visualstudio.microsoft.com/visual-cpp-build-tools/) con la carga de trabajo "Desarrollo para el escritorio con C++"
+  - WebView2 (ya viene con Windows 11)
 
 ```bash
 pnpm install
@@ -41,6 +44,27 @@ pnpm typecheck
 pnpm test
 pnpm format
 ```
+
+### Overlay
+
+```bash
+pnpm --filter @age-overlay/overlay dev         # app de escritorio con recarga en caliente
+pnpm --filter @age-overlay/overlay vite:dev    # solo la UI en el navegador (sin ventana nativa)
+pnpm --filter @age-overlay/overlay tauri:build # instalador en apps/overlay/src-tauri/target/release/bundle/
+```
+
+Atajos por defecto (configurables en _Ajustes_):
+
+| Atajo                          | Acción                                                    |
+| ------------------------------ | --------------------------------------------------------- |
+| `Ctrl+Alt+O`                   | Modo edición ↔ modo juego (en juego los clics atraviesan) |
+| `Ctrl+Alt+P`                   | Iniciar / pausar reloj                                    |
+| `Ctrl+Alt+R`                   | Reiniciar reloj                                           |
+| `Ctrl+Alt+L` / `Ctrl+Alt+J`    | Adelantar / atrasar 5 s                                   |
+| `Ctrl+Alt+PageDown` / `PageUp` | Paso siguiente / anterior                                 |
+| `Ctrl+Alt+H`                   | Mostrar / ocultar                                         |
+
+> El juego tiene que estar en **ventana sin bordes (borderless)**. Con pantalla completa exclusiva el overlay puede no verse (ver [Fase 2b](docs/fase-2b-modo-inyeccion.md)).
 
 ## Contribuir
 

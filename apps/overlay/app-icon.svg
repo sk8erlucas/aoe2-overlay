@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Ícono propio: escudo con reloj de arena -->
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e2b04a"/>
+      <stop offset="1" stop-color="#9a6b1f"/>
+    </linearGradient>
+  </defs>
+  <path d="M256 24 L456 96 V248 C456 368 368 448 256 488 C144 448 56 368 56 248 V96 Z"
+        fill="#1d2433" stroke="url(#g)" stroke-width="28" stroke-linejoin="round"/>
+  <path d="M176 136 H336 M176 376 H336" stroke="url(#g)" stroke-width="28" stroke-linecap="round"/>
+  <path d="M192 150 C192 214 248 230 256 256 C264 230 320 214 320 150 Z" fill="#e2b04a"/>
+  <path d="M256 256 C248 282 192 298 192 362 H320 C320 298 264 282 256 256 Z" fill="#e2b04a" opacity="0.45"/>
+</svg>
