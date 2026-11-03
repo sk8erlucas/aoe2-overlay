@@ -1,0 +1,424 @@
+/*
+ * Landing: medidas en "u" sobre un cuadro de diseño de 1507px (ver docs/diseno-web.md).
+ */
+.landing {
+  --u: calc(100vw / 1507);
+  --side: calc(121 * var(--u));
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* ---------------- Hero ---------------- */
+
+.hero {
+  position: relative;
+  height: calc(1300 * var(--u));
+  min-height: 100svh;
+  overflow: hidden;
+  background: var(--color-red);
+  color: var(--color-cream);
+}
+
+.hero-nav {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: calc(84 * var(--u));
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(64 * var(--u));
+  border-bottom: 1px solid color-mix(in srgb, var(--color-cream) 50%, transparent);
+  z-index: 40;
+}
+.hero-nav a {
+  font-size: max(13px, calc(30 * var(--u)));
+  font-weight: 900;
+  font-stretch: 84%;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.hero-nav a:hover {
+  color: var(--color-gold);
+}
+.hero-account {
+  position: absolute;
+  right: calc(var(--side) + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: max(11px, calc(14 * var(--u))) !important;
+  font-stretch: 75% !important;
+}
+
+/* Reglas verticales del marco */
+.frame-rule {
+  position: absolute;
+  top: calc(84 * var(--u));
+  bottom: 0;
+  width: 1px;
+  background: color-mix(in srgb, currentColor 50%, transparent);
+  z-index: 30;
+}
+.frame-rule.left {
+  left: var(--side);
+}
+.frame-rule.right {
+  right: var(--side);
+}
+
+/* Etiquetas laterales rotadas */
+.side-label {
+  position: absolute;
+  font-size: max(9px, calc(11 * var(--u)));
+  font-weight: 800;
+  font-stretch: 75%;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  z-index: 30;
+}
+.side-label.left {
+  left: calc(var(--side) / 2);
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+.side-label.right {
+  right: calc(var(--side) / 2);
+  transform: translate(50%, -50%) rotate(90deg);
+}
+
+.hero-topline {
+  position: absolute;
+  top: calc(158 * var(--u));
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: calc(40 * var(--u));
+  font-weight: 900;
+  font-stretch: 80%;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  z-index: 5;
+}
+
+/* Líneas del título (cada una en una máscara para el reveal) */
+.title-line {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  overflow: hidden;
+  z-index: 5;
+}
+.title-line.l1 {
+  top: calc(252 * var(--u));
+  width: calc(392 * var(--u));
+  height: calc(258 * var(--u));
+}
+.title-line.l2 {
+  top: calc(526 * var(--u));
+  width: calc(1120 * var(--u));
+  height: calc(266 * var(--u));
+}
+.title-line svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.title-line text {
+  font-family: var(--font-display);
+  fill: var(--color-cream);
+}
+
+/* Escenario del caballero (por delante del título) */
+.stage {
+  position: absolute;
+  left: 50%;
+  /* Apoyado en el borde inferior: la imagen viene cortada a la altura de las piernas. */
+  bottom: 0;
+  width: calc(760 * var(--u));
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+.stage-inner {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 14%;
+  will-change: transform;
+}
+.knight,
+.knight-glint {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.knight {
+  object-fit: contain;
+  -webkit-mask: linear-gradient(to bottom, #000 82%, transparent 100%);
+  mask: linear-gradient(to bottom, #000 82%, transparent 100%);
+  filter: brightness(0.22) saturate(0.4);
+  will-change: filter;
+}
+/* Brillo dorado que recorre solo la silueta (máscara con la misma imagen) */
+.knight-glint {
+  -webkit-mask: var(--knight-src) center / contain no-repeat;
+  mask: var(--knight-src) center / contain no-repeat;
+  background: linear-gradient(
+    105deg,
+    transparent 44%,
+    rgba(255, 224, 150, 0.55) 50%,
+    transparent 56%
+  );
+  background-size: 300% 100%;
+  background-position: 100% 0;
+  mix-blend-mode: screen;
+  opacity: 0;
+  pointer-events: none;
+}
+/* Halo detrás del caballero */
+.stage-halo {
+  position: absolute;
+  inset: 12% 10% 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 196, 92, 0.55), transparent 65%);
+  opacity: 0;
+  filter: blur(20px);
+}
+
+.embers {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* Panel estilo overlay que va tachando pasos */
+.bo-panel {
+  position: absolute;
+  top: calc(250 * var(--u));
+  right: calc(var(--side) + 28 * var(--u));
+  width: calc(340 * var(--u));
+  min-width: 250px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(16, 19, 27, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #f3f1ea;
+  font-size: 13px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
+  z-index: 25;
+}
+.bo-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 6px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+.bo-clock {
+  color: var(--color-gold);
+  font-weight: 800;
+  font-size: 18px;
+  font-variant-numeric: tabular-nums;
+}
+.bo-step {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition:
+    background 0.3s,
+    opacity 0.3s;
+  opacity: 0.55;
+}
+.bo-step .tick {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  border-radius: 4px;
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  color: #1d1606;
+}
+.bo-step.done {
+  opacity: 0.6;
+}
+.bo-step.done .tick {
+  background: var(--color-gold);
+  border-color: var(--color-gold);
+}
+.bo-step.done .txt {
+  text-decoration: line-through;
+  text-decoration-color: rgba(255, 255, 255, 0.4);
+}
+.bo-step.current {
+  opacity: 1;
+  background: rgba(226, 176, 74, 0.2);
+}
+
+/* ---------------- Sección "Qué es" ---------------- */
+
+.about {
+  position: relative;
+  background: var(--color-cream);
+  color: var(--color-ink);
+  padding-bottom: calc(140 * var(--u));
+}
+.about .frame-rule {
+  top: 0;
+  color: color-mix(in srgb, var(--color-red) 55%, transparent);
+}
+
+.biodata {
+  position: relative;
+  z-index: 1;
+  min-height: calc(324 * var(--u));
+  border-bottom: 1px solid var(--color-red);
+  display: grid;
+  grid-template-columns: calc(290 * var(--u)) 1fr;
+  gap: calc(60 * var(--u));
+  padding: calc(56 * var(--u)) calc(150 * var(--u)) calc(56 * var(--u)) calc(200 * var(--u));
+  align-items: center;
+}
+.crest-label {
+  font-size: max(9px, calc(10.5 * var(--u)));
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: calc(14 * var(--u));
+}
+.crest {
+  width: calc(232 * var(--u));
+  height: auto;
+}
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: calc(34 * var(--u)) calc(40 * var(--u));
+  margin-left: calc(210 * var(--u));
+}
+.stat-label {
+  font-size: max(9px, calc(10.5 * var(--u)));
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-red);
+}
+.stat-value {
+  font-size: max(15px, calc(31 * var(--u)));
+  font-weight: 900;
+  font-stretch: 90%;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+
+.card-row {
+  position: relative;
+  z-index: 1;
+  padding: calc(110 * var(--u)) calc(134 * var(--u)) 0;
+}
+.intro-card {
+  position: relative;
+  border: 1px solid color-mix(in srgb, var(--color-red) 70%, transparent);
+  padding: calc(70 * var(--u)) calc(60 * var(--u)) calc(80 * var(--u));
+  text-align: center;
+}
+.intro-card .corner {
+  position: absolute;
+  width: calc(30 * var(--u));
+  height: calc(30 * var(--u));
+  min-width: 12px;
+  min-height: 12px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--color-red) 70%, transparent);
+  background: var(--color-cream);
+  transform: translate(-50%, -50%);
+}
+.intro-icon {
+  width: calc(118 * var(--u));
+  min-width: 56px;
+  margin: 0 auto calc(36 * var(--u));
+}
+.statement {
+  font-size: calc(50 * var(--u));
+  font-weight: 900;
+  font-stretch: 96%;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.statement span {
+  display: block;
+}
+.intro-text {
+  max-width: 500px;
+  margin: calc(36 * var(--u)) auto calc(40 * var(--u));
+  font-size: max(15px, calc(19 * var(--u)));
+  line-height: 1.45;
+  color: color-mix(in srgb, var(--color-ink) 80%, transparent);
+}
+
+/* ---------------- Móvil ---------------- */
+
+@media (max-width: 767px) {
+  .landing {
+    --u: calc(100vw / 1300);
+    --side: 22px;
+  }
+  .hero {
+    height: max(100svh, 178vw);
+  }
+  .hero-nav {
+    height: 56px;
+    gap: 18px;
+  }
+  .hero-account {
+    display: none;
+  }
+  .frame-rule {
+    top: 56px;
+  }
+  .side-label {
+    display: none;
+  }
+  .hero-topline {
+    top: 74px;
+    font-size: 12px;
+  }
+  .title-line.l1 {
+    top: 104px;
+  }
+  .title-line.l2 {
+    top: calc(104px + 290 * var(--u));
+  }
+  .stage {
+    width: 120vw;
+  }
+  .bo-panel {
+    display: none;
+  }
+  .biodata {
+    grid-template-columns: 1fr;
+    padding: 32px 36px;
+  }
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+    margin-left: 0;
+    gap: 18px;
+  }
+  .card-row {
+    padding: 48px 22px 0;
+  }
+  .intro-card {
+    padding: 36px 18px 40px;
+  }
+  .statement {
+    font-size: min(4vw, 22px);
+  }
+}

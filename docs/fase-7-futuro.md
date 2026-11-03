@@ -14,3 +14,4 @@
 - [ ] Forks de estrategias ("basada en…")
 - [ ] Soporte multi-monitor y elegir en qué esquina se muestra
 - [ ] Pasos con imágenes o íconos propios (sin assets del juego)
+- [ ] Reemplazar la ilustración del hero de la web (`apps/web/public/game-assets/teutonic-knight.webp`, arte de Microsoft) por una propia con licencia libre, idealmente en capas para el efecto de armadura de [diseno-web.md](diseno-web.md)

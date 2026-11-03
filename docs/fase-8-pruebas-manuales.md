@@ -43,6 +43,8 @@ Jugar cada una al menos una vez contra la IA y anotar ajustes en `strategies/*.j
 - [ ] Recorrido completo en el navegador: registro → crear estrategia → votar con otro usuario
 - [ ] La landing se ve bien en móvil y escritorio
 - [ ] Con "reducir movimiento" activado en el sistema, no hay animaciones
+- [ ] Lighthouse: rendimiento y accesibilidad > 90 en la landing y en /estrategias
+- [ ] El efecto del caballero se ve fluido en una PC común y en un celular
 
 ## Notas
 

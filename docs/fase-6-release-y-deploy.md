@@ -19,6 +19,8 @@
 - [ ] DB: servidor propio (Postgres 18). Activar SSL o limitar el puerto por firewall. Correr las migraciones en cada deploy
 - [ ] API en Fly.io o Railway, con variables de entorno y healthcheck
 - [ ] Web en Vercel, con dominio propio (opcional)
+- [ ] Web y API bajo el mismo dominio padre (ej. `aoe2overlay.com` y `api.aoe2overlay.com`) y Better Auth con `crossSubDomainCookies` para compartir la sesión
+- [ ] Variables de la web: `NEXT_PUBLIC_API_URL`; de la API: `CORS_ORIGINS` con la URL de la web
 - [ ] Backups de la DB
 
 ### Proyecto open source

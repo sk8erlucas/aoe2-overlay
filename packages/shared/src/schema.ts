@@ -53,7 +53,8 @@ export const strategySchema = z.object({
   /** Nombre en inglés de la civ, lista de civs, o "Any"/"Generic". */
   civilization: z.union([z.string().trim().min(1), z.array(z.string().trim().min(1)).min(1)]),
   author: z.string().trim().min(1),
-  source: z.url().optional(),
+  /** Solo http/https: se muestra como link en la web (evita `javascript:` y similares). */
+  source: z.url({ protocol: /^https?$/ }).optional(),
   description: z.string().optional(),
 
   // --- Extensiones propias (opcionales) ---

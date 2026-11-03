@@ -14,7 +14,7 @@ Overlay open source de **estrategias de apertura (build orders)** para **Age of 
 ```
 apps/
   overlay/   # App de escritorio (Tauri v2 + React)
-  web/       # Sitio web (Next.js)                         — próximamente
+  web/       # Sitio web (Next.js 16 + Tailwind 4)
   api/       # Backend (Fastify + Drizzle + PostgreSQL), docs en /api/docs
 packages/
   config/    # Configuración compartida (TypeScript, ESLint, Prettier)

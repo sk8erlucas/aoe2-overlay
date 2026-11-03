@@ -26,6 +26,13 @@ describe("strategySchema", () => {
     expect(strategySchema.safeParse(bad).success).toBe(false);
   });
 
+  it("solo acepta fuentes http/https", () => {
+    for (const source of ["javascript:alert(1)", "data:text/html,hola", "ftp://x.com/a"]) {
+      expect(strategySchema.safeParse({ ...community, source }).success).toBe(false);
+    }
+    expect(strategySchema.safeParse({ ...community, source: "https://x.com" }).success).toBe(true);
+  });
+
   it("rechaza tiempos con formato inválido", () => {
     const step = { ...community.build_order[0], time: "1:75" };
     expect(strategySchema.safeParse({ ...community, build_order: [step] }).success).toBe(false);

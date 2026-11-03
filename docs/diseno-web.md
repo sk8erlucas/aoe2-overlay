@@ -4,6 +4,18 @@ Dirección visual para `apps/web` (Fase 4). Está basada en un diseño de refere
 
 > **Assets:** no usamos ninguna imagen, video ni ilustración del diseño de referencia ni del juego. Todo lo gráfico es propio: ilustraciones nuestras o encargadas con licencia compatible, y el logo del escudo con reloj de arena (`apps/overlay/app-icon.svg`).
 
+## Implementación actual (Fase 4)
+
+La ilustración disponible es **una sola imagen** (caballero teutónico, 500×500, con transparencia), así que el "armado pieza por pieza" se reemplazó por:
+
+1. **Silueta → luz:** el caballero arranca oscuro (`brightness .22`) y se ilumina con el scroll.
+2. **Brillo dorado:** una franja de luz recorre solo su silueta (máscara CSS con la misma imagen).
+3. **Cámara:** acercamiento suave hacia el yelmo (×1.16, para no pixelar la imagen).
+4. **Panel de build order:** a la derecha, una réplica del overlay va tachando pasos a medida que se baja. Cuenta qué hace el producto.
+5. **Brasas** doradas en canvas 2D en lugar del video de pétalos.
+
+El resto (título estirado, reglas, etiquetas, sección crema, móvil y movimiento reducido) sigue esta especificación. Lo de abajo queda como objetivo para cuando haya una ilustración propia en capas.
+
 ## Concepto
 
 La landing cuenta lo que hace el producto: **una estrategia se arma paso a paso**. En el hero, un caballero medieval (ilustración propia, vectorial y plana) recibe su armadura pieza por pieza a medida que se hace scroll, igual que una build order va sumando edificios y aldeanos.

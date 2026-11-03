@@ -1,0 +1,120 @@
+@import "tailwindcss";
+
+/* Paleta y tipografías de docs/diseno-web.md */
+@theme {
+  --color-red: #e40038;
+  --color-cream: #faf3e9;
+  --color-ink: #201408;
+  --color-gold: #e2b04a;
+  --color-gold-dark: #b8862a;
+  --font-display: var(--font-anton), "Impact", sans-serif;
+  --font-sans: var(--font-archivo), "Segoe UI", system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+  /* Grano de papel: ruido fractal en SVG. */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+html {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Capa de grano sobre una sección. */
+.grain {
+  position: relative;
+  isolation: isolate;
+}
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: var(--grain);
+  opacity: 0.16;
+  mix-blend-mode: multiply;
+  z-index: 0;
+}
+
+/* Etiqueta en Archivo condensado, mayúsculas. */
+.label {
+  font-family: var(--font-sans);
+  font-stretch: 75%;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: 999px;
+  font-weight: 800;
+  font-stretch: 85%;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    transform 0.15s;
+  cursor: pointer;
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.btn-gold {
+  background: var(--color-gold);
+  color: var(--color-ink);
+}
+.btn-gold:hover:not(:disabled) {
+  background: #f0c260;
+}
+.btn-red {
+  background: var(--color-red);
+  color: var(--color-cream);
+}
+.btn-red:hover:not(:disabled) {
+  background: #c8002f;
+}
+.btn-ghost {
+  border: 1px solid color-mix(in srgb, var(--color-ink) 25%, transparent);
+}
+.btn-ghost:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--color-ink) 7%, transparent);
+}
+
+.field {
+  width: 100%;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--color-ink) 22%, transparent);
+  border-radius: 8px;
+  background: white;
+  font: inherit;
+}
+.field:focus {
+  outline: 2px solid var(--color-red);
+  outline-offset: 1px;
+}
+
+.card {
+  background: white;
+  border: 1px solid color-mix(in srgb, var(--color-red) 25%, transparent);
+  border-radius: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
