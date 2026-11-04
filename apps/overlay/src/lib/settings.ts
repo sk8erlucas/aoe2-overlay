@@ -1,5 +1,6 @@
 import { DEFAULT_SPEED, type Position } from "@age-overlay/shared";
 import { isTauri } from "@tauri-apps/api/core";
+import { DEFAULT_API_URL } from "./sync";
 
 export const HOTKEY_ACTIONS = [
   "toggleMode",
@@ -51,6 +52,8 @@ export interface Settings {
   /** Escala del texto (0.8 – 1.5). */
   scale: number;
   sound: boolean;
+  /** URL de la API de estrategias (vacía = solo estrategias base, sin internet). */
+  apiUrl: string;
   hotkeys: Record<HotkeyAction, string>;
   selection: Selection;
 }
@@ -60,6 +63,7 @@ export const DEFAULT_SETTINGS: Settings = {
   opacity: 0.75,
   scale: 1,
   sound: false,
+  apiUrl: DEFAULT_API_URL,
   hotkeys: DEFAULT_HOTKEYS,
   selection: {},
 };

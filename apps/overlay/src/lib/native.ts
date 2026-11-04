@@ -10,6 +10,24 @@ export async function setGameMode(enabled: boolean): Promise<void> {
   if (isTauri()) await invoke("set_game_mode", { enabled });
 }
 
+export interface Rect {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+/** Zonas que aceptan clics en modo juego (los botones); el resto deja pasar los clics. */
+export async function setInteractiveRects(rects: Rect[]): Promise<void> {
+  if (isTauri()) await invoke("set_interactive_rects", { rects });
+}
+
+/** Cierra la app (guarda posición y tamaño de la ventana). */
+export async function quitApp(): Promise<void> {
+  if (isTauri()) await invoke("quit_app");
+  else window.close();
+}
+
 export async function showOverlay(): Promise<void> {
   if (isTauri()) await invoke("show_overlay");
 }

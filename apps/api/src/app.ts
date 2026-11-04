@@ -17,9 +17,21 @@ import type { Database } from "./db/client";
 import type { Env } from "./env";
 import { HttpError, sessionHelpers } from "./lib/session";
 import { miscRoutes } from "./routes/misc";
+import { overlayRoutes } from "./routes/overlay";
 import { reportRoutes } from "./routes/reports";
 import { strategyRoutes } from "./routes/strategies";
 import { suggestionRoutes } from "./routes/suggestions";
+
+/**
+ * Orígenes del overlay de escritorio (Tauri): http://tauri.localhost en Windows,
+ * tauri://localhost en macOS/Linux y el servidor de Vite en desarrollo.
+ * Solo se agregan a CORS (no a los orígenes de confianza de Better Auth).
+ */
+export const OVERLAY_ORIGINS = [
+  "http://tauri.localhost",
+  "tauri://localhost",
+  "http://localhost:1420",
+];
 
 export interface AppDeps {
   db: Database;
@@ -50,7 +62,7 @@ export async function buildApp({
   // La API solo devuelve JSON: la CSP se desactiva para que funcione /api/docs.
   await app.register(helmet, { contentSecurityPolicy: false });
   await app.register(cors, {
-    origin: env.CORS_ORIGINS,
+    origin: [...env.CORS_ORIGINS, ...OVERLAY_ORIGINS],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   });
@@ -121,6 +133,7 @@ export async function buildApp({
   await app.register(strategyRoutes, { prefix: "/api", db, session });
   await app.register(suggestionRoutes, { prefix: "/api", db });
   await app.register(reportRoutes, { prefix: "/api", db, session });
+  await app.register(overlayRoutes, { prefix: "/api", db });
 
   return app;
 }

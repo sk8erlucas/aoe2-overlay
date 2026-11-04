@@ -34,6 +34,32 @@ describe("sistema", () => {
   });
 });
 
+describe("sincronización del overlay", () => {
+  it("devuelve las estrategias completas con ETag y 304 si no cambió", async () => {
+    const res = await t.app.inject("/api/overlay/strategies");
+    expect(res.statusCode).toBe(200);
+    const body = json<{ items: { slug: string; data: { build_order: unknown[] } }[] }>(res);
+    expect(body.items.length).toBeGreaterThanOrEqual(5);
+    expect(body.items[0]?.data.build_order.length).toBeGreaterThan(0);
+
+    const etag = res.headers.etag as string;
+    expect(etag).toBeTruthy();
+    const again = await t.app.inject({
+      url: "/api/overlay/strategies",
+      headers: { "if-none-match": etag },
+    });
+    expect(again.statusCode).toBe(304);
+  });
+
+  it("permite CORS desde el overlay de escritorio", async () => {
+    const res = await t.app.inject({
+      url: "/api/overlay/strategies",
+      headers: { origin: "http://tauri.localhost" },
+    });
+    expect(res.headers["access-control-allow-origin"]).toBe("http://tauri.localhost");
+  });
+});
+
 describe("auth", () => {
   it("/api/me con y sin sesión", async () => {
     expect((await t.app.inject("/api/me")).statusCode).toBe(401);

@@ -1,8 +1,12 @@
 import { strategySchema, type Strategy } from "@age-overlay/shared";
 
 export interface LoadedStrategy extends Strategy {
-  /** Id estable: el nombre del archivo sin extensión. */
+  /** Id estable: nombre de archivo (base) o slug de la API (descargadas). */
   id: string;
+  origin: "bundled" | "remote";
+  /** Votos en la comunidad (solo las descargadas). */
+  score?: number;
+  verified?: boolean;
 }
 
 /** Estrategias base empaquetadas en el instalador (carpeta strategies/ del repo). */
@@ -19,7 +23,7 @@ function load(): LoadedStrategy[] {
       .pop()!
       .replace(/\.json$/, "");
     const parsed = strategySchema.safeParse(raw);
-    if (parsed.success) result.push({ ...parsed.data, id });
+    if (parsed.success) result.push({ ...parsed.data, id, origin: "bundled", verified: true });
     else console.warn(`Estrategia inválida ignorada: ${id}`, parsed.error.issues);
   }
   return result.sort((a, b) => a.name.localeCompare(b.name, "es"));

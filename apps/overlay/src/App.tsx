@@ -8,6 +8,7 @@ import * as clock from "./lib/clock";
 import {
   beep,
   onTrayToggleMode,
+  quitApp,
   registerHotkeys,
   resetPosition,
   setGameMode,
@@ -16,7 +17,14 @@ import {
   type HotkeyError,
 } from "./lib/native";
 import { loadSettings, saveSettings, type HotkeyAction, type Settings } from "./lib/settings";
-import { BUNDLED_STRATEGIES } from "./lib/strategies";
+import {
+  loadCache,
+  mergeStrategies,
+  syncStrategies,
+  SYNC_INTERVAL_MS,
+  type StrategyCache,
+  type SyncStatus,
+} from "./lib/sync";
 
 type Mode = "edit" | "game";
 type Tab = "match" | "settings";
@@ -59,8 +67,51 @@ function Overlay({ initialSettings }: { initialSettings: Settings }) {
     void saveSettings(next);
   }, []);
 
+  // --- Estrategias: base + descargadas de la API (con caché offline) ---
+  const [cache, setCache] = useState<StrategyCache | null>(null);
+  const [syncStatus, setSyncStatus] = useState<SyncStatus>({ state: "idle" });
+  const strategies = useMemo(() => mergeStrategies(cache?.items), [cache]);
+
+  const cacheRef = useRef<StrategyCache | null>(null);
+  const runSync = useCallback(async () => {
+    const apiUrl = settingsRef.current.apiUrl;
+    if (!apiUrl) return;
+    setSyncStatus({ state: "syncing" });
+    try {
+      const next = await syncStrategies(apiUrl, cacheRef.current);
+      cacheRef.current = next;
+      setCache(next);
+      setSyncStatus({ state: "ok", syncedAt: next.syncedAt, count: next.items.length });
+    } catch (e) {
+      setSyncStatus({
+        state: "offline",
+        message: e instanceof Error ? e.message : String(e),
+        syncedAt: cacheRef.current?.syncedAt ?? null,
+      });
+    }
+  }, []);
+
+  // Al abrir: primero la caché (funciona sin internet), después sincroniza.
+  useEffect(() => {
+    void loadCache().then((saved) => {
+      cacheRef.current = saved;
+      setCache(saved);
+      void runSync();
+    });
+    const id = setInterval(() => void runSync(), SYNC_INTERVAL_MS);
+    return () => clearInterval(id);
+  }, [runSync]);
+
+  // Si cambia la URL de la API, sincroniza de nuevo.
+  const firstApiUrl = useRef(settings.apiUrl);
+  useEffect(() => {
+    if (settings.apiUrl === firstApiUrl.current) return;
+    firstApiUrl.current = settings.apiUrl;
+    void runSync();
+  }, [settings.apiUrl, runSync]);
+
   // --- Estrategia y paso actual ---
-  const strategy = BUNDLED_STRATEGIES.find((s) => s.id === settings.selection.strategyId);
+  const strategy = strategies.find((s) => s.id === settings.selection.strategyId);
   const times = useMemo(
     () => (strategy ? estimateStepTimes(strategy.build_order) : []),
     [strategy],
@@ -172,6 +223,8 @@ function Overlay({ initialSettings }: { initialSettings: Settings }) {
           <div className="content">
             {tab === "match" ? (
               <SetupView
+                strategies={strategies}
+                syncStatus={syncStatus}
                 selection={settings.selection}
                 onChange={(selection) => updateSettings({ selection })}
                 onPlay={play}
@@ -182,6 +235,8 @@ function Overlay({ initialSettings }: { initialSettings: Settings }) {
                 hotkeyErrors={hotkeyErrors}
                 onChange={updateSettings}
                 onResetPosition={() => void resetPosition()}
+                onSyncNow={() => void runSync()}
+                onQuit={() => void quitApp()}
               />
             )}
           </div>
@@ -198,6 +253,9 @@ function Overlay({ initialSettings }: { initialSettings: Settings }) {
           running={clockState.running}
           flash={flash}
           settings={settings}
+          onAction={(action) =>
+            action === "hide" ? void toggleVisibility() : actions.current[action]()
+          }
         />
       )}
     </main>

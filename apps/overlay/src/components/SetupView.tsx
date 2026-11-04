@@ -1,8 +1,9 @@
 import { CIVS, MAPS, mapTypeOf } from "@age-overlay/game-data";
 import { POSITIONS, suggest, type Position } from "@age-overlay/shared";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import type { Selection } from "../lib/settings";
-import { BUNDLED_STRATEGIES } from "../lib/strategies";
+import type { LoadedStrategy } from "../lib/strategies";
+import type { SyncStatus } from "../lib/sync";
 
 const POSITION_LABELS: Record<Position, string> = {
   "1v1": "1 contra 1",
@@ -13,21 +14,52 @@ const POSITION_LABELS: Record<Position, string> = {
 const civsSorted = [...CIVS].sort((a, b) => a.name.es.localeCompare(b.name.es, "es"));
 const mapsSorted = [...MAPS].sort((a, b) => a.name.es.localeCompare(b.name.es, "es"));
 
+const normalize = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+
+function timeAgo(iso: string): string {
+  const min = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+  if (min < 1) return "recién";
+  if (min < 60) return `hace ${min} min`;
+  const h = Math.round(min / 60);
+  return h < 24 ? `hace ${h} h` : `hace ${Math.round(h / 24)} días`;
+}
+
+function SyncLine({ status, count }: { status: SyncStatus; count: number }) {
+  if (status.state === "syncing") return <p className="sync-status">Sincronizando estrategias…</p>;
+  if (status.state === "ok")
+    return (
+      <p className="sync-status">
+        ✓ {count} estrategias · sincronizado {timeAgo(status.syncedAt)}
+      </p>
+    );
+  if (status.state === "offline")
+    return (
+      <p className="sync-status offline" title={status.message}>
+        Sin conexión: usando {count} estrategias guardadas
+        {status.syncedAt ? ` (${timeAgo(status.syncedAt)})` : ""}
+      </p>
+    );
+  return <p className="sync-status">{count} estrategias</p>;
+}
+
 interface Props {
+  strategies: readonly LoadedStrategy[];
+  syncStatus: SyncStatus;
   selection: Selection;
   onChange: (selection: Selection) => void;
   onPlay: () => void;
 }
 
 /** Pantalla previa a la partida: elegir mapa, civs y posición, y ver sugerencias. */
-export function SetupView({ selection, onChange, onPlay }: Props) {
+export function SetupView({ strategies, syncStatus, selection, onChange, onPlay }: Props) {
+  const [query, setQuery] = useState("");
   const set = <K extends keyof Selection>(key: K, value: Selection[K]) =>
     onChange({ ...selection, [key]: value || undefined });
 
   const suggestions = useMemo(() => {
     const mapType = selection.map ? mapTypeOf(selection.map) : undefined;
     return suggest(
-      BUNDLED_STRATEGIES,
+      strategies,
       {
         civ: selection.civ,
         vsCiv: selection.vsCiv,
@@ -35,14 +67,25 @@ export function SetupView({ selection, onChange, onPlay }: Props) {
         mapType,
         position: selection.position,
       },
-      { limit: 50 },
+      { limit: 50, getVotes: (s) => s.score ?? 0 },
     );
-  }, [selection.civ, selection.vsCiv, selection.map, selection.position]);
+  }, [strategies, selection.civ, selection.vsCiv, selection.map, selection.position]);
 
-  const chosen = BUNDLED_STRATEGIES.find((s) => s.id === selection.strategyId);
+  // Con texto en el buscador se busca en todas por nombre (ignora los filtros).
+  const results = useMemo(() => {
+    const q = normalize(query.trim());
+    if (!q) return suggestions;
+    return strategies
+      .filter((s) => normalize(s.name).includes(q))
+      .slice(0, 50)
+      .map((strategy) => ({ strategy, score: 0, reasons: ["búsqueda"] }));
+  }, [query, strategies, suggestions]);
+
+  const chosen = strategies.find((s) => s.id === selection.strategyId);
 
   return (
     <div className="setup">
+      <SyncLine status={syncStatus} count={strategies.length} />
       <div className="fields">
         <label>
           Mapa
@@ -93,27 +136,34 @@ export function SetupView({ selection, onChange, onPlay }: Props) {
         </label>
       </div>
 
-      <h3>Sugerencias</h3>
-      {suggestions.length === 0 ? (
+      <h3>{query.trim() ? "Resultados" : "Sugerencias"}</h3>
+      <input
+        className="search"
+        placeholder="Buscar por nombre…"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+      />
+      {results.length === 0 ? (
         <p className="muted">No hay estrategias para esa combinación.</p>
       ) : (
         <ul className="suggestions">
-          {suggestions.map(({ strategy, reasons }) => {
-            const s = strategy as (typeof BUNDLED_STRATEGIES)[number];
-            return (
-              <li key={s.id}>
-                <button
-                  className={s.id === selection.strategyId ? "selected" : ""}
-                  onClick={() => set("strategyId", s.id)}
-                >
-                  <span className="s-name">{s.name}</span>
-                  <span className="s-meta">
-                    {reasons.join(" · ") || "general"} · {s.build_order.length} pasos
-                  </span>
-                </button>
-              </li>
-            );
-          })}
+          {results.map(({ strategy: s, reasons }) => (
+            <li key={s.id}>
+              <button
+                className={s.id === selection.strategyId ? "selected" : ""}
+                onClick={() => set("strategyId", s.id)}
+              >
+                <span className="s-name">
+                  {s.name}
+                  {s.verified && <span className="badge">✔</span>}
+                  {(s.score ?? 0) > 0 && <span className="badge">▲ {s.score}</span>}
+                </span>
+                <span className="s-meta">
+                  {reasons.join(" · ") || "general"} · {s.build_order.length} pasos · {s.author}
+                </span>
+              </button>
+            </li>
+          ))}
         </ul>
       )}
 

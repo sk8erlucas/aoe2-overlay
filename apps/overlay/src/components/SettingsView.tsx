@@ -1,5 +1,6 @@
 import { DEFAULT_SPEED } from "@age-overlay/shared";
 import { useState } from "react";
+import { DEFAULT_API_URL, normalizeApiUrl } from "../lib/sync";
 import type { HotkeyError } from "../lib/native";
 import {
   DEFAULT_HOTKEYS,
@@ -14,6 +15,8 @@ interface Props {
   hotkeyErrors: HotkeyError[];
   onChange: (patch: Partial<Settings>) => void;
   onResetPosition: () => void;
+  onSyncNow: () => void;
+  onQuit: () => void;
 }
 
 const SPEEDS = [
@@ -23,7 +26,15 @@ const SPEEDS = [
   { value: 2.0, label: "Rápida (2.0)" },
 ];
 
-export function SettingsView({ settings, hotkeyErrors, onChange, onResetPosition }: Props) {
+export function SettingsView({
+  settings,
+  hotkeyErrors,
+  onChange,
+  onResetPosition,
+  onSyncNow,
+  onQuit,
+}: Props) {
+  const [apiDraft, setApiDraft] = useState(settings.apiUrl);
   // Las hotkeys se editan como texto y se aplican al salir del campo.
   const [draft, setDraft] = useState(settings.hotkeys);
 
@@ -118,6 +129,42 @@ export function SettingsView({ settings, hotkeyErrors, onChange, onResetPosition
           Restaurar atajos
         </button>
         <button onClick={onResetPosition}>Volver a la esquina</button>
+      </div>
+
+      <h3>Estrategias de la comunidad</h3>
+      <label>
+        URL de la API
+        <input
+          value={apiDraft}
+          placeholder={DEFAULT_API_URL}
+          spellCheck={false}
+          onChange={(e) => setApiDraft(e.target.value)}
+          onBlur={() => onChange({ apiUrl: normalizeApiUrl(apiDraft) })}
+          onKeyDown={(e) => e.key === "Enter" && onChange({ apiUrl: normalizeApiUrl(apiDraft) })}
+        />
+      </label>
+      <p className="muted">
+        Vacía = solo las estrategias que vienen con el instalador (sin internet).
+      </p>
+      <div className="row">
+        <button onClick={onSyncNow} disabled={!settings.apiUrl}>
+          Sincronizar ahora
+        </button>
+        <button
+          onClick={() => {
+            setApiDraft(DEFAULT_API_URL);
+            onChange({ apiUrl: DEFAULT_API_URL });
+          }}
+        >
+          URL por defecto
+        </button>
+      </div>
+
+      <h3>Aplicación</h3>
+      <div className="row">
+        <button className="danger" onClick={onQuit}>
+          Salir de AoE2 Overlay
+        </button>
       </div>
     </div>
   );

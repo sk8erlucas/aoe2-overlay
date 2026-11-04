@@ -19,14 +19,15 @@
 
 ### A cargo del dueño del proyecto (ver la guía)
 
-- [ ] DNS: registros `A` para `tudominio.com` y `api.tudominio.com`
-- [ ] Generar un `BETTER_AUTH_SECRET` nuevo para producción
-- [ ] Dokploy: servicio `api` con sus variables y dominio
-- [ ] Dokploy: servicio `web` con el build arg y dominio
+- [x] DNS: `aoe2overlay.sitemaster.com.ar`, `api.aoe2overlay…` y `db.aoe2overlay…` (Cloudflare, solo DNS)
+- [x] Generar un `BETTER_AUTH_SECRET` nuevo para producción
+- [x] Dokploy: servicio `api` con sus variables y dominio
+- [x] Dokploy: servicio `web` con el build arg y dominio
 - [ ] Autodeploy en ambos servicios
 - [ ] Registrarse y darse rol de admin
-- [ ] Publicar el primer release: `git tag v0.1.0 && git push origin v0.1.0`
-- [ ] Base de datos: usar la conexión interna de Dokploy y cerrar el puerto público 5489 (o activar SSL / limitar por firewall)
+- [x] Publicar el primer release (`v0.1.0` publicado con .exe y .msi)
+- [x] SSL en Postgres (`db.aoe2overlay.sitemaster.com.ar`, certificado autofirmado)
+- [ ] Obligar SSL en las conexiones externas (`hostssl` en `pg_hba.conf`): hoy todavía acepta conexiones sin cifrar desde afuera
 - [ ] Backups automáticos de la base (Dokploy → base → Backups)
 
 ### Después
@@ -45,7 +46,7 @@
 
 ## Criterio de terminado
 
-- [ ] `https://tudominio.com` y `https://api.tudominio.com/api/health` responden
-- [ ] El tag `v0.1.0` genera el instalador en Releases
+- [x] `https://aoe2overlay.sitemaster.com.ar` y `https://api.aoe2overlay.sitemaster.com.ar/api/health` responden
+- [x] El tag `v0.1.0` genera el instalador en Releases
 - [ ] Instalar desde la web funciona en una PC limpia
 - [ ] Publicar `v0.1.1` hace que el overlay instalado ofrezca la actualización

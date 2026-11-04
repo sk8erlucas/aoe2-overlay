@@ -89,3 +89,14 @@ export function getStepAt(stepTimes: readonly number[], gameSeconds: number): St
     nextIndex === null ? null : Math.max(0, (stepTimes[nextIndex] ?? 0) - gameSeconds);
   return { index, nextIndex, secondsToNext };
 }
+
+/** Explorador con el que arranca toda partida estándar (cuenta para la población). */
+export const STARTING_SCOUTS = 1;
+
+/**
+ * Población total de un paso: aldeanos + el explorador inicial.
+ * No incluye unidades militares producidas en el paso (no las conocemos).
+ */
+export function populationOf(step: Pick<Step, "villager_count">): number {
+  return step.villager_count + STARTING_SCOUTS;
+}

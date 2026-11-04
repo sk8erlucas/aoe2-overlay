@@ -17,7 +17,7 @@ Arquitectura y decisiones: [arquitectura.md](arquitectura.md) · Diseño de la w
 | 2   | [Overlay MVP (sin backend)](fase-2-overlay-mvp.md)                    | ✅ Terminada   |
 | 3   | [API y base de datos](fase-3-api-y-db.md)                             | ✅ Terminada   |
 | 4   | [Web](fase-4-web.md)                                                  | ✅ Terminada   |
-| 5   | [Integración overlay ↔ API](fase-5-integracion-overlay-api.md)        | ⬜ Pendiente   |
+| 5   | [Integración overlay ↔ API](fase-5-integracion-overlay-api.md)        | 🟨 En progreso |
 | 6   | [Release y deploy](fase-6-release-y-deploy.md)                        | 🟨 En progreso |
 | 7   | [Futuro](fase-7-futuro.md)                                            | ⬜ Pendiente   |
 | 8   | [Pruebas manuales](fase-8-pruebas-manuales.md)                        | 🟨 En progreso |

@@ -78,3 +78,10 @@ describe("getStepAt", () => {
     expect(getStepAt(times, 999)).toEqual({ index: 2, nextIndex: null, secondsToNext: null });
   });
 });
+
+describe("populationOf", () => {
+  it("suma el explorador inicial", async () => {
+    const { populationOf } = await import("../src");
+    expect(populationOf({ villager_count: 6 })).toBe(7);
+  });
+});

@@ -1,4 +1,10 @@
-import { estimateStepTimes, formatClock, parseNote, type Step } from "@age-overlay/shared";
+import {
+  estimateStepTimes,
+  formatClock,
+  parseNote,
+  populationOf,
+  type Step,
+} from "@age-overlay/shared";
 import { AGE_LABELS } from "@/lib/labels";
 
 const RES = [
@@ -49,7 +55,12 @@ export function StepTimeline({ steps }: { steps: Step[] }) {
                 >
                   {formatClock(times[i] ?? 0)}
                 </span>
-                <span className="font-bold">{step.villager_count} aldeanos</span>
+                <span className="font-bold" title="Población total: aldeanos + explorador inicial">
+                  👥 {populationOf(step)}{" "}
+                  <span className="font-normal text-ink/60">
+                    ({step.villager_count} ald. + explorador)
+                  </span>
+                </span>
                 <span className="flex gap-3 text-ink/70">
                   {RES.map(([key, icon]) => {
                     const v = step.resources[key];

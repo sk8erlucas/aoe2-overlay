@@ -305,3 +305,77 @@ input[type="range"] {
   color: var(--muted);
   text-align: center;
 }
+
+/* ---------- Botones del modo juego ---------- */
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  padding: 3px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  width: fit-content;
+}
+.ctl {
+  min-width: 30px;
+  height: 26px;
+  padding: 0 6px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.ctl.main {
+  min-width: 38px;
+  background: var(--gold);
+  color: #1d1606;
+  border: none;
+  text-shadow: none;
+  font-weight: 700;
+}
+.ctl.main:hover {
+  background: #f0c260;
+}
+.ctl.close:hover {
+  background: rgba(224, 96, 90, 0.5);
+}
+.ctl-sep {
+  width: 1px;
+  height: 18px;
+  margin: 0 2px;
+  background: var(--line);
+}
+
+.pop {
+  font-size: 1rem;
+}
+.pop strong {
+  color: var(--gold);
+  font-size: 1.15rem;
+}
+.pop-detail {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.sync-status {
+  margin: 0 0 8px;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.sync-status.offline {
+  color: #f0b27a;
+}
+.search {
+  margin-bottom: 6px;
+}
+.badge {
+  margin-left: 6px;
+  font-size: 0.7rem;
+  color: var(--gold);
+}
+.danger:hover:not(:disabled) {
+  background: rgba(224, 96, 90, 0.45);
+}
