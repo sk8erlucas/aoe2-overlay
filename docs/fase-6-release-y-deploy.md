@@ -24,7 +24,7 @@
 - [x] Dokploy: servicio `api` con sus variables y dominio
 - [x] Dokploy: servicio `web` con el build arg y dominio
 - [x] Autodeploy en ambos servicios: webhooks de `api` y `web` cargados en GitHub (2026-11-04), el ping llegó bien a Dokploy
-- [ ] Confirmar el autodeploy con un push real: aparece un deploy nuevo en cada servicio (Dokploy → Deployments)
+- [x] Confirmado con un push real (2026-11-04): los dos webhooks respondieron 200 y la API y la web nuevas quedaron online en unos 3 minutos
 - [x] Registrarse y darse rol de admin (`fibonaku`, admin desde 2026-11-04)
 - [x] Publicar el primer release (`v0.1.0` publicado con .exe y .msi)
 - [x] SSL en Postgres (`db.aoe2overlay.sitemaster.com.ar`, certificado autofirmado)
