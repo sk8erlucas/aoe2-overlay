@@ -38,6 +38,8 @@
   1. **SignPath Foundation**: firma gratis para proyectos open source; se pide en signpath.org y firma desde GitHub Actions
   2. **Azure Artifact Signing (ex Trusted Signing)**: ~10 USD/mes; revisar si acepta personas en Argentina
   3. Certificado OV comercial (~200–400 USD/año, con token USB o HSM en la nube)
+- [x] Metadatos de editor y copyright en el .exe, e instalación por usuario sin pedir administrador (menos heurísticas sospechosas)
+- [x] VirusTotal v0.2.0: 2/71 (Arctic Wolf "Unsafe", SecureAge "Malicious"), falsos positivos típicos de NSIS sin firmar
 - [ ] Reportar falsos positivos: subir el instalador a VirusTotal y, si algún antivirus lo marca, enviarlo como falso positivo (Microsoft Security Intelligence y el antivirus que lo detecte)
 
 ### Proyecto open source

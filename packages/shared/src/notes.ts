@@ -56,18 +56,57 @@ export function iconLabel(path: string): string {
     .trim();
 }
 
+/**
+ * Palabras clave que usan las estrategias de la comunidad dentro del texto
+ * (vienen de las traducciones de RTS Overlay) → etiqueta en español.
+ */
+const TEXT_KEYWORDS: Record<string, string> = {
+  foodUnderTC: "comida bajo el centro urbano",
+  stragglerTree: "árbol suelto",
+  stragglerTrees: "árboles sueltos",
+  darkAge: "Alta Edad Media",
+  feudalAge: "Edad Feudal",
+  castleAge: "Edad de los Castillos",
+  imperialAge: "Edad Imperial",
+  battleElephant: "elefantes de guerra",
+  knight: "caballeros",
+  scoutCavalry: "exploradores",
+  archer: "arqueros",
+  crossbowman: "ballesteros",
+  skirmisher: "hostigadores",
+  manAtArms: "hombres de armas",
+  militia: "milicias",
+  spearman: "lanceros",
+  monk: "monjes",
+  townCenter: "centro urbano",
+  loom: "telar",
+  wheelbarrow: "carretilla",
+  handCart: "carro de mano",
+  doubleBitAxe: "hacha de doble filo",
+  horseCollar: "collera",
+  goldMining: "minería de oro",
+};
+
+/** Reemplaza las palabras clave conocidas dentro de un texto. */
+export function translateKeywords(text: string): string {
+  // Cada palabra entera (letras) se busca en el diccionario; si no está, queda igual.
+  return text.replace(/[A-Za-z]+/g, (w) => TEXT_KEYWORDS[w] ?? w);
+}
+
 /** Separa una nota en segmentos de texto e ícono. */
 export function parseNote(note: string): NoteSegment[] {
   const segments: NoteSegment[] = [];
   let last = 0;
   for (const match of note.matchAll(ICON_PATTERN)) {
     const start = match.index ?? 0;
-    if (start > last) segments.push({ type: "text", text: note.slice(last, start) });
+    if (start > last)
+      segments.push({ type: "text", text: translateKeywords(note.slice(last, start)) });
     const path = match[1] ?? "";
     segments.push({ type: "icon", path, label: iconLabel(path) });
     last = start + match[0].length;
   }
-  if (last < note.length) segments.push({ type: "text", text: note.slice(last) });
+  if (last < note.length)
+    segments.push({ type: "text", text: translateKeywords(note.slice(last)) });
   return segments;
 }
 

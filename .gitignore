@@ -35,3 +35,6 @@ Thumbs.db
 
 # Next.js
 next-env.d.ts
+
+# Estrategias de terceros descargadas para importar (no se versionan)
+imports/

@@ -8,7 +8,7 @@
 
 ### `packages/shared`
 
-- [x] Esquema Zod `Strategy` compatible con el formato de la comunidad + extensiones (ver [strategies/README.md](../strategies/README.md))
+- [x] Esquema Zod `Strategy` compatible con el formato de la comunidad + extensiones (ver [strategies/README.md](../../strategies/README.md))
 - [x] Esquema Zod `Step` (villager_count, age, time opcional, resources con builder, notes)
 - [x] Constantes: `AGES`, `MAP_TYPES`, `POSITIONS`, `DIFFICULTIES`, `GENERIC_CIVS`
 - [x] Utilidades de tiempo: `gameToReal`, `realToGame`, `formatClock`, `parseClock`, `DEFAULT_SPEED = 1.7`
@@ -49,4 +49,4 @@
 - **No hace falta DB en esta fase.** El esquema de la Fase 3 se deriva de este: el JSON completo en `jsonb` más columnas para filtrar.
 - Los paquetes internos exportan TypeScript directo (`exports: ./src/index.ts`), sin paso de build. Vite, Next (`transpilePackages`) y tsx los consumen así.
 - La lista de civs y mapas puede quedar desactualizada con DLCs nuevas: se agregan en `packages/game-data/src/`.
-- Pendiente decidir el tema íconos (ver [arquitectura.md](arquitectura.md#pendiente-íconos)).
+- Pendiente decidir el tema íconos (ver [arquitectura.md](../arquitectura.md#pendiente-íconos)).

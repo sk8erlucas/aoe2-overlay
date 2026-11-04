@@ -47,8 +47,13 @@
     "windows": {
       "nsis": {
         "languages": ["Spanish", "English"],
-        "displayLanguageSelector": true
+        "displayLanguageSelector": true,
+        "installMode": "currentUser"
       }
-    }
+    },
+    "publisher": "AoE2 Overlay (open source)",
+    "copyright": "Copyright (c) 2026 AoE2 Overlay contributors. Licencia MIT.",
+    "homepage": "https://aoe2overlay.sitemaster.com.ar",
+    "longDescription": "Overlay open source de estrategias de apertura para Age of Empires II: Definitive Edition. Ventana siempre encima del juego; no se inyecta en el juego ni lee su memoria. Codigo fuente: https://github.com/sk8erlucas/aoe2-overlay"
   }
 }

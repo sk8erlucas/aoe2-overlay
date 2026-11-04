@@ -11,9 +11,12 @@ describe("parseNote", () => {
     ]);
   });
 
-  it("deja el texto sin íconos intacto", () => {
+  it("texto sin íconos: un solo segmento (con las palabras clave traducidas)", () => {
+    expect(parseNote("Explorar con el explorador")).toEqual([
+      { type: "text", text: "Explorar con el explorador" },
+    ]);
     expect(parseNote("Click up to feudalAge")).toEqual([
-      { type: "text", text: "Click up to feudalAge" },
+      { type: "text", text: "Click up to Edad Feudal" },
     ]);
   });
 });
@@ -33,5 +36,16 @@ describe("noteToText", () => {
     expect(noteToText("@resource/Aoe2de_hammer.png@ 1 @barracks/Barracks_aoe2DE.png@")).toBe(
       "construir 1 cuartel",
     );
+  });
+});
+
+describe("palabras clave de la comunidad", () => {
+  it("traduce las conocidas y deja el resto", async () => {
+    const { noteToText } = await import("../src");
+    expect(noteToText("Move 6 from foodUnderTC to stragglerTree")).toBe(
+      "Move 6 from comida bajo el centro urbano to árbol suelto",
+    );
+    expect(noteToText("Train ∞ battleElephant")).toBe("Train ∞ elefantes de guerra");
+    expect(noteToText("Click up to feudalAge")).toBe("Click up to Edad Feudal");
   });
 });

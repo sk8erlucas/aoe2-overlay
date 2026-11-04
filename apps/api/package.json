@@ -13,7 +13,8 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "user:role": "tsx --env-file-if-exists=.env src/db/set-role.ts"
+    "user:role": "tsx --env-file-if-exists=.env src/db/set-role.ts",
+    "import:community": "tsx --env-file-if-exists=.env src/db/import-community.ts"
   },
   "dependencies": {
     "@age-overlay/game-data": "workspace:*",
