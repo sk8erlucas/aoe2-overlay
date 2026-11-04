@@ -23,7 +23,8 @@
 - [x] Generar un `BETTER_AUTH_SECRET` nuevo para producción
 - [x] Dokploy: servicio `api` con sus variables y dominio
 - [x] Dokploy: servicio `web` con el build arg y dominio
-- [ ] Autodeploy en ambos servicios: Dokploy usa el proveedor Git, así que hace falta el webhook de cada servicio en GitHub (ver la guía, paso 5)
+- [x] Autodeploy en ambos servicios: webhooks de `api` y `web` cargados en GitHub (2026-11-04), el ping llegó bien a Dokploy
+- [ ] Confirmar el autodeploy con un push real: aparece un deploy nuevo en cada servicio (Dokploy → Deployments)
 - [x] Registrarse y darse rol de admin (`fibonaku`, admin desde 2026-11-04)
 - [x] Publicar el primer release (`v0.1.0` publicado con .exe y .msi)
 - [x] SSL en Postgres (`db.aoe2overlay.sitemaster.com.ar`, certificado autofirmado)
