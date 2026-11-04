@@ -101,7 +101,19 @@ Ya existe y tiene las tablas creadas (`aoe2-overlaydb`). Dos opciones:
 
 ## 5. Deploy automático
 
-En cada servicio (`api` y `web`): **General → Autodeploy** activado. Así, cada push a `main` vuelve a desplegar. Si Dokploy te pide un webhook, copiá la URL de **Deployments → Webhook** y agregala en GitHub (**Settings → Webhooks**).
+Con el proveedor **Git** (no el conector de GitHub), Dokploy no se entera solo de los push: necesita un webhook por servicio.
+
+1. En cada servicio (`api` y `web`): **General → Autodeploy** activado.
+2. Copiá la URL de **Deployments → Webhook URL** de cada uno. Es secreta: no la pegues en el repo.
+3. En GitHub: **Settings → Webhooks → Add webhook**, una vez por servicio:
+   - _Payload URL_: la URL del paso 2
+   - _Content type_: `application/json`
+   - _Which events_: **Just the push event**
+4. Opcional: en **General → Watch Paths**, para no redesplegar por cambios que no lo afectan:
+   - `api`: `apps/api/**`, `packages/**`, `strategies/**`, `pnpm-lock.yaml`
+   - `web`: `apps/web/**`, `packages/**`, `pnpm-lock.yaml`
+
+Para probarlo, hacé un push a `main` y mirá **Deployments**: tiene que aparecer un deploy nuevo en cada servicio.
 
 ## 6. Tu usuario administrador
 

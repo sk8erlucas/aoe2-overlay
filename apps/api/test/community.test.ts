@@ -16,6 +16,15 @@ const base = {
 };
 
 describe("prepareCommunityStrategy", () => {
+  it('quita los "undefined" que dejan algunas exportaciones', () => {
+    const step = { ...base.build_order[0]!, notes: ["Lure undefined @animal/Boar_aoe2DE.png@"] };
+    const r = prepareCommunityStrategy({ ...base, build_order: [step] }, "abc123");
+    expect(r.ok).toBe(true);
+    if (!r.ok) return;
+    expect(r.strategy.build_order[0]!.notes[0]).toBe("Lure @animal/Boar_aoe2DE.png@");
+    expect(r.warnings.some((w) => w.includes("undefined"))).toBe(true);
+  });
+
   it("da crédito con la fuente original y el tag", () => {
     const r = prepareCommunityStrategy(base, "aqo8MRuR07aaUKTSTt6V");
     expect(r.ok).toBe(true);

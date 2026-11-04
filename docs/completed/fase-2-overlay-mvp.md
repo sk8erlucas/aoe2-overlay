@@ -60,7 +60,7 @@
 
 ## Notas
 
-- **Fase cerrada el 2026-11-03.** Las pruebas en partida (clics, hotkeys, precisión del reloj, redimensionado) pasaron a la [Fase 8: pruebas manuales](../fase-8-pruebas-manuales.md). Recordar la posición de la ventana pasó a la [Fase 5](../fase-5-integracion-overlay-api.md).
+- **Fase cerrada el 2026-11-03.** Las pruebas en partida (clics, hotkeys, precisión del reloj, redimensionado) pasaron a la [Fase 8: pruebas manuales](../fase-8-pruebas-manuales.md). Recordar la posición de la ventana pasó a la [Fase 5](fase-5-integracion-overlay-api.md).
 
 - **Verificado sin el juego (2026-11-03):**
   - La ventana aparece arriba a la derecha sin tomar el foco.

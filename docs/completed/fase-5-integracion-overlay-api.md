@@ -27,11 +27,13 @@
 - [x] Recordar posición y tamaño de la ventana entre sesiones (`tauri-plugin-window-state`); la primera vez arranca arriba a la derecha
 - [x] Corregido: la ventana se ocultaba sola al entrar en modo juego o al pasar el mouse por los botones (mezcla de llamadas directas a Win32 con el estado interno de tao). Ahora todo usa la API de Tauri (`show`, `set_focusable`)
 
-### Pendiente
+### Cuenta, favoritas y links desde la web
 
-- [ ] Login opcional desde el overlay (flujo device-code de Better Auth: el overlay muestra un código y se confirma en la web)
-- [ ] Favoritas del usuario arriba en la lista (requiere el login)
-- [ ] Abrir una estrategia de la web en el overlay (deep link `ageoverlay://strategy/<slug>`)
+- [x] Login opcional desde el overlay (plugin `deviceAuthorization` de Better Auth, RFC 8628): Ajustes → Cuenta → "Iniciar sesión" muestra un código, abre `/dispositivo` en la web y el overlay recibe un token que manda como `Authorization: Bearer` (plugin `bearer`). Solo acepta el `client_id` `aoe2-overlay`; el código vence a los 10 minutos
+- [x] Página `/dispositivo` en la web: pide iniciar sesión si hace falta, muestra el código y pide confirmar antes de conectar
+- [x] Favoritas del usuario arriba en la lista, marcadas con ★ (también en la búsqueda); se actualizan con cada sincronización. Si la sesión vence, el overlay la olvida solo
+- [x] Abrir una estrategia de la web en el overlay: botón "Abrir en el overlay" (`ageoverlay://strategy/<slug>`, `tauri-plugin-deep-link` + `single-instance`). Si la estrategia no estaba sincronizada (por ejemplo, no listada), la pide a la API
+- [x] Tests: flujo completo en la API (`test/device.test.ts`) y parser del link, orden de favoritas y polling en el overlay (`test/account.test.ts`)
 
 ## Criterio de terminado
 
@@ -40,7 +42,11 @@
 
 ## Notas
 
+- **Fase cerrada el 2026-11-04.** La prueba a mano del login y del link quedó en la [Fase 8](../fase-8-pruebas-manuales.md).
+- El esquema `ageoverlay://` lo registra el instalador: el link funciona desde la **0.3.0** instalada (en `tauri dev` se registra al arrancar).
+- La migración `0001_device_code` crea la tabla `device_code`; corre sola al redesplegar la API.
+
 - Para que el overlay sincronice contra producción, la API desplegada tiene que incluir `/api/overlay/strategies`: **redesplegar la API en Dokploy** después de este cambio.
 - Verificado en Windows: lejos de los botones la ventana deja pasar los clics (`WS_EX_TRANSPARENT`); sobre ▶ los acepta.
 - La "población" no incluye unidades militares (la estrategia no las detalla): es aldeanos + 1 explorador.
-- La versión del overlay pasó a **0.2.0**. Para publicarla: `git tag v0.2.0 && git push origin v0.2.0`.
+- La versión del overlay pasó a **0.2.0** y después a **0.3.0** (cuenta y links). Para publicarla: `git tag v0.3.0 && git push origin v0.3.0`.

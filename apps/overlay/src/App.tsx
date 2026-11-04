@@ -4,7 +4,9 @@ import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties }
 import { GameView } from "./components/GameView";
 import { SettingsView } from "./components/SettingsView";
 import { SetupView } from "./components/SetupView";
+import { fetchFavorites, loadAccount, saveAccount, signOut, type Account } from "./lib/account";
 import * as clock from "./lib/clock";
+import { onDeepLink, type DeepLink } from "./lib/deeplink";
 import {
   beep,
   onTrayToggleMode,
@@ -20,7 +22,9 @@ import { loadSettings, saveSettings, type HotkeyAction, type Settings } from "./
 import {
   loadCache,
   mergeStrategies,
+  normalizeApiUrl,
   syncStrategies,
+  type RemoteItem,
   SYNC_INTERVAL_MS,
   type StrategyCache,
   type SyncStatus,
@@ -70,12 +74,67 @@ function Overlay({ initialSettings }: { initialSettings: Settings }) {
   // --- Estrategias: base + descargadas de la API (con caché offline) ---
   const [cache, setCache] = useState<StrategyCache | null>(null);
   const [syncStatus, setSyncStatus] = useState<SyncStatus>({ state: "idle" });
-  const strategies = useMemo(() => mergeStrategies(cache?.items), [cache]);
+  // Estrategias abiertas desde un link que no venían en la sincronización (p. ej. no listadas).
+  const [extra, setExtra] = useState<RemoteItem[]>([]);
+  const strategies = useMemo(
+    () => mergeStrategies([...(cache?.items ?? []), ...extra]),
+    [cache, extra],
+  );
+  const strategiesRef = useRef(strategies);
+  strategiesRef.current = strategies;
+
+  // --- Cuenta (opcional) y favoritas ---
+  const [account, setAccount] = useState<Account | null>(null);
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const accountRef = useRef<Account | null>(null);
+
+  const refreshFavorites = useCallback(async () => {
+    const acc = accountRef.current;
+    // El token es de una API en particular: si se cambió la URL, no se usa.
+    if (!acc || acc.apiUrl !== normalizeApiUrl(settingsRef.current.apiUrl)) {
+      setFavorites([]);
+      return;
+    }
+    try {
+      const favs = await fetchFavorites(acc);
+      if (favs === null) {
+        // Sesión vencida o cerrada desde la web.
+        accountRef.current = null;
+        setAccount(null);
+        setFavorites([]);
+        await saveAccount(null);
+      } else {
+        setFavorites(favs);
+      }
+    } catch {
+      // Sin conexión: se mantienen las que había.
+    }
+  }, []);
+
+  const login = useCallback(
+    async (acc: Account) => {
+      accountRef.current = acc;
+      setAccount(acc);
+      await saveAccount(acc);
+      await refreshFavorites();
+    },
+    [refreshFavorites],
+  );
+
+  const logout = useCallback(async () => {
+    const acc = accountRef.current;
+    accountRef.current = null;
+    setAccount(null);
+    setFavorites([]);
+    await saveAccount(null);
+    if (acc) await signOut(acc);
+  }, []);
 
   const cacheRef = useRef<StrategyCache | null>(null);
   const runSync = useCallback(async () => {
     const apiUrl = settingsRef.current.apiUrl;
     if (!apiUrl) return;
+    void refreshFavorites();
     setSyncStatus({ state: "syncing" });
     try {
       const next = await syncStrategies(apiUrl, cacheRef.current);
@@ -91,11 +150,13 @@ function Overlay({ initialSettings }: { initialSettings: Settings }) {
     }
   }, []);
 
-  // Al abrir: primero la caché (funciona sin internet), después sincroniza.
+  // Al abrir: primero la caché y la cuenta (funciona sin internet), después sincroniza.
   useEffect(() => {
-    void loadCache().then((saved) => {
+    void Promise.all([loadCache(), loadAccount()]).then(([saved, acc]) => {
       cacheRef.current = saved;
       setCache(saved);
+      accountRef.current = acc;
+      setAccount(acc);
       void runSync();
     });
     const id = setInterval(() => void runSync(), SYNC_INTERVAL_MS);
@@ -109,6 +170,37 @@ function Overlay({ initialSettings }: { initialSettings: Settings }) {
     firstApiUrl.current = settings.apiUrl;
     void runSync();
   }, [settings.apiUrl, runSync]);
+
+  // --- Links desde la web: ageoverlay://strategy/<slug> ---
+  const openLink = useCallback(
+    async (link: DeepLink) => {
+      setMode("edit");
+      setTab("match");
+      const select = () =>
+        updateSettings({
+          selection: { ...settingsRef.current.selection, strategyId: link.slug },
+        });
+      if (strategiesRef.current.some((s) => s.id === link.slug)) return select();
+      const apiUrl = normalizeApiUrl(settingsRef.current.apiUrl);
+      if (!apiUrl) return;
+      try {
+        const res = await fetch(`${apiUrl}/api/strategies/${encodeURIComponent(link.slug)}`, {
+          signal: AbortSignal.timeout(15_000),
+        });
+        if (!res.ok) return;
+        const item = (await res.json()) as RemoteItem;
+        setExtra((prev) => [...prev.filter((i) => i.slug !== item.slug), item]);
+        select();
+      } catch {
+        // Sin conexión y sin la estrategia en caché: no se puede abrir.
+      }
+    },
+    [updateSettings],
+  );
+  useEffect(() => {
+    const off = onDeepLink((link) => void openLink(link));
+    return () => void off.then((fn) => fn());
+  }, [openLink]);
 
   // --- Estrategia y paso actual ---
   const strategy = strategies.find((s) => s.id === settings.selection.strategyId);
@@ -224,6 +316,7 @@ function Overlay({ initialSettings }: { initialSettings: Settings }) {
             {tab === "match" ? (
               <SetupView
                 strategies={strategies}
+                favorites={favorites}
                 syncStatus={syncStatus}
                 selection={settings.selection}
                 onChange={(selection) => updateSettings({ selection })}
@@ -236,6 +329,9 @@ function Overlay({ initialSettings }: { initialSettings: Settings }) {
                 onChange={updateSettings}
                 onResetPosition={() => void resetPosition()}
                 onSyncNow={() => void runSync()}
+                account={account}
+                onLogin={login}
+                onLogout={() => void logout()}
                 onQuit={() => void quitApp()}
               />
             )}

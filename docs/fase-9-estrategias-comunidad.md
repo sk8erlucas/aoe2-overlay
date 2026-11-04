@@ -29,13 +29,16 @@
 ### Notas de la comunidad
 
 - [x] Las palabras clave del formato de la comunidad (`foodUnderTC`, `stragglerTree`, `feudalAge`, `battleElephant`…) se muestran en español en el overlay y la web (`translateKeywords` en `packages/shared/src/notes.ts`)
+- [x] Sumadas `siegeWorkshop`, `batteringRam`, `mangonel` y `scorpion`
+- [x] El importador quita el `undefined` que dejan algunas exportaciones ("Lure undefined @boar@") y lo avisa
 - [ ] Ampliar el diccionario a medida que aparezcan palabras nuevas en las estrategias importadas
 
 ### Catálogo
 
 - [x] 20-Min Elephant (Malayos) de pooplord, publicada (`/estrategias/20-min-elephant-aqo8mr`)
 - [ ] Turcos: Fast Imperial
-- [ ] Cumanos (ej. Feudal TC boom / Fast Castle con 2 CU)
+- [x] Cumanos: Ram Spam de tytythechoochoo (`/estrategias/ram-spam-cumans`). El JSON vino sin el id de Build Order Guide, así que se importó como `cumansRamSpam.json`
+- [ ] Cumanos: Feudal TC boom / Fast Castle con 2 CU
 - [ ] Al menos una estrategia buena por cada civilización ranked
 - [ ] Las más votadas genéricas (scouts, arqueros, drush, FC)
 

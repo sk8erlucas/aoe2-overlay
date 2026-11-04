@@ -379,3 +379,18 @@ input[type="range"] {
 .danger:hover:not(:disabled) {
   background: rgba(224, 96, 90, 0.45);
 }
+
+/* Login con código (Ajustes → Cuenta) */
+.device-code {
+  margin: 4px 0;
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 1.6em;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-align: center;
+  user-select: all;
+}
+
+.badge.fav {
+  margin: 0 4px 0 0;
+}

@@ -51,8 +51,15 @@ export async function api<T>(path: string, { body, cookie, headers, ...init }: A
   const text = await res.text();
   const data = text ? (JSON.parse(text) as unknown) : undefined;
   if (!res.ok) {
-    const err = (data ?? {}) as { error?: string; message?: string; issues?: ApiError["issues"] };
-    throw new ApiError(res.status, err.error ?? err.message ?? `Error ${res.status}`, err.issues);
+    const err = (data ?? {}) as {
+      error?: string;
+      error_description?: string;
+      message?: string;
+      issues?: ApiError["issues"];
+    };
+    // Los endpoints OAuth de Better Auth (device code) usan `error` + `error_description`.
+    const message = err.error_description ?? err.error ?? err.message ?? `Error ${res.status}`;
+    throw new ApiError(res.status, message, err.issues);
   }
   return data as T;
 }

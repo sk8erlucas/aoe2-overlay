@@ -46,6 +46,18 @@ Jugar cada una al menos una vez contra la IA y anotar ajustes en `strategies/*.j
 - [ ] Lighthouse: rendimiento y accesibilidad > 90 en la landing y en /estrategias
 - [ ] El efecto del caballero se ve fluido en una PC común y en un celular
 
+## Cuenta y links (de la Fase 5)
+
+Requiere el overlay **0.3.0** instalado y la API y la web redesplegadas.
+
+- [ ] Ajustes → Cuenta → "Iniciar sesión": se abre `/dispositivo` con el código, se confirma y el overlay muestra "Conectado como…"
+- [ ] Sin sesión en la web, `/dispositivo` pide ingresar y vuelve con el código cargado
+- [ ] Una estrategia marcada como favorita en la web aparece primero con ★ después de "Sincronizar ahora"
+- [ ] "Cerrar sesión" en el overlay quita las ★
+- [ ] "Abrir en el overlay" en la web, con el overlay abierto: lo muestra y elige la estrategia
+- [ ] Lo mismo con el overlay cerrado: lo abre y elige la estrategia
+- [ ] "Ram Spam" (Cumanos) se ve bien en el overlay: notas traducidas (taller de asedio, arietes)
+
 ## Notas
 
 - Si algo falla, abrir una issue con la plantilla de bug y el modo de pantalla del juego.

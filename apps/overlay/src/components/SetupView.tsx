@@ -1,6 +1,7 @@
 import { CIVS, MAPS, mapTypeOf } from "@age-overlay/game-data";
 import { POSITIONS, suggest, type Position } from "@age-overlay/shared";
 import { useMemo, useState } from "react";
+import { favoritesFirst } from "../lib/account";
 import type { Selection } from "../lib/settings";
 import type { LoadedStrategy } from "../lib/strategies";
 import type { SyncStatus } from "../lib/sync";
@@ -44,6 +45,8 @@ function SyncLine({ status, count }: { status: SyncStatus; count: number }) {
 
 interface Props {
   strategies: readonly LoadedStrategy[];
+  /** Slugs de las favoritas del usuario (vacío sin cuenta). */
+  favorites: string[];
   syncStatus: SyncStatus;
   selection: Selection;
   onChange: (selection: Selection) => void;
@@ -51,7 +54,14 @@ interface Props {
 }
 
 /** Pantalla previa a la partida: elegir mapa, civs y posición, y ver sugerencias. */
-export function SetupView({ strategies, syncStatus, selection, onChange, onPlay }: Props) {
+export function SetupView({
+  strategies,
+  favorites,
+  syncStatus,
+  selection,
+  onChange,
+  onPlay,
+}: Props) {
   const [query, setQuery] = useState("");
   const set = <K extends keyof Selection>(key: K, value: Selection[K]) =>
     onChange({ ...selection, [key]: value || undefined });
@@ -67,19 +77,22 @@ export function SetupView({ strategies, syncStatus, selection, onChange, onPlay 
         mapType,
         position: selection.position,
       },
-      { limit: 50, getVotes: (s) => s.score ?? 0 },
+      // Sin recortar acá: las favoritas se suben antes de quedarse con 50.
+      { limit: strategies.length, getVotes: (s) => s.score ?? 0 },
     );
   }, [strategies, selection.civ, selection.vsCiv, selection.map, selection.position]);
 
   // Con texto en el buscador se busca en todas por nombre (ignora los filtros).
   const results = useMemo(() => {
     const q = normalize(query.trim());
-    if (!q) return suggestions;
-    return strategies
-      .filter((s) => normalize(s.name).includes(q))
-      .slice(0, 50)
-      .map((strategy) => ({ strategy, score: 0, reasons: ["búsqueda"] }));
-  }, [query, strategies, suggestions]);
+    const list = q
+      ? strategies
+          .filter((s) => normalize(s.name).includes(q))
+          .map((strategy) => ({ strategy, score: 0, reasons: ["búsqueda"] }))
+      : suggestions;
+    return favoritesFirst(list, (r) => r.strategy.id, favorites).slice(0, 50);
+  }, [query, strategies, suggestions, favorites]);
+  const favSet = useMemo(() => new Set(favorites), [favorites]);
 
   const chosen = strategies.find((s) => s.id === selection.strategyId);
 
@@ -154,6 +167,11 @@ export function SetupView({ strategies, syncStatus, selection, onChange, onPlay 
                 onClick={() => set("strategyId", s.id)}
               >
                 <span className="s-name">
+                  {favSet.has(s.id) && (
+                    <span className="badge fav" title="Favorita">
+                      ★
+                    </span>
+                  )}
                   {s.name}
                   {s.verified && <span className="badge">✔</span>}
                   {(s.score ?? 0) > 0 && <span className="badge">▲ {s.score}</span>}
@@ -170,7 +188,7 @@ export function SetupView({ strategies, syncStatus, selection, onChange, onPlay 
       {chosen?.description && <p className="description">{chosen.description}</p>}
 
       <button className="primary play" disabled={!chosen} onClick={onPlay}>
-        ▶ Jugar con esta estrategia
+        {chosen ? `▶ Jugar: ${chosen.name}` : "▶ Jugar con esta estrategia"}
       </button>
     </div>
   );

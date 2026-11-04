@@ -23,8 +23,8 @@
 - [x] Generar un `BETTER_AUTH_SECRET` nuevo para producción
 - [x] Dokploy: servicio `api` con sus variables y dominio
 - [x] Dokploy: servicio `web` con el build arg y dominio
-- [ ] Autodeploy en ambos servicios
-- [ ] Registrarse y darse rol de admin
+- [ ] Autodeploy en ambos servicios: Dokploy usa el proveedor Git, así que hace falta el webhook de cada servicio en GitHub (ver la guía, paso 5)
+- [x] Registrarse y darse rol de admin (`fibonaku`, admin desde 2026-11-04)
 - [x] Publicar el primer release (`v0.1.0` publicado con .exe y .msi)
 - [x] SSL en Postgres (`db.aoe2overlay.sitemaster.com.ar`, certificado autofirmado)
 - [ ] Obligar SSL en las conexiones externas (`hostssl` en `pg_hba.conf`): hoy todavía acepta conexiones sin cifrar desde afuera

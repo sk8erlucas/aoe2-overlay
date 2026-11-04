@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "AoE2 Overlay",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "identifier": "io.github.sk8erlucas.aoe2overlay",
   "build": {
     "beforeDevCommand": "pnpm vite:dev",
@@ -55,5 +55,12 @@
     "copyright": "Copyright (c) 2026 AoE2 Overlay contributors. Licencia MIT.",
     "homepage": "https://aoe2overlay.sitemaster.com.ar",
     "longDescription": "Overlay open source de estrategias de apertura para Age of Empires II: Definitive Edition. Ventana siempre encima del juego; no se inyecta en el juego ni lee su memoria. Codigo fuente: https://github.com/sk8erlucas/aoe2-overlay"
+  },
+  "plugins": {
+    "deep-link": {
+      "desktop": {
+        "schemes": ["ageoverlay"]
+      }
+    }
   }
 }

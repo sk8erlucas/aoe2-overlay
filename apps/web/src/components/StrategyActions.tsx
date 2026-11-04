@@ -87,6 +87,13 @@ export function StrategyActions({ s, loggedIn }: { s: StrategyDetail; loggedIn: 
         >
           {fav ? "★ Favorita" : "☆ Favorita"}
         </button>
+        <a
+          className="btn btn-ghost text-xs"
+          href={`ageoverlay://strategy/${encodeURIComponent(s.slug)}`}
+          title="Requiere AoE2 Overlay 0.3 o posterior instalado en esta PC"
+        >
+          Abrir en el overlay
+        </a>
         <button className="btn btn-ghost text-xs" onClick={() => downloadJson(s.slug, s.data)}>
           Exportar JSON
         </button>

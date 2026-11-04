@@ -1,6 +1,6 @@
 //! Parte nativa del overlay: ventana transparente encima del juego, modo click-through,
 //! zonas clickeables (botones) en modo juego, mostrar sin robar el foco, recordar la
-//! posición e ícono en la bandeja del sistema.
+//! posición, ícono en la bandeja del sistema y links `ageoverlay://` desde la web.
 //!
 //! La lógica (reloj, estrategias, hotkeys, sincronización) vive en el frontend (React).
 
@@ -11,6 +11,7 @@ use serde::Deserialize;
 use tauri::menu::{Menu, MenuItem};
 use tauri::tray::TrayIconBuilder;
 use tauri::{AppHandle, Emitter, Manager, PhysicalPosition, WebviewWindow};
+use tauri_plugin_deep_link::DeepLinkExt;
 use tauri_plugin_window_state::{AppHandleExt, StateFlags};
 
 /// Margen (en píxeles lógicos) respecto del borde de la pantalla.
@@ -228,11 +229,15 @@ fn build_tray(app: &AppHandle) -> tauri::Result<()> {
 pub fn run() {
     tauri::Builder::default()
         // Tiene que ser el primer plugin: si ya hay una instancia abierta, la muestra y sale.
+        // Con la feature "deep-link", un link `ageoverlay://…` abierto con la app ya corriendo
+        // llega a esta instancia (evento de deep-link) en vez de abrir otra.
         .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
             if let Some(w) = main_window(app) {
                 show_without_focus(&w);
             }
         }))
+        .plugin(tauri_plugin_deep_link::init())
+        .plugin(tauri_plugin_opener::init())
         .plugin(
             tauri_plugin_window_state::Builder::default()
                 .with_state_flags(window_state_flags())
@@ -251,6 +256,18 @@ pub fn run() {
         ])
         .setup(|app| {
             build_tray(app.handle())?;
+            // El instalador registra el esquema `ageoverlay://`; en desarrollo se registra acá.
+            #[cfg(debug_assertions)]
+            {
+                let _ = app.deep_link().register_all();
+            }
+            // Al abrir una estrategia desde la web, mostrar el overlay (el frontend la elige).
+            let handle = app.handle().clone();
+            app.deep_link().on_open_url(move |_event| {
+                if let Some(w) = main_window(&handle) {
+                    show_without_focus(&w);
+                }
+            });
             // Si no hay posición guardada (primera vez), arriba a la derecha.
             let saved = app
                 .path()

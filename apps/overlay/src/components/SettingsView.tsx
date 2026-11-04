@@ -1,6 +1,8 @@
 import { DEFAULT_SPEED } from "@age-overlay/shared";
 import { useState } from "react";
+import type { Account } from "../lib/account";
 import { DEFAULT_API_URL, normalizeApiUrl } from "../lib/sync";
+import { AccountSection } from "./AccountSection";
 import type { HotkeyError } from "../lib/native";
 import {
   DEFAULT_HOTKEYS,
@@ -17,6 +19,9 @@ interface Props {
   onResetPosition: () => void;
   onSyncNow: () => void;
   onQuit: () => void;
+  account: Account | null;
+  onLogin: (account: Account) => Promise<void>;
+  onLogout: () => void;
 }
 
 const SPEEDS = [
@@ -33,6 +38,9 @@ export function SettingsView({
   onResetPosition,
   onSyncNow,
   onQuit,
+  account,
+  onLogin,
+  onLogout,
 }: Props) {
   const [apiDraft, setApiDraft] = useState(settings.apiUrl);
   // Las hotkeys se editan como texto y se aplican al salir del campo.
@@ -159,6 +167,14 @@ export function SettingsView({
           URL por defecto
         </button>
       </div>
+
+      <h3>Cuenta</h3>
+      <AccountSection
+        apiUrl={settings.apiUrl}
+        account={account}
+        onLogin={onLogin}
+        onLogout={onLogout}
+      />
 
       <h3>Aplicación</h3>
       <div className="row">

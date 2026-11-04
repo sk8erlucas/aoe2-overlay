@@ -101,6 +101,22 @@ export const verification = pgTable(
   (t) => [index("verification_identifier_idx").on(t.identifier)],
 );
 
+/** Plugin device-authorization: login del overlay con un código que se confirma en la web. */
+export const deviceCode = pgTable("device_code", {
+  id: text("id").primaryKey(),
+  deviceCode: text("device_code").notNull().unique(),
+  userCode: text("user_code").notNull().unique(),
+  userId: text("user_id").references(() => user.id, { onDelete: "cascade" }),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  status: text("status").notNull(),
+  lastPolledAt: timestamp("last_polled_at", { withTimezone: true }),
+  pollingInterval: integer("polling_interval"),
+  clientId: text("client_id"),
+  scope: text("scope"),
+  createdAt: createdAt(),
+  updatedAt: updatedAt(),
+});
+
 // ---------------------------------------------------------------------------
 // Estrategias
 // ---------------------------------------------------------------------------

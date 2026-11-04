@@ -1,8 +1,12 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { bearer, deviceAuthorization } from "better-auth/plugins";
 import type { Database } from "./db/client";
 import * as schema from "./db/schema";
 import type { Env } from "./env";
+
+/** client_id que manda el overlay de escritorio en el flujo device-code. */
+export const OVERLAY_CLIENT_ID = "aoe2-overlay";
 
 export function createAuth(
   db: Database,
@@ -22,6 +26,7 @@ export function createAuth(
         session: schema.session,
         account: schema.account,
         verification: schema.verification,
+        deviceCode: schema.deviceCode,
       },
     }),
     emailAndPassword: {
@@ -35,6 +40,17 @@ export function createAuth(
         role: { type: "string", defaultValue: "user", input: false },
       },
     },
+    plugins: [
+      // Login del overlay: pide un código, el usuario lo confirma en la web (/dispositivo)
+      // y el overlay recibe un token de sesión que manda como `Authorization: Bearer`.
+      deviceAuthorization({
+        expiresIn: "10m",
+        interval: "5s",
+        verificationUri: `${env.CORS_ORIGINS[0] ?? env.BETTER_AUTH_URL}/dispositivo`,
+        validateClient: (clientId) => clientId === OVERLAY_CLIENT_ID,
+      }),
+      bearer(),
+    ],
     advanced: {
       // En producción la API va detrás de HTTPS: cookies Secure.
       useSecureCookies: env.BETTER_AUTH_URL.startsWith("https://"),

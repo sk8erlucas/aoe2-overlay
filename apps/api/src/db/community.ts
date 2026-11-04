@@ -48,6 +48,18 @@ export function prepareCommunityStrategy(raw: unknown, id: string): ImportResult
   if (!s.source) s.source = bogUrl(id);
   s.tags = [...new Set([...(s.tags ?? []), BOG_TAG])];
 
+  // Algunas exportaciones dejan "undefined" donde faltaba un número ("Lure undefined @boar@").
+  let cleaned = 0;
+  s.build_order = s.build_order.map((step) => ({
+    ...step,
+    notes: step.notes.map((note) => {
+      const fixed = note.replace(/\s*\bundefined\b/g, "").trim();
+      if (fixed !== note) cleaned++;
+      return fixed;
+    }),
+  }));
+  if (cleaned) warnings.push(`se quitó "undefined" de ${cleaned} nota(s)`);
+
   for (const civ of getCivilizations(s)) {
     if (!findCiv(civ)) warnings.push(`civilización desconocida: "${civ}"`);
   }
