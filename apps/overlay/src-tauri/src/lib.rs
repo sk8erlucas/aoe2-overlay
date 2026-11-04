@@ -49,46 +49,15 @@ struct HitTest {
 
 struct HitTestState(Mutex<HitTest>);
 
-#[cfg(windows)]
-mod win {
-    use windows_sys::Win32::Foundation::HWND;
-    use windows_sys::Win32::UI::WindowsAndMessaging::{
-        GetWindowLongPtrW, SetWindowLongPtrW, ShowWindow, GWL_EXSTYLE, SW_SHOWNOACTIVATE,
-        WS_EX_NOACTIVATE,
-    };
-
-    /// Con WS_EX_NOACTIVATE la ventana nunca toma el foco: el juego sigue recibiendo el teclado,
-    /// incluso al hacer clic en los botones del overlay.
-    pub fn set_no_activate(hwnd: HWND, enabled: bool) {
-        unsafe {
-            let ex = GetWindowLongPtrW(hwnd, GWL_EXSTYLE);
-            let flag = WS_EX_NOACTIVATE as isize;
-            let new = if enabled { ex | flag } else { ex & !flag };
-            SetWindowLongPtrW(hwnd, GWL_EXSTYLE, new);
-        }
-    }
-
-    /// Muestra la ventana sin activarla (no le saca el foco al juego).
-    pub fn show_no_activate(hwnd: HWND) {
-        unsafe {
-            ShowWindow(hwnd, SW_SHOWNOACTIVATE);
-        }
-    }
-}
-
+/// Muestra la ventana usando siempre la API de Tauri/tao.
+///
+/// Importante: no usar ShowWindow/SetWindowLong directo. tao guarda los estilos de la
+/// ventana en su propio estado y los vuelve a aplicar en cada cambio (click-through,
+/// siempre encima…): si la ventana se mostró "por fuera", tao cree que está oculta y la
+/// vuelve a esconder. En modo juego la ventana es no enfocable (WS_EX_NOACTIVATE vía
+/// `set_focusable(false)`), así que mostrarla no le quita el foco al juego.
 fn show_without_focus(window: &WebviewWindow) {
-    #[cfg(windows)]
-    {
-        if let Ok(hwnd) = window.hwnd() {
-            win::show_no_activate(hwnd.0 as _);
-        } else {
-            let _ = window.show();
-        }
-    }
-    #[cfg(not(windows))]
-    {
-        let _ = window.show();
-    }
+    let _ = window.show();
     let _ = window.set_always_on_top(true);
 }
 
@@ -138,10 +107,8 @@ fn set_game_mode(
         hit.game_mode = enabled;
         hit.ignoring = Some(enabled);
     }
-    #[cfg(windows)]
-    if let Ok(hwnd) = window.hwnd() {
-        win::set_no_activate(hwnd.0 as _, enabled);
-    }
+    // No enfocable en modo juego: el teclado sigue yendo al juego, incluso al tocar botones.
+    window.set_focusable(!enabled).map_err(|e| e.to_string())?;
     if !enabled {
         let _ = window.set_focus();
     }

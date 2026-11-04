@@ -34,7 +34,11 @@
 
 - [ ] Generar la clave de firma del updater y guardarla en GitHub Secrets
 - [ ] `tauri-plugin-updater` leyendo `latest.json` del release
-- [ ] (Opcional) Firma de código Authenticode para evitar SmartScreen
+- [ ] Firma de código del instalador (reduce avisos de SmartScreen y falsos positivos). Opciones, en orden de preferencia:
+  1. **SignPath Foundation**: firma gratis para proyectos open source; se pide en signpath.org y firma desde GitHub Actions
+  2. **Azure Artifact Signing (ex Trusted Signing)**: ~10 USD/mes; revisar si acepta personas en Argentina
+  3. Certificado OV comercial (~200–400 USD/año, con token USB o HSM en la nube)
+- [ ] Reportar falsos positivos: subir el instalador a VirusTotal y, si algún antivirus lo marca, enviarlo como falso positivo (Microsoft Security Intelligence y el antivirus que lo detecte)
 
 ### Proyecto open source
 

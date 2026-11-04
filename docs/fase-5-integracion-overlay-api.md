@@ -25,6 +25,7 @@
 - [x] Población total en cada paso: aldeanos + explorador inicial (`populationOf` en `shared`), también en la web
 - [x] Botón "Salir de AoE2 Overlay" en Ajustes (guarda la posición antes de cerrar)
 - [x] Recordar posición y tamaño de la ventana entre sesiones (`tauri-plugin-window-state`); la primera vez arranca arriba a la derecha
+- [x] Corregido: la ventana se ocultaba sola al entrar en modo juego o al pasar el mouse por los botones (mezcla de llamadas directas a Win32 con el estado interno de tao). Ahora todo usa la API de Tauri (`show`, `set_focusable`)
 
 ### Pendiente
 
