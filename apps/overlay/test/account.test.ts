@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { favoritesFirst, formatUserCode, pollDeviceToken } from "../src/lib/account";
+import { favoritesFirst, formatUserCode, pollDeviceToken, setFavorite } from "../src/lib/account";
 import { parseDeepLink } from "../src/lib/deeplink";
 
 describe("parseDeepLink", () => {
@@ -37,6 +37,30 @@ describe("favoritesFirst", () => {
 
 it("formatUserCode", () => {
   expect(formatUserCode("ABCDEFGH")).toBe("ABCD-EFGH");
+});
+
+describe("setFavorite", () => {
+  const account = { apiUrl: "https://api", token: "tok", name: "Ana" };
+  const reply = (status: number) =>
+    (async () => new Response("{}", { status })) as unknown as typeof fetch;
+
+  it("usa el slug y el token", async () => {
+    let url = "";
+    let init: RequestInit | undefined;
+    const spy = (async (u: string, i: RequestInit) => {
+      url = u;
+      init = i;
+      return new Response("{}");
+    }) as unknown as typeof fetch;
+    expect(await setFavorite(account, "ram-spam-cumans", true, spy)).toBe(true);
+    expect(url).toBe("https://api/api/strategies/slug/ram-spam-cumans/favorite");
+    expect(init?.body).toBe('{"favorite":true}');
+    expect(init?.headers).toMatchObject({ authorization: "Bearer tok" });
+  });
+  it("401 = sesión vencida; otro error lanza para poder deshacer", async () => {
+    expect(await setFavorite(account, "x", true, reply(401))).toBe(false);
+    await expect(setFavorite(account, "x", true, reply(500))).rejects.toThrow();
+  });
 });
 
 describe("pollDeviceToken", () => {

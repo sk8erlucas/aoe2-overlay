@@ -197,14 +197,37 @@ input[type="range"] {
   display: grid;
   gap: 4px;
 }
-.suggestions button {
-  width: 100%;
+.suggestions li {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+}
+.suggestions .pick {
+  flex: 1;
+  min-width: 0;
   text-align: left;
   display: flex;
   flex-direction: column;
   padding: 6px 10px;
 }
-.suggestions button.selected {
+.suggestions .star {
+  flex: none;
+  width: 32px;
+  padding: 0;
+  border-color: transparent;
+  background: transparent;
+  font-size: 1.45rem;
+  line-height: 1;
+  color: var(--muted);
+}
+.suggestions .star:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--gold);
+}
+.suggestions .star.on {
+  color: var(--gold);
+}
+.suggestions .pick.selected {
   border-color: var(--gold);
   background: rgba(226, 176, 74, 0.15);
 }
@@ -404,8 +427,31 @@ input[type="range"] {
   user-select: all;
 }
 
-.badge.fav {
-  margin: 0 4px 0 0;
+/* Avatar de la barra superior */
+.titlebar nav .avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border-radius: 50%;
+  font-weight: 700;
+}
+.titlebar nav .avatar.in {
+  border-color: var(--gold);
+  background: var(--gold);
+  color: #1b1408;
+  text-shadow: none;
+}
+.titlebar nav .avatar.out {
+  border: 1px dashed var(--muted);
+  background: transparent;
+  color: var(--muted);
+}
+.titlebar nav .avatar.out:hover {
+  border-color: var(--gold);
+  color: var(--gold);
 }
 
 /* Aviso de actualización (Ajustes) */

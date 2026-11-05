@@ -42,6 +42,7 @@
 
 ## Notas
 
+- Desde la 0.3.2 la URL de la API ya no se configura en Ajustes: es fija y en desarrollo se cambia con `VITE_API_URL`. Las favoritas también se marcan desde el overlay (`POST /api/strategies/slug/:slug/favorite`).
 - **Fase cerrada el 2026-11-04.** La prueba a mano del login y del link quedó en la [Fase 8](../fase-8-pruebas-manuales.md).
 - El esquema `ageoverlay://` lo registra el instalador: el link funciona desde la **0.3.0** instalada (en `tauri dev` se registra al arrancar).
 - La migración `0001_device_code` crea la tabla `device_code`; corre sola al redesplegar la API.

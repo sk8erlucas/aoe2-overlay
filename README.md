@@ -83,6 +83,8 @@ pnpm --filter @age-overlay/overlay vite:dev    # solo la UI en el navegador (sin
 pnpm --filter @age-overlay/overlay tauri:build # instalador en apps/overlay/src-tauri/target/release/bundle/
 ```
 
+El overlay usa la API de producción. Para probar contra una API local, creá `apps/overlay/.env.local` con `VITE_API_URL=http://localhost:3001`.
+
 Atajos por defecto (configurables en _Ajustes_):
 
 | Atajo                          | Acción                                                    |

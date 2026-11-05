@@ -1,10 +1,18 @@
 import { estimateStepTimes, getStepAt } from "@age-overlay/shared";
 import { isTauri } from "@tauri-apps/api/core";
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { AccountAvatar } from "./components/AccountAvatar";
 import { GameView } from "./components/GameView";
 import { SettingsView } from "./components/SettingsView";
 import { SetupView } from "./components/SetupView";
-import { fetchFavorites, loadAccount, saveAccount, signOut, type Account } from "./lib/account";
+import {
+  fetchFavorites,
+  loadAccount,
+  saveAccount,
+  setFavorite,
+  signOut,
+  type Account,
+} from "./lib/account";
 import * as clock from "./lib/clock";
 import { onDeepLink, type DeepLink } from "./lib/deeplink";
 import { checkForUpdate, UPDATE_CHECK_INTERVAL_MS, type AvailableUpdate } from "./lib/updater";
@@ -22,8 +30,8 @@ import {
 import { loadSettings, saveSettings, type HotkeyAction, type Settings } from "./lib/settings";
 import {
   loadCache,
+  API_URL,
   mergeStrategies,
-  normalizeApiUrl,
   syncStrategies,
   type RemoteItem,
   SYNC_INTERVAL_MS,
@@ -88,29 +96,57 @@ function Overlay({ initialSettings }: { initialSettings: Settings }) {
   const [account, setAccount] = useState<Account | null>(null);
   const [favorites, setFavorites] = useState<string[]>([]);
   const accountRef = useRef<Account | null>(null);
+  const favoritesRef = useRef(favorites);
+  favoritesRef.current = favorites;
+
+  /** Sesión vencida o cerrada desde la web. */
+  const forgetAccount = useCallback(async () => {
+    accountRef.current = null;
+    setAccount(null);
+    setFavorites([]);
+    await saveAccount(null);
+  }, []);
 
   const refreshFavorites = useCallback(async () => {
     const acc = accountRef.current;
-    // El token es de una API en particular: si se cambió la URL, no se usa.
-    if (!acc || acc.apiUrl !== normalizeApiUrl(settingsRef.current.apiUrl)) {
+    if (!acc) {
       setFavorites([]);
       return;
     }
     try {
       const favs = await fetchFavorites(acc);
       if (favs === null) {
-        // Sesión vencida o cerrada desde la web.
-        accountRef.current = null;
-        setAccount(null);
-        setFavorites([]);
-        await saveAccount(null);
+        await forgetAccount();
       } else {
         setFavorites(favs);
       }
     } catch {
       // Sin conexión: se mantienen las que había.
     }
-  }, []);
+  }, [forgetAccount]);
+
+  const toggleFavorite = useCallback(
+    async (slug: string) => {
+      const acc = accountRef.current;
+      if (!acc) {
+        setTab("settings");
+        return;
+      }
+      const was = favoritesRef.current.includes(slug);
+      const apply = (on: boolean) =>
+        setFavorites((prev) => {
+          const rest = prev.filter((s) => s !== slug);
+          return on ? [slug, ...rest] : rest;
+        });
+      apply(!was); // Se ve al instante; si la API falla, se vuelve atrás.
+      try {
+        if (!(await setFavorite(acc, slug, !was))) await forgetAccount();
+      } catch {
+        apply(was);
+      }
+    },
+    [forgetAccount],
+  );
 
   const login = useCallback(
     async (acc: Account) => {
@@ -133,12 +169,10 @@ function Overlay({ initialSettings }: { initialSettings: Settings }) {
 
   const cacheRef = useRef<StrategyCache | null>(null);
   const runSync = useCallback(async () => {
-    const apiUrl = settingsRef.current.apiUrl;
-    if (!apiUrl) return;
     void refreshFavorites();
     setSyncStatus({ state: "syncing" });
     try {
-      const next = await syncStrategies(apiUrl, cacheRef.current);
+      const next = await syncStrategies(API_URL, cacheRef.current);
       cacheRef.current = next;
       setCache(next);
       setSyncStatus({ state: "ok", syncedAt: next.syncedAt, count: next.items.length });
@@ -164,14 +198,6 @@ function Overlay({ initialSettings }: { initialSettings: Settings }) {
     return () => clearInterval(id);
   }, [runSync]);
 
-  // Si cambia la URL de la API, sincroniza de nuevo.
-  const firstApiUrl = useRef(settings.apiUrl);
-  useEffect(() => {
-    if (settings.apiUrl === firstApiUrl.current) return;
-    firstApiUrl.current = settings.apiUrl;
-    void runSync();
-  }, [settings.apiUrl, runSync]);
-
   // --- Actualizaciones: al rato de abrir y cada 6 h (se avisa en Ajustes) ---
   const [update, setUpdate] = useState<AvailableUpdate | null>(null);
   useEffect(() => {
@@ -194,10 +220,8 @@ function Overlay({ initialSettings }: { initialSettings: Settings }) {
           selection: { ...settingsRef.current.selection, strategyId: link.slug },
         });
       if (strategiesRef.current.some((s) => s.id === link.slug)) return select();
-      const apiUrl = normalizeApiUrl(settingsRef.current.apiUrl);
-      if (!apiUrl) return;
       try {
-        const res = await fetch(`${apiUrl}/api/strategies/${encodeURIComponent(link.slug)}`, {
+        const res = await fetch(`${API_URL}/api/strategies/${encodeURIComponent(link.slug)}`, {
           signal: AbortSignal.timeout(15_000),
         });
         if (!res.ok) return;
@@ -319,6 +343,7 @@ function Overlay({ initialSettings }: { initialSettings: Settings }) {
               >
                 Ajustes{update && <span className="dot" aria-label="actualización disponible" />}
               </button>
+              <AccountAvatar account={account} onClick={() => setTab("settings")} />
               {isTauri() && (
                 <button title="Ocultar" onClick={() => void toggleVisibility()}>
                   ✕
@@ -327,16 +352,20 @@ function Overlay({ initialSettings }: { initialSettings: Settings }) {
             </nav>
           </header>
           <div className="content">
-            {tab === "match" ? (
+            {tab === "match" && (
               <SetupView
                 strategies={strategies}
                 favorites={favorites}
+                loggedIn={!!account}
+                onToggleFavorite={(slug) => void toggleFavorite(slug)}
                 syncStatus={syncStatus}
                 selection={settings.selection}
                 onChange={(selection) => updateSettings({ selection })}
                 onPlay={play}
               />
-            ) : (
+            )}
+            {/* Siempre montado: el login sigue esperando aunque se cambie de pestaña. */}
+            <div hidden={tab !== "settings"}>
               <SettingsView
                 settings={settings}
                 hotkeyErrors={hotkeyErrors}
@@ -349,7 +378,7 @@ function Overlay({ initialSettings }: { initialSettings: Settings }) {
                 update={update}
                 onQuit={() => void quitApp()}
               />
-            )}
+            </div>
           </div>
           <footer className="footer muted">
             {settings.hotkeys.toggleMode}: modo juego · {settings.hotkeys.toggleVisible}: ocultar

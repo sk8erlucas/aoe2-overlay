@@ -47,6 +47,9 @@ interface Props {
   strategies: readonly LoadedStrategy[];
   /** Slugs de las favoritas del usuario (vacío sin cuenta). */
   favorites: string[];
+  loggedIn: boolean;
+  /** Sin sesión, lleva a Ajustes → Cuenta. */
+  onToggleFavorite: (slug: string) => void;
   syncStatus: SyncStatus;
   selection: Selection;
   onChange: (selection: Selection) => void;
@@ -57,6 +60,8 @@ interface Props {
 export function SetupView({
   strategies,
   favorites,
+  loggedIn,
+  onToggleFavorite,
   syncStatus,
   selection,
   onChange,
@@ -163,15 +168,24 @@ export function SetupView({
           {results.map(({ strategy: s, reasons }) => (
             <li key={s.id}>
               <button
-                className={s.id === selection.strategyId ? "selected" : ""}
+                className={`star ${favSet.has(s.id) ? "on" : ""}`}
+                aria-pressed={favSet.has(s.id)}
+                title={
+                  !loggedIn
+                    ? "Iniciá sesión para guardar favoritas"
+                    : favSet.has(s.id)
+                      ? "Quitar de favoritas"
+                      : "Agregar a favoritas"
+                }
+                onClick={() => onToggleFavorite(s.id)}
+              >
+                {favSet.has(s.id) ? "★" : "☆"}
+              </button>
+              <button
+                className={`pick ${s.id === selection.strategyId ? "selected" : ""}`}
                 onClick={() => set("strategyId", s.id)}
               >
                 <span className="s-name">
-                  {favSet.has(s.id) && (
-                    <span className="badge fav" title="Favorita">
-                      ★
-                    </span>
-                  )}
                   {s.name}
                   {s.verified && <span className="badge">✔</span>}
                   {(s.score ?? 0) > 0 && <span className="badge">▲ {s.score}</span>}

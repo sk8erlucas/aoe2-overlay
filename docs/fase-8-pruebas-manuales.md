@@ -54,6 +54,8 @@ Requiere el overlay **0.3.0** instalado y la API y la web redesplegadas.
 - [ ] Sin sesión en la web, `/dispositivo` pide ingresar y vuelve con el código cargado
 - [ ] Una estrategia marcada como favorita en la web aparece primero con ★ después de "Sincronizar ahora"
 - [ ] "Cerrar sesión" en el overlay quita las ★
+- [ ] La ★ a la izquierda de una estrategia la marca y la quita, y el cambio se ve en la web (`/perfil`)
+- [ ] El avatar muestra la inicial con sesión y la silueta punteada sin sesión; al tocarlo lleva a Ajustes → Cuenta
 - [ ] "Abrir en el overlay" en la web, con el overlay abierto: lo muestra y elige la estrategia
 - [ ] Lo mismo con el overlay cerrado: lo abre y elige la estrategia
 - [ ] "Ram Spam" (Cumanos) se ve bien en el overlay: notas traducidas (taller de asedio, arietes)

@@ -90,12 +90,33 @@ const TEXT_KEYWORDS: Record<string, string> = {
   doubleBitAxe: "hacha de doble filo",
   horseCollar: "collera",
   goldMining: "minería de oro",
+  // Verbos y conectores de los pasos en inglés. No chocan con palabras en español.
+  Create: "Crear",
+  Move: "Mover",
+  Research: "Investigar",
+  Train: "Entrenar",
+  Lure: "Atraer",
+  Build: "Construir",
+  Before: "Antes de",
+  In: "En",
+  on: "en",
+  from: "de",
+  to: "a",
+  and: "y",
 };
+
+/** Frases de varias palabras: se reemplazan antes que las palabras sueltas. */
+const TEXT_PHRASES: ReadonlyArray<[RegExp, string]> = [
+  [/\bClick up to\b/g, "Avanzar a"],
+  [/\bStart moving close to opponent[’']s\b/g, "Acercarse al rival:"],
+];
 
 /** Reemplaza las palabras clave conocidas dentro de un texto. */
 export function translateKeywords(text: string): string {
-  // Cada palabra entera (letras) se busca en el diccionario; si no está, queda igual.
-  return text.replace(/[A-Za-z]+/g, (w) => TEXT_KEYWORDS[w] ?? w);
+  const phrased = TEXT_PHRASES.reduce((t, [re, es]) => t.replace(re, es), text);
+  // Cada palabra entera se busca en el diccionario; si no está, queda igual. \p{L} incluye
+  // las letras acentuadas: así "cómo" no se parte en pedazos que coincidan con una clave.
+  return phrased.replace(/\p{L}+/gu, (w) => TEXT_KEYWORDS[w] ?? w);
 }
 
 /** Separa una nota en segmentos de texto e ícono. */

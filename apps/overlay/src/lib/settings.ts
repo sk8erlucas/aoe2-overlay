@@ -1,6 +1,5 @@
 import { DEFAULT_SPEED, type Position } from "@age-overlay/shared";
 import { isTauri } from "@tauri-apps/api/core";
-import { DEFAULT_API_URL } from "./sync";
 
 export const HOTKEY_ACTIONS = [
   "toggleMode",
@@ -52,8 +51,6 @@ export interface Settings {
   /** Escala del texto (0.8 – 1.5). */
   scale: number;
   sound: boolean;
-  /** URL de la API de estrategias (vacía = solo estrategias base, sin internet). */
-  apiUrl: string;
   hotkeys: Record<HotkeyAction, string>;
   selection: Selection;
 }
@@ -63,7 +60,6 @@ export const DEFAULT_SETTINGS: Settings = {
   opacity: 0.75,
   scale: 1,
   sound: false,
-  apiUrl: DEFAULT_API_URL,
   hotkeys: DEFAULT_HOTKEYS,
   selection: {},
 };
@@ -71,10 +67,12 @@ export const DEFAULT_SETTINGS: Settings = {
 const KEY = "settings";
 const FALLBACK_KEY = "aoe2-overlay:settings";
 
-function merge(saved: Partial<Settings> | null | undefined): Settings {
+function merge(saved: (Partial<Settings> & { apiUrl?: unknown }) | null | undefined): Settings {
+  // `apiUrl` existió hasta la 0.3.1 y ya no se usa: no se arrastra a lo guardado.
+  const { apiUrl: _removed, ...rest } = saved ?? {};
   return {
     ...DEFAULT_SETTINGS,
-    ...saved,
+    ...rest,
     hotkeys: { ...DEFAULT_HOTKEYS, ...saved?.hotkeys },
     selection: { ...saved?.selection },
   };

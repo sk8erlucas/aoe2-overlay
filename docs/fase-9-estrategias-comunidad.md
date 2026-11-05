@@ -31,6 +31,7 @@
 - [x] Las palabras clave del formato de la comunidad (`foodUnderTC`, `stragglerTree`, `feudalAge`, `battleElephant`…) se muestran en español en el overlay y la web (`translateKeywords` en `packages/shared/src/notes.ts`)
 - [x] Sumadas `siegeWorkshop`, `batteringRam`, `mangonel` y `scorpion`
 - [x] El importador quita el `undefined` que dejan algunas exportaciones ("Lure undefined @boar@") y lo avisa
+- [x] Verbos y conectores de los pasos traducidos (`Create`, `Move`, `Research`, `on`, `from`, `to`…) y frases (`Click up to`)
 - [ ] Ampliar el diccionario a medida que aparezcan palabras nuevas en las estrategias importadas
 
 ### Catálogo
@@ -40,6 +41,7 @@
 - [x] Cumanos: Ram Spam de tytythechoochoo (`/estrategias/ram-spam-cumans`). El JSON vino sin el id de Build Order Guide, así que se importó como `cumansRamSpam.json`
 - [ ] Cumanos: Feudal TC boom / Fast Castle con 2 CU
 - [ ] Al menos una estrategia buena por cada civilización ranked
+- [x] 3 TC Boom (genérica) de AOE Companion (`/estrategias/3-tc-boom-aoecom`)
 - [ ] Las más votadas genéricas (scouts, arqueros, drush, FC)
 
 ## Cómo cargar más estrategias

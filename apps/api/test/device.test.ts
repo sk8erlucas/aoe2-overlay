@@ -96,8 +96,32 @@ describe("login del overlay (device code)", () => {
     );
     expect(favs.items.map((f) => f.slug)).toEqual(["scouts-feudal"]);
 
+    // El overlay usa el slug: quitar y volver a poner, y 404 si no existe.
+    const bySlug = (slug: string, favorite: boolean) =>
+      t.app.inject({
+        method: "POST",
+        url: `/api/strategies/slug/${slug}/favorite`,
+        headers: bearer,
+        payload: { favorite },
+      });
+    expect(json(await bySlug("scouts-feudal", false)).isFavorite).toBe(false);
+    const empty = json<{ items: unknown[] }>(
+      await t.app.inject({ url: "/api/me/favorites", headers: bearer }),
+    );
+    expect(empty.items).toEqual([]);
+    expect((await bySlug("no-existe", true)).statusCode).toBe(404);
+
     // El código no se puede usar dos veces.
     expect((await pollToken(code.device_code)).statusCode).toBe(400);
+  });
+
+  it("marcar favorita por slug pide sesión", async () => {
+    const res = await t.app.inject({
+      method: "POST",
+      url: "/api/strategies/slug/scouts-feudal/favorite",
+      payload: { favorite: true },
+    });
+    expect(res.statusCode).toBe(401);
   });
 
   it("un token inventado no da acceso", async () => {

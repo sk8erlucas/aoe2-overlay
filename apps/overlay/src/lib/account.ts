@@ -161,6 +161,30 @@ export async function fetchFavorites(
   return body.items.map((i) => i.slug);
 }
 
+/**
+ * Marca o desmarca una favorita. Devuelve false si la sesión ya no sirve (401).
+ * Lanza error si no hay conexión o la API falla.
+ */
+export async function setFavorite(
+  account: Account,
+  slug: string,
+  favorite: boolean,
+  fetchImpl: typeof fetch = fetch,
+): Promise<boolean> {
+  const res = await fetchImpl(
+    `${account.apiUrl}/api/strategies/slug/${encodeURIComponent(slug)}/favorite`,
+    {
+      method: "POST",
+      headers: { ...authHeaders(account), "content-type": "application/json" },
+      body: JSON.stringify({ favorite }),
+      signal: AbortSignal.timeout(15_000),
+    },
+  );
+  if (res.status === 401) return false;
+  if (!res.ok) throw new Error(`La API respondió ${res.status}`);
+  return true;
+}
+
 /** Cierra la sesión en la API (si falla, igual se olvida el token local). */
 export async function signOut(account: Account, fetchImpl: typeof fetch = fetch): Promise<void> {
   try {

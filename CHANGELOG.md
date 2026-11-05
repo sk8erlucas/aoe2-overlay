@@ -4,6 +4,22 @@ Cambios del overlay de escritorio (los instaladores están en [Releases](https:/
 
 El proyecto usa [versionado semántico](https://semver.org/lang/es/): mientras la versión sea `0.x`, un cambio de minor (`0.3` → `0.4`) puede traer cambios grandes; un patch (`0.3.0` → `0.3.1`) solo trae arreglos y mejoras chicas.
 
+## [0.3.2] - sin publicar
+
+### Agregado
+
+- Favoritas desde el overlay: estrella grande a la izquierda de cada estrategia para marcarla o quitarla. Sin sesión, lleva a iniciar sesión.
+- Avatar en la barra superior: tu inicial si iniciaste sesión, una silueta punteada si no. Lleva a **Ajustes → Cuenta**, que ahora está arriba de todo.
+
+### Cambiado
+
+- Los pasos de las estrategias de la comunidad se leen en español ("Crear 6 aldeano en ovejas", "Avanzar a Edad Feudal").
+- Se quitó la URL de la API de Ajustes: el overlay siempre usa la API oficial.
+
+### Corregido
+
+- El inicio de sesión ya no se corta si cambiás de pestaña mientras esperás la confirmación.
+
 ## [0.3.1] - 2026-11-05
 
 ### Agregado
@@ -41,6 +57,7 @@ El proyecto usa [versionado semántico](https://semver.org/lang/es/): mientras l
 
 Primera versión: overlay transparente siempre encima del juego, con modo juego (los clics pasan al juego) y modo edición, reloj sincronizable con hotkeys globales, sugerencias según mapa, civilizaciones y posición, y 5 estrategias base.
 
+[0.3.2]: https://github.com/sk8erlucas/aoe2-overlay/compare/v0.3.1...main
 [0.3.1]: https://github.com/sk8erlucas/aoe2-overlay/releases/tag/v0.3.1
 [0.3.0]: https://github.com/sk8erlucas/aoe2-overlay/releases/tag/v0.3.0
 [0.2.0]: https://github.com/sk8erlucas/aoe2-overlay/releases/tag/v0.2.0

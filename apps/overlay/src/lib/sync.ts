@@ -10,7 +10,11 @@ import { strategySchema } from "@age-overlay/shared";
 import { isTauri } from "@tauri-apps/api/core";
 import { BUNDLED_STRATEGIES, type LoadedStrategy } from "./strategies";
 
-export const DEFAULT_API_URL = "https://api.aoe2overlay.sitemaster.com.ar";
+/** API de producción. Para desarrollo se puede cambiar con VITE_API_URL. */
+export const API_URL = (
+  (import.meta.env.VITE_API_URL as string | undefined) ??
+  "https://api.aoe2overlay.sitemaster.com.ar"
+).replace(/[/]+$/, "");
 /** Cada cuánto se vuelve a sincronizar con la app abierta. */
 export const SYNC_INTERVAL_MS = 30 * 60 * 1000;
 

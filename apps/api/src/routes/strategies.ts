@@ -69,6 +69,25 @@ export const strategyRoutes: FastifyPluginAsyncZod<Deps> = async (app, { db, ses
     }
   }
 
+  async function setFavorite(
+    row: typeof strategies.$inferSelect,
+    me: SessionUser,
+    favorite: boolean,
+  ) {
+    if (!canSee(row, me)) throw new HttpError(404, "Estrategia no encontrada");
+    if (favorite) {
+      await db
+        .insert(favorites)
+        .values({ userId: me.id, strategyId: row.id })
+        .onConflictDoNothing();
+    } else {
+      await db
+        .delete(favorites)
+        .where(and(eq(favorites.userId, me.id), eq(favorites.strategyId, row.id)));
+    }
+    return { isFavorite: favorite };
+  }
+
   /** Estrategias visibles para `me`: públicas y no listadas para todos; ocultas solo para autor/staff. */
   function canSee(row: typeof strategies.$inferSelect, me: SessionUser | null) {
     return row.visibility !== "hidden" || row.authorId === me?.id || isStaff(me);
@@ -307,18 +326,35 @@ export const strategyRoutes: FastifyPluginAsyncZod<Deps> = async (app, { db, ses
     async (req) => {
       const me = await session.requireUser(req);
       const row = await findById(req.params.id);
-      if (!canSee(row, me)) throw new HttpError(404, "Estrategia no encontrada");
-      if (req.body.favorite) {
-        await db
-          .insert(favorites)
-          .values({ userId: me.id, strategyId: row.id })
-          .onConflictDoNothing();
-      } else {
-        await db
-          .delete(favorites)
-          .where(and(eq(favorites.userId, me.id), eq(favorites.strategyId, row.id)));
-      }
-      return { isFavorite: req.body.favorite };
+      return setFavorite(row, me, req.body.favorite);
+    },
+  );
+
+  // El overlay identifica las estrategias por slug (no conoce los UUID).
+  app.post(
+    "/strategies/slug/:slug/favorite",
+    {
+      schema: {
+        tags: TAG,
+        summary: "Marcar o desmarcar como favorita, por slug",
+        params: slugParams,
+        body: favoriteBody,
+        response: {
+          200: z.object({ isFavorite: z.boolean() }),
+          401: errorSchema,
+          404: errorSchema,
+        },
+      },
+    },
+    async (req) => {
+      const me = await session.requireUser(req);
+      const [row] = await db
+        .select()
+        .from(strategies)
+        .where(eq(strategies.slug, req.params.slug))
+        .limit(1);
+      if (!row) throw new HttpError(404, "Estrategia no encontrada");
+      return setFavorite(row, me, req.body.favorite);
     },
   );
 

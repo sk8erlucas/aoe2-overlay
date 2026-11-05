@@ -8,10 +8,9 @@ import {
   type Account,
   type DeviceCode,
 } from "../lib/account";
-import { normalizeApiUrl } from "../lib/sync";
+import { API_URL } from "../lib/sync";
 
 interface Props {
-  apiUrl: string;
   account: Account | null;
   onLogin: (account: Account) => Promise<void>;
   onLogout: () => void;
@@ -23,14 +22,13 @@ type Flow =
   | { state: "waiting"; code: DeviceCode };
 
 /** Login opcional: el overlay muestra un código y el usuario lo confirma en la web. */
-export function AccountSection({ apiUrl, account, onLogin, onLogout }: Props) {
+export function AccountSection({ account, onLogin, onLogout }: Props) {
   const [flow, setFlow] = useState<Flow>({ state: "idle" });
   // Se usa para cortar el polling al cancelar o al desmontar.
   const run = useRef(0);
   useEffect(() => () => void run.current++, []);
 
-  const base = normalizeApiUrl(apiUrl);
-  const linked = account && account.apiUrl === base;
+  const base = API_URL;
 
   const start = async () => {
     const id = ++run.current;
@@ -77,15 +75,12 @@ export function AccountSection({ apiUrl, account, onLogin, onLogout }: Props) {
     setFlow({ state: "idle" });
   };
 
-  if (!base) {
-    return <p className="muted">Configurá la URL de la API para poder iniciar sesión.</p>;
-  }
-
-  if (linked) {
+  if (account) {
     return (
       <>
         <p>
-          Conectado como <strong>{account.name}</strong>. Tus favoritas aparecen primero (★).
+          Conectado como <strong>{account.name}</strong>. Tocá la ★ de una estrategia para marcarla
+          como favorita: aparecen primero.
         </p>
         <div className="row">
           <button onClick={onLogout}>Cerrar sesión</button>
@@ -116,7 +111,8 @@ export function AccountSection({ apiUrl, account, onLogin, onLogout }: Props) {
   return (
     <>
       <p className="muted">
-        Opcional: iniciá sesión para ver tus estrategias favoritas primero en la lista.
+        Opcional: iniciá sesión para guardar tus estrategias favoritas. Si no tenés cuenta, la creás
+        en la web en el mismo paso.
       </p>
       {flow.state === "idle" && flow.error && <p className="error">{flow.error}</p>}
       <div className="row">
