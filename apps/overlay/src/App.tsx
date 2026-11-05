@@ -7,6 +7,7 @@ import { SetupView } from "./components/SetupView";
 import { fetchFavorites, loadAccount, saveAccount, signOut, type Account } from "./lib/account";
 import * as clock from "./lib/clock";
 import { onDeepLink, type DeepLink } from "./lib/deeplink";
+import { checkForUpdate, UPDATE_CHECK_INTERVAL_MS, type AvailableUpdate } from "./lib/updater";
 import {
   beep,
   onTrayToggleMode,
@@ -171,6 +172,18 @@ function Overlay({ initialSettings }: { initialSettings: Settings }) {
     void runSync();
   }, [settings.apiUrl, runSync]);
 
+  // --- Actualizaciones: al rato de abrir y cada 6 h (se avisa en Ajustes) ---
+  const [update, setUpdate] = useState<AvailableUpdate | null>(null);
+  useEffect(() => {
+    const run = () => void checkForUpdate().then((u) => u && setUpdate(u));
+    const first = setTimeout(run, 10_000);
+    const id = setInterval(run, UPDATE_CHECK_INTERVAL_MS);
+    return () => {
+      clearTimeout(first);
+      clearInterval(id);
+    };
+  }, []);
+
   // --- Links desde la web: ageoverlay://strategy/<slug> ---
   const openLink = useCallback(
     async (link: DeepLink) => {
@@ -302,8 +315,9 @@ function Overlay({ initialSettings }: { initialSettings: Settings }) {
               <button
                 className={tab === "settings" ? "active" : ""}
                 onClick={() => setTab("settings")}
+                title={update ? `Versión ${update.version} disponible` : undefined}
               >
-                Ajustes
+                Ajustes{update && <span className="dot" aria-label="actualización disponible" />}
               </button>
               {isTauri() && (
                 <button title="Ocultar" onClick={() => void toggleVisibility()}>
@@ -332,6 +346,7 @@ function Overlay({ initialSettings }: { initialSettings: Settings }) {
                 account={account}
                 onLogin={login}
                 onLogout={() => void logout()}
+                update={update}
                 onQuit={() => void quitApp()}
               />
             )}

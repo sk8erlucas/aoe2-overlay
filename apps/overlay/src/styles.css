@@ -83,6 +83,19 @@ input:not([type="checkbox"]):not([type="range"]) {
   border-radius: 6px;
 }
 
+/* La lista desplegable la dibuja WebView2 con fondo propio (blanco en la ventana
+   transparente): sin esto el texto claro heredado no se ve hasta pasar el mouse. */
+select option,
+select optgroup {
+  background-color: rgb(var(--bg));
+  color: var(--text);
+  text-shadow: none;
+}
+select option:checked {
+  background-color: #3a3220;
+  color: var(--gold);
+}
+
 h3 {
   margin: 14px 0 6px;
   font-size: 0.85rem;
@@ -393,4 +406,25 @@ input[type="range"] {
 
 .badge.fav {
   margin: 0 4px 0 0;
+}
+
+/* Aviso de actualización (Ajustes) */
+.update {
+  margin-bottom: 12px;
+  padding: 8px 10px;
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  background: rgba(226, 176, 74, 0.12);
+}
+.update p {
+  margin: 0 0 6px;
+}
+.dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-left: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+  vertical-align: super;
 }

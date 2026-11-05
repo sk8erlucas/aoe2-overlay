@@ -138,7 +138,26 @@ git tag v0.1.0
 git push origin v0.1.0
 ```
 
-El workflow `.github/workflows/release.yml` compila el instalador en Windows (~10 min) y lo publica en `https://github.com/sk8erlucas/aoe2-overlay/releases`. Para próximas versiones: subí la versión en `apps/overlay/src-tauri/tauri.conf.json` y creá un tag nuevo (`v0.1.1`, …).
+El workflow `.github/workflows/release.yml` compila el instalador en Windows (~10 min) y lo publica en `https://github.com/sk8erlucas/aoe2-overlay/releases`.
+
+Para cada versión nueva:
+
+1. Subí la versión en `apps/overlay/package.json`, `apps/overlay/src-tauri/tauri.conf.json` y `apps/overlay/src-tauri/Cargo.toml`.
+2. Anotá los cambios en `CHANGELOG.md` (y cambiá "sin publicar" por la fecha).
+3. Creá el tag: `git tag v0.3.1 && git push origin v0.3.1`.
+
+### Actualizaciones automáticas (desde la 0.3.1)
+
+El release también sube `latest.json` y una firma (`.sig`) por instalador. El overlay instalado lee `releases/latest/download/latest.json` y solo instala si la firma coincide con la clave pública de `tauri.conf.json` (`plugins.updater.pubkey`).
+
+La clave privada está en tu PC, en `~/.tauri/aoe2-overlay.key`, y su contraseña en `~/.tauri/aoe2-overlay.key.password`. **Guardá una copia de los dos archivos en tu gestor de contraseñas:** si se pierden, los overlays instalados no pueden volver a actualizarse solos (habría que reinstalar con una clave nueva).
+
+Una sola vez, cargalas como secrets del repo (sin esto el workflow falla):
+
+```bash
+gh secret set TAURI_SIGNING_PRIVATE_KEY < ~/.tauri/aoe2-overlay.key
+gh secret set TAURI_SIGNING_PRIVATE_KEY_PASSWORD < ~/.tauri/aoe2-overlay.key.password
+```
 
 ## Dónde está cada variable
 

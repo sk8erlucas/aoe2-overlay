@@ -33,8 +33,9 @@
 
 ### Después
 
-- [ ] Generar la clave de firma del updater y guardarla en GitHub Secrets
-- [ ] `tauri-plugin-updater` leyendo `latest.json` del release
+- [x] Generar la clave de firma del updater (`~/.tauri/aoe2-overlay.key`, fuera del repo)
+- [ ] Cargar la clave en GitHub Secrets (`TAURI_SIGNING_PRIVATE_KEY` y `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`, ver la guía, paso 7) y guardar una copia en un gestor de contraseñas
+- [x] `tauri-plugin-updater` leyendo `latest.json` del release: busca al abrir y cada 6 h, avisa en Ajustes y se instala con "Actualizar y reiniciar" (0.3.1)
 - [ ] Firma de código del instalador (reduce avisos de SmartScreen y falsos positivos). Opciones, en orden de preferencia:
   1. **SignPath Foundation**: firma gratis para proyectos open source; se pide en signpath.org y firma desde GitHub Actions
   2. **Azure Artifact Signing (ex Trusted Signing)**: ~10 USD/mes; revisar si acepta personas en Argentina
@@ -48,7 +49,7 @@
 - [ ] README final con capturas o GIF, badges e instalación
 - [x] Disclaimer de las Microsoft Game Content Usage Rules (README, footer de la web y `apps/web/public/game-assets/README.md`)
 - [x] `SECURITY.md` (cómo reportar vulnerabilidades)
-- [ ] CHANGELOG y versionado semántico
+- [x] CHANGELOG y versionado semántico (`CHANGELOG.md`)
 - [ ] Issues iniciales etiquetadas `good first issue`
 
 ## Criterio de terminado
@@ -56,4 +57,4 @@
 - [x] `https://aoe2overlay.sitemaster.com.ar` y `https://api.aoe2overlay.sitemaster.com.ar/api/health` responden
 - [x] El tag `v0.1.0` genera el instalador en Releases
 - [ ] Instalar desde la web funciona en una PC limpia
-- [ ] Publicar `v0.1.1` hace que el overlay instalado ofrezca la actualización
+- [ ] Publicar una versión nueva hace que el overlay instalado ofrezca la actualización (primera prueba posible: con la 0.3.1 instalada, publicar la 0.3.2)

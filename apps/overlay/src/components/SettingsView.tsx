@@ -2,7 +2,9 @@ import { DEFAULT_SPEED } from "@age-overlay/shared";
 import { useState } from "react";
 import type { Account } from "../lib/account";
 import { DEFAULT_API_URL, normalizeApiUrl } from "../lib/sync";
+import type { AvailableUpdate } from "../lib/updater";
 import { AccountSection } from "./AccountSection";
+import { UpdateSection } from "./UpdateSection";
 import type { HotkeyError } from "../lib/native";
 import {
   DEFAULT_HOTKEYS,
@@ -22,6 +24,7 @@ interface Props {
   account: Account | null;
   onLogin: (account: Account) => Promise<void>;
   onLogout: () => void;
+  update: AvailableUpdate | null;
 }
 
 const SPEEDS = [
@@ -41,6 +44,7 @@ export function SettingsView({
   account,
   onLogin,
   onLogout,
+  update,
 }: Props) {
   const [apiDraft, setApiDraft] = useState(settings.apiUrl);
   // Las hotkeys se editan como texto y se aplican al salir del campo.
@@ -56,6 +60,7 @@ export function SettingsView({
 
   return (
     <div className="settings">
+      {update && <UpdateSection update={update} />}
       <label>
         Velocidad de la partida
         <select

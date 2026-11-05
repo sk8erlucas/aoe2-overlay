@@ -35,7 +35,13 @@ jobs:
       - uses: tauri-apps/tauri-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Firma de las actualizaciones (ver docs/deploy-dokploy.md, "Actualizaciones").
+          # Sin estos secrets el build falla: tauri.conf.json pide createUpdaterArtifacts.
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
+          # Sube latest.json al release: el overlay instalado lo lee para actualizarse.
+          includeUpdaterJson: true
           projectPath: apps/overlay
           tagName: ${{ github.ref_name }}
           releaseName: "AoE2 Overlay ${{ github.ref_name }}"

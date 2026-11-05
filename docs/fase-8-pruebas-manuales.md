@@ -58,6 +58,12 @@ Requiere el overlay **0.3.0** instalado y la API y la web redesplegadas.
 - [ ] Lo mismo con el overlay cerrado: lo abre y elige la estrategia
 - [ ] "Ram Spam" (Cumanos) se ve bien en el overlay: notas traducidas (taller de asedio, arietes)
 
+## Actualizaciones (de la Fase 6)
+
+- [ ] Con la 0.3.1 instalada, al publicar una versión nueva aparece el aviso en Ajustes (punto dorado en la pestaña)
+- [ ] "Actualizar y reiniciar" instala sin pedir permisos de administrador y el overlay vuelve a abrir con la versión nueva
+- [ ] Los desplegables de la pestaña Partida se leen bien al abrirlos (fondo oscuro, texto claro)
+
 ## Notas
 
 - Si algo falla, abrir una issue con la plantilla de bug y el modo de pantalla del juego.
