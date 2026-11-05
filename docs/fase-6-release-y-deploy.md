@@ -46,7 +46,7 @@
 
 ### Proyecto open source
 
-- [ ] README final con capturas o GIF, badges e instalación
+- [x] README final con capturas, badges e instalación (capturas en `docs/screenshots/`; falta un GIF en partida real)
 - [x] Disclaimer de las Microsoft Game Content Usage Rules (README, footer de la web y `apps/web/public/game-assets/README.md`)
 - [x] `SECURITY.md` (cómo reportar vulnerabilidades)
 - [x] CHANGELOG y versionado semántico (`CHANGELOG.md`)

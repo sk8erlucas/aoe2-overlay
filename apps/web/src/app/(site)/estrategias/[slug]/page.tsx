@@ -110,8 +110,8 @@ export default async function StrategyPage({ params }: Props) {
         <div className="card space-y-2 p-4 text-sm">
           <p className="font-bold">¿Usarla en el juego?</p>
           <p className="text-ink/70">
-            Exportá el JSON o abrí el overlay: las estrategias de la comunidad van a sincronizarse
-            solas (próximamente).
+            Con el overlay instalado, tocá &quot;Abrir en el overlay&quot;: la estrategia queda
+            elegida. Las públicas también se sincronizan solas.
           </p>
           <Link href="/descargar" className="btn btn-gold w-full text-xs">
             Descargar overlay

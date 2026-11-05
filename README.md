@@ -7,7 +7,37 @@ Overlay open source de **estrategias de apertura (build orders)** para **Age of 
 - 🗺️ **Sugerencias**: elegís mapa, civilización, rival y posición, y te sugiere estrategias.
 - 🌐 **Web y comunidad**: creá, compartí y votá estrategias.
 
-> 🚧 En desarrollo temprano. Mirá el [roadmap](docs/README.md).
+<p align="center">
+  <a href="https://github.com/sk8erlucas/aoe2-overlay/releases/latest"><img alt="Último release" src="https://img.shields.io/github/v/release/sk8erlucas/aoe2-overlay?label=descargar&color=d4002f"></a>
+  <a href="https://github.com/sk8erlucas/aoe2-overlay/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/sk8erlucas/aoe2-overlay/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="LICENSE"><img alt="Licencia MIT" src="https://img.shields.io/github/license/sk8erlucas/aoe2-overlay"></a>
+  <img alt="Windows 10/11" src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/overlay-partida.png" alt="Overlay: elegir mapa, civilización y estrategia" width="300">
+  &nbsp;
+  <img src="docs/screenshots/overlay-juego.png" alt="Overlay en modo juego: paso actual, recursos y próximo paso" width="360">
+</p>
+
+> 🚧 En desarrollo temprano. Mirá el [roadmap](docs/README.md) y los [cambios por versión](CHANGELOG.md).
+
+## Instalación
+
+1. Bajá el instalador desde **[aoe2overlay.sitemaster.com.ar/descargar](https://aoe2overlay.sitemaster.com.ar/descargar)** o desde [Releases](https://github.com/sk8erlucas/aoe2-overlay/releases/latest) (`AoE2.Overlay_*_x64-setup.exe`).
+2. Ejecutalo. No pide permisos de administrador. Como el instalador todavía no está firmado, Windows puede mostrar el aviso de SmartScreen: **Más información → Ejecutar de todas formas**.
+3. Abrí AoE2 Overlay: aparece arriba a la derecha. Elegí mapa y civilización, tocá una sugerencia y **▶ Jugar**.
+4. Al empezar la partida, `Ctrl+Alt+P` arranca el reloj. `Ctrl+Alt+O` cambia entre modo juego (los clics pasan al juego) y modo edición.
+
+Desde la 0.3.1 el overlay se actualiza solo: cuando hay una versión nueva, avisa en **Ajustes**.
+
+## La web
+
+En **[aoe2overlay.sitemaster.com.ar](https://aoe2overlay.sitemaster.com.ar/estrategias)** podés explorar, crear y votar estrategias, marcarlas como favoritas (aparecen primero en el overlay si iniciás sesión) y abrirlas directo en el overlay.
+
+<p align="center">
+  <img src="docs/screenshots/web-estrategia.png" alt="Página de una estrategia en la web" width="720">
+</p>
 
 ## Estructura
 
