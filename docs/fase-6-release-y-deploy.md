@@ -34,7 +34,8 @@
 ### Después
 
 - [x] Generar la clave de firma del updater (`~/.tauri/aoe2-overlay.key`, fuera del repo)
-- [ ] Cargar la clave en GitHub Secrets (`TAURI_SIGNING_PRIVATE_KEY` y `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`, ver la guía, paso 7) y guardar una copia en un gestor de contraseñas
+- [x] Clave cargada en GitHub Secrets (`TAURI_SIGNING_PRIVATE_KEY` y `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`); `v0.3.1` publicado con `latest.json` y firmas (2026-11-05)
+- [ ] Guardar una copia de `~/.tauri/aoe2-overlay.key*` en un gestor de contraseñas
 - [x] `tauri-plugin-updater` leyendo `latest.json` del release: busca al abrir y cada 6 h, avisa en Ajustes y se instala con "Actualizar y reiniciar" (0.3.1)
 - [ ] Firma de código del instalador (reduce avisos de SmartScreen y falsos positivos). Opciones, en orden de preferencia:
   1. **SignPath Foundation**: firma gratis para proyectos open source; se pide en signpath.org y firma desde GitHub Actions
