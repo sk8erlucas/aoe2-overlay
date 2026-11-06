@@ -5,7 +5,7 @@ describe("parseNote", () => {
   it("separa texto e íconos", () => {
     expect(parseNote("Create 6 @resource/MaleVillDE.jpg@ on @animal/Sheep_aoe2DE.png@")).toEqual([
       { type: "text", text: "Crear 6 " },
-      { type: "icon", path: "resource/MaleVillDE.jpg", label: "aldeano" },
+      { type: "icon", path: "resource/MaleVillDE.jpg", label: "aldeanos" },
       { type: "text", text: " en " },
       { type: "icon", path: "animal/Sheep_aoe2DE.png", label: "ovejas" },
     ]);
@@ -49,6 +49,22 @@ describe("palabras clave de la comunidad", () => {
     expect(noteToText("Click up to feudalAge")).toBe("Avanzar a Edad Feudal");
     expect(noteToText("Start moving close to opponent’s @town_center/Towncenter_aoe2DE.png@")).toBe(
       "Acercarse al rival: centro urbano",
+    );
+  });
+
+  it("edificios escritos como texto y plurales según el número", async () => {
+    const { noteToText } = await import("../src");
+    expect(noteToText("@resource/Aoe2de_hammer.png@ 1 market, 2 @stable/Stable_aoe2DE.png@")).toBe(
+      "construir 1 mercado, 2 establos",
+    );
+    expect(noteToText("@resource/Aoe2de_hammer.png@ 2 house, 1 barracks")).toBe(
+      "construir 2 casas, 1 cuartel",
+    );
+    expect(noteToText("Create 1 @resource/MaleVillDE.jpg@ on @resource/BerryBushDE.png@")).toBe(
+      "Crear 1 aldeano en bayas",
+    );
+    expect(noteToText("@resource/Aoe2de_hammer.png@ 2 townCenter")).toBe(
+      "construir 2 centros urbanos",
     );
   });
 

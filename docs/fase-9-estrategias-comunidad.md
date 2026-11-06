@@ -32,6 +32,7 @@
 - [x] Sumadas `siegeWorkshop`, `batteringRam`, `mangonel` y `scorpion`
 - [x] El importador quita el `undefined` que dejan algunas exportaciones ("Lure undefined @boar@") y lo avisa
 - [x] Verbos y conectores de los pasos traducidos (`Create`, `Move`, `Research`, `on`, `from`, `to`…) y frases (`Click up to`)
+- [x] Edificios escritos como texto (`market`, `house`…) y plurales según el número ("5 aldeanos")
 - [ ] Ampliar el diccionario a medida que aparezcan palabras nuevas en las estrategias importadas
 
 ### Catálogo

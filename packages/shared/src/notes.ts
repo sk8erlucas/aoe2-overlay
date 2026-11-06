@@ -80,6 +80,19 @@ const TEXT_KEYWORDS: Record<string, string> = {
   spearman: "lanceros",
   monk: "monjes",
   townCenter: "centro urbano",
+  house: "casa",
+  farm: "granja",
+  mill: "molino",
+  market: "mercado",
+  blacksmith: "herrería",
+  barracks: "cuartel",
+  stable: "establo",
+  archeryRange: "galería de tiro",
+  lumberCamp: "campamento maderero",
+  miningCamp: "campamento minero",
+  monastery: "monasterio",
+  university: "universidad",
+  castle: "castillo",
   siegeWorkshop: "taller de asedio",
   batteringRam: "arietes",
   mangonel: "mangoneles",
@@ -111,12 +124,42 @@ const TEXT_PHRASES: ReadonlyArray<[RegExp, string]> = [
   [/\bStart moving close to opponent[’']s\b/g, "Acercarse al rival:"],
 ];
 
+/** Plural de las etiquetas que se suelen contar ("5 aldeano" → "5 aldeanos"). */
+const PLURALS: Record<string, string> = {
+  aldeano: "aldeanos",
+  aldeana: "aldeanas",
+  casa: "casas",
+  granja: "granjas",
+  molino: "molinos",
+  mercado: "mercados",
+  herrería: "herrerías",
+  cuartel: "cuarteles",
+  establo: "establos",
+  "galería de tiro": "galerías de tiro",
+  "campamento maderero": "campamentos madereros",
+  "campamento minero": "campamentos mineros",
+  "centro urbano": "centros urbanos",
+  "taller de asedio": "talleres de asedio",
+  monasterio: "monasterios",
+  universidad: "universidades",
+  castillo: "castillos",
+};
+
+/** Pone la etiqueta en plural si el texto anterior termina en un número mayor a 1. */
+function countAware(label: string, before: string): string {
+  const n = /(\d+)\s*$/.exec(before)?.[1];
+  return n && Number(n) > 1 ? (PLURALS[label] ?? label) : label;
+}
+
 /** Reemplaza las palabras clave conocidas dentro de un texto. */
 export function translateKeywords(text: string): string {
   const phrased = TEXT_PHRASES.reduce((t, [re, es]) => t.replace(re, es), text);
   // Cada palabra entera se busca en el diccionario; si no está, queda igual. \p{L} incluye
   // las letras acentuadas: así "cómo" no se parte en pedazos que coincidan con una clave.
-  return phrased.replace(/\p{L}+/gu, (w) => TEXT_KEYWORDS[w] ?? w);
+  return phrased.replace(/\p{L}+/gu, (w, offset: number) => {
+    const es = TEXT_KEYWORDS[w];
+    return es ? countAware(es, phrased.slice(0, offset)) : w;
+  });
 }
 
 /** Separa una nota en segmentos de texto e ícono. */
@@ -128,7 +171,8 @@ export function parseNote(note: string): NoteSegment[] {
     if (start > last)
       segments.push({ type: "text", text: translateKeywords(note.slice(last, start)) });
     const path = match[1] ?? "";
-    segments.push({ type: "icon", path, label: iconLabel(path) });
+    const label = countAware(iconLabel(path), note.slice(last, start));
+    segments.push({ type: "icon", path, label });
     last = start + match[0].length;
   }
   if (last < note.length)
