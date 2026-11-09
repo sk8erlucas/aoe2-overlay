@@ -42,7 +42,7 @@
 - [ ] Turcos: Fast Imperial
 - [x] Cumanos: Ram Spam de tytythechoochoo (`/estrategias/ram-spam-cumans`). El JSON vino sin el id de Build Order Guide, así que se importó como `cumansRamSpam.json`
 - [ ] Cumanos: Feudal TC boom / Fast Castle con 2 CU
-- [ ] Españoles: Scouts → Conqs de Tatoh. Validada en modo prueba (`imports/buildorderguide/spanishScoutsConqs.json`), falta publicarla
+- [x] Españoles: Scouts → Conqs de Tatoh, publicada (`/estrategias/scouts-conqs-spanis`). El JSON vino sin el id de Build Order Guide, así que se importó como `spanishScoutsConqs.json`
 - [ ] Al menos una estrategia buena por cada civilización ranked
 - [x] 3 TC Boom (genérica) de AOE Companion (`/estrategias/3-tc-boom-aoecom`)
 - [ ] Las más votadas genéricas (scouts, arqueros, drush, FC)

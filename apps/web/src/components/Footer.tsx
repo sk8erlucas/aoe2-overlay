@@ -24,6 +24,7 @@ export function Footer() {
         <nav className="flex flex-wrap gap-4 label text-xs">
           <Link href="/estrategias">Estrategias</Link>
           <Link href="/descargar">Descargar</Link>
+          <Link href="/privacidad">Privacidad</Link>
           <a href={GITHUB_URL} target="_blank" rel="noreferrer">
             GitHub
           </a>

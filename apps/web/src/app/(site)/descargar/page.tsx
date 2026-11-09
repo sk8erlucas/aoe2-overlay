@@ -81,6 +81,22 @@ export default function DownloadPage() {
             .
           </p>
         </div>
+        <div className="card space-y-2 p-5 text-sm">
+          <h2 className="label text-sm text-red">Firma de código</h2>
+          <p className="text-ink/70">
+            Free code signing provided by SignPath.io, certificate by SignPath Foundation. La
+            solicitud está en trámite: las versiones actuales todavía no están firmadas. Mirá la{" "}
+            <a
+              className="underline"
+              href={`${GITHUB_URL}/blob/main/CODE_SIGNING.md`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              política de firma
+            </a>
+            .
+          </p>
+        </div>
       </aside>
     </div>
   );
