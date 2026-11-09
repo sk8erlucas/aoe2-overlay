@@ -109,3 +109,7 @@ Atajos por defecto (configurables en _Ajustes_):
 ## Aviso legal
 
 Age of Empires II © Microsoft Corporation. AoE2 Overlay fue creado según las [Game Content Usage Rules](https://www.xbox.com/en-US/developers/rules) de Microsoft usando assets de Age of Empires II, y no está respaldado ni afiliado con Microsoft.
+
+## Firma de código
+
+Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
