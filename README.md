@@ -102,6 +102,10 @@ Atajos por defecto (configurables en _Ajustes_):
 
 ¡Toda ayuda es bienvenida! Leé [CONTRIBUTING.md](CONTRIBUTING.md) y el [Código de Conducta](CODE_OF_CONDUCT.md).
 
+## Firma de código y privacidad
+
+Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org). La solicitud está en trámite: las versiones actuales todavía no están firmadas. Ver la [política de firma](CODE_SIGNING.md) y la [política de privacidad](https://aoe2overlay.sitemaster.com.ar/privacidad).
+
 ## Licencia
 
 [MIT](LICENSE)
