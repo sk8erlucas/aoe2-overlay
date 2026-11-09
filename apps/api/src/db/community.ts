@@ -44,6 +44,9 @@ export function prepareCommunityStrategy(raw: unknown, id: string): ImportResult
   const s = { ...parsed.data };
   const warnings: string[] = [];
 
+  // Algunos nombres vienen con puntuación suelta adelante (":   Scouts -> Conqs").
+  s.name = s.name.replace(/^[\s:;,.|–—-]+/, "").trim();
+
   // Crédito: el autor original se respeta y la fuente apunta a la estrategia original.
   if (!s.source) s.source = bogUrl(id);
   s.tags = [...new Set([...(s.tags ?? []), BOG_TAG])];

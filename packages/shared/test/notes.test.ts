@@ -68,6 +68,35 @@ describe("palabras clave de la comunidad", () => {
     );
   });
 
+  it("tecnologías e íconos con el nombre oficial en español", () => {
+    expect(noteToText("Research bloodlines, paddedArcherArmor")).toBe(
+      "Investigar pureza de sangre, armadura acolchada de arquero",
+    );
+    expect(noteToText("Research @town_center/WheelbarrowDE.png@")).toBe("Investigar carretilla");
+    expect(noteToText("Train 2 @stable/Scoutcavalry_aoe2DE.png@")).toBe("Entrenar 2 exploradores");
+  });
+
+  it("usa artículo delante de una edad", () => {
+    expect(noteToText("Before @age/FeudalAgeIconDE_alpha.png@")).toBe("Antes de la Edad Feudal");
+    expect(noteToText("In @age/CastleAgeIconDE_alpha.png@")).toBe("En la Edad de los Castillos");
+    expect(noteToText("In castleAge")).toBe("En la Edad de los Castillos");
+    expect(noteToText("In @stable/Stable_aoe2DE.png@")).toBe("En establo");
+  });
+
+  it("el martillo como lugar es construcción", () => {
+    expect(
+      noteToText(
+        "Move 5 @resource/MaleVillDE.jpg@ from @resource/Aoe2de_hammer.png@ to @resource/Aoe2de_gold.png@",
+      ),
+    ).toBe("Mover 5 aldeanos de construcción a oro");
+    expect(noteToText("Create 5 @resource/MaleVillDE.jpg@ on @resource/Aoe2de_hammer.png@")).toBe(
+      "Crear 5 aldeanos en construcción",
+    );
+    expect(noteToText("@resource/Aoe2de_hammer.png@ 1 @other/House_aoe2DE.png@")).toBe(
+      "construir 1 casa",
+    );
+  });
+
   it("no toca el texto en español", async () => {
     const { noteToText } = await import("../src");
     const nota = "Con 6 aldeanos, cómo atraer el jabalí a tu centro urbano";

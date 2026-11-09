@@ -4,11 +4,12 @@ Cambios del overlay de escritorio (los instaladores están en [Releases](https:/
 
 El proyecto usa [versionado semántico](https://semver.org/lang/es/): mientras la versión sea `0.x`, un cambio de minor (`0.3` → `0.4`) puede traer cambios grandes; un patch (`0.3.0` → `0.3.1`) solo trae arreglos y mejoras chicas.
 
-## [0.3.3] - sin publicar
+## [0.3.3] - 2026-11-09
 
 ### Cambiado
 
 - Pasos más naturales: edificios escritos como texto traducidos ("1 mercado") y plurales ("5 aldeanos", "2 centros urbanos").
+- Más tecnologías y unidades con su nombre oficial en español ("Pureza de sangre", "Carretilla"), artículo delante de las edades ("En la Edad Feudal") y "construcción" cuando el martillo indica un lugar.
 
 ## [0.3.2] - 2026-11-05
 

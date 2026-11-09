@@ -25,6 +25,13 @@ describe("prepareCommunityStrategy", () => {
     expect(r.warnings.some((w) => w.includes("undefined"))).toBe(true);
   });
 
+  it("limpia la puntuación suelta al principio del nombre", () => {
+    const r = prepareCommunityStrategy({ ...base, name: ":   Scouts -> Conqs" }, "abc123");
+    if (!r.ok) throw new Error("debería ser válida");
+    expect(r.strategy.name).toBe("Scouts -> Conqs");
+    expect(r.slug).toBe("scouts-conqs-abc123");
+  });
+
   it("da crédito con la fuente original y el tag", () => {
     const r = prepareCommunityStrategy(base, "aqo8MRuR07aaUKTSTt6V");
     expect(r.ok).toBe(true);
