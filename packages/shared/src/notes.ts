@@ -36,6 +36,8 @@ const ICON_LABELS: ReadonlyArray<[string, string]> = [
   ["siegeworkshop", "taller de asedio"],
   ["towncenter", "centro urbano"],
   ["loom", "telar"],
+  ["wheelbarrow", "carretilla"],
+  ["handcart", "carro de mano"],
   ["scout", "explorador"],
   ["feudalage", "Edad Feudal"],
   ["castleage", "Edad de los Castillos"],
@@ -103,6 +105,49 @@ const TEXT_KEYWORDS: Record<string, string> = {
   doubleBitAxe: "hacha de doble filo",
   horseCollar: "collera",
   goldMining: "minería de oro",
+  // Tecnologías y unidades: nombres oficiales de la versión en español del juego.
+  goldShaftMining: "pozo minero aurífero",
+  stoneMining: "cantería",
+  stoneShaftMining: "pozo de cantera",
+  bowSaw: "sierra de arco",
+  twoManSaw: "sierra a dos",
+  heavyPlow: "arado pesado",
+  cropRotation: "rotación de cultivos",
+  bloodlines: "pureza de sangre",
+  husbandry: "ganadería",
+  fletching: "emplumado de flechas",
+  bodkinArrow: "flecha de punzón",
+  ballistics: "balística",
+  chemistry: "química",
+  thumbRing: "dactilera",
+  forging: "forja",
+  ironCasting: "fundición de hierro",
+  scaleMailArmor: "armadura de láminas",
+  scaleBardingArmor: "armadura de láminas de caballería",
+  paddedArcherArmor: "armadura acolchada de arquero",
+  leatherArcherArmor: "armadura de cuero de arquero",
+  townWatch: "guardia urbana",
+  townPatrol: "patrulla urbana",
+  murderHoles: "matacanes",
+  conscription: "leva",
+  tracking: "rastreo",
+  conquistador: "conquistadores",
+  lightCavalry: "caballería ligera",
+  hussar: "húsares",
+  pikeman: "piqueros",
+  handCannoneer: "artilleros manuales",
+  camelRider: "jinetes de camello",
+  cavalryArcher: "arqueros a caballo",
+  eagleScout: "exploradores águila",
+  eagleWarrior: "guerreros águila",
+  dock: "muelle",
+  fishingShip: "pesqueros",
+  fishTrap: "trampa para peces",
+  galley: "galeras",
+  watchTower: "atalaya",
+  palisadeWall: "empalizada",
+  stoneWall: "muro de piedra",
+  relic: "reliquia",
   // Verbos y conectores de los pasos en inglés. No chocan con palabras en español.
   Create: "Crear",
   Move: "Mover",
@@ -143,7 +188,25 @@ const PLURALS: Record<string, string> = {
   monasterio: "monasterios",
   universidad: "universidades",
   castillo: "castillos",
+  explorador: "exploradores",
+  muelle: "muelles",
+  atalaya: "atalayas",
+  reliquia: "reliquias",
 };
+
+/** "Before/In" delante de una edad llevan artículo: "En la Edad Feudal". */
+const BEFORE_AGE = /\b(Before|In)\s+(?=@age\/|(?:dark|feudal|castle|imperial)Age\b)/g;
+
+function withAgeArticle(note: string): string {
+  return note.replace(BEFORE_AGE, (_, word: string) =>
+    word === "Before" ? "Antes de la " : "En la ",
+  );
+}
+
+/** El martillo es "construir", salvo como lugar: "Mover 5 de construcción a oro". */
+function hammerLabel(label: string, before: string): string {
+  return label === "construir" && /\b(?:on|from|to)\s*$/.test(before) ? "construcción" : label;
+}
 
 /** Pone la etiqueta en plural si el texto anterior termina en un número mayor a 1. */
 function countAware(label: string, before: string): string {
@@ -163,7 +226,8 @@ export function translateKeywords(text: string): string {
 }
 
 /** Separa una nota en segmentos de texto e ícono. */
-export function parseNote(note: string): NoteSegment[] {
+export function parseNote(rawNote: string): NoteSegment[] {
+  const note = withAgeArticle(rawNote);
   const segments: NoteSegment[] = [];
   let last = 0;
   for (const match of note.matchAll(ICON_PATTERN)) {
@@ -171,7 +235,8 @@ export function parseNote(note: string): NoteSegment[] {
     if (start > last)
       segments.push({ type: "text", text: translateKeywords(note.slice(last, start)) });
     const path = match[1] ?? "";
-    const label = countAware(iconLabel(path), note.slice(last, start));
+    const before = note.slice(last, start);
+    const label = hammerLabel(countAware(iconLabel(path), before), before);
     segments.push({ type: "icon", path, label });
     last = start + match[0].length;
   }

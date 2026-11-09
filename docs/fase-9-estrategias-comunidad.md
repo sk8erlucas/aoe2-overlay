@@ -33,6 +33,7 @@
 - [x] El importador quita el `undefined` que dejan algunas exportaciones ("Lure undefined @boar@") y lo avisa
 - [x] Verbos y conectores de los pasos traducidos (`Create`, `Move`, `Research`, `on`, `from`, `to`…) y frases (`Click up to`)
 - [x] Edificios escritos como texto (`market`, `house`…) y plurales según el número ("5 aldeanos")
+- [x] Tecnologías y unidades con los nombres oficiales del juego en español (`resources/es/strings/key-value`)
 - [ ] Ampliar el diccionario a medida que aparezcan palabras nuevas en las estrategias importadas
 
 ### Catálogo
@@ -41,6 +42,7 @@
 - [ ] Turcos: Fast Imperial
 - [x] Cumanos: Ram Spam de tytythechoochoo (`/estrategias/ram-spam-cumans`). El JSON vino sin el id de Build Order Guide, así que se importó como `cumansRamSpam.json`
 - [ ] Cumanos: Feudal TC boom / Fast Castle con 2 CU
+- [ ] Españoles: Scouts → Conqs de Tatoh. Validada en modo prueba (`imports/buildorderguide/spanishScoutsConqs.json`), falta publicarla
 - [ ] Al menos una estrategia buena por cada civilización ranked
 - [x] 3 TC Boom (genérica) de AOE Companion (`/estrategias/3-tc-boom-aoecom`)
 - [ ] Las más votadas genéricas (scouts, arqueros, drush, FC)
