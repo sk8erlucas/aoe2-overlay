@@ -1,8 +1,6 @@
 # Code signing policy
 
-Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
-
-> **Status:** the application to SignPath Foundation has been submitted. Current releases are **not signed yet**; this policy applies from the first signed release.
+> **Status:** releases are **not signed yet**. The SignPath Foundation application was declined in November 2026 because the project is still new; we plan to reapply once it has more public adoption. This policy applies from the first signed release. Until then, every release includes `SHA256SUMS.txt` so downloads can be verified.
 
 ## What gets signed
 
@@ -17,7 +15,7 @@ The installer contains this project's code and its open source dependencies. The
 | Committers and reviewers | [sk8erlucas](https://github.com/sk8erlucas) |
 | Approvers                | [sk8erlucas](https://github.com/sk8erlucas) |
 
-Every team member uses multi-factor authentication for GitHub and SignPath. Each signing request is approved manually by an approver.
+Every team member uses multi-factor authentication for GitHub and for the signing service. Each signing request is approved manually by an approver.
 
 ## Privacy
 

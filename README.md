@@ -104,7 +104,7 @@ Atajos por defecto (configurables en _Ajustes_):
 
 ## Firma de código y privacidad
 
-Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org). La solicitud está en trámite: las versiones actuales todavía no están firmadas. Ver la [política de firma](CODE_SIGNING.md) y la [política de privacidad](https://aoe2overlay.sitemaster.com.ar/privacidad).
+El instalador todavía no está firmado. Cada release publica `SHA256SUMS.txt` para verificar que el archivo descargado es el original. Ver la [política de firma](CODE_SIGNING.md) y la [política de privacidad](https://aoe2overlay.sitemaster.com.ar/privacidad).
 
 ## Licencia
 
@@ -113,7 +113,3 @@ Free code signing provided by [SignPath.io](https://signpath.io), certificate by
 ## Aviso legal
 
 Age of Empires II © Microsoft Corporation. AoE2 Overlay fue creado según las [Game Content Usage Rules](https://www.xbox.com/en-US/developers/rules) de Microsoft usando assets de Age of Empires II, y no está respaldado ni afiliado con Microsoft.
-
-## Firma de código
-
-Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).

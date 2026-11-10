@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Anton, Archivo } from "next/font/google";
 import type { ReactNode } from "react";
+import { SITE_URL } from "@/lib/config";
 import "./globals.css";
 
 // next/font descarga las fuentes en el build y las sirve desde nuestro dominio.
@@ -11,11 +12,22 @@ const archivo = Archivo({
   variable: "--font-archivo",
 });
 
+const DESCRIPTION =
+  "Overlay open source de estrategias de apertura para Age of Empires II: DE. Gratis, encima del juego y sin tocar su memoria.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: { default: "AoE2 Overlay", template: "%s · AoE2 Overlay" },
-  description:
-    "Overlay open source de estrategias de apertura para Age of Empires II: DE. Gratis, encima del juego y sin tocar su memoria.",
+  description: DESCRIPTION,
   icons: { icon: "/logo.svg" },
+  // La imagen sale de app/opengraph-image.tsx.
+  openGraph: {
+    type: "website",
+    siteName: "AoE2 Overlay",
+    locale: "es_AR",
+    description: DESCRIPTION,
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
