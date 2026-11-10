@@ -4,7 +4,9 @@
 
 **Depende de:** Fase 4. La Fase 5 puede venir después.
 
-**Guía paso a paso:** [deploy-dokploy.md](deploy-dokploy.md)
+**Guía paso a paso:** [deploy-dokploy.md](../deploy-dokploy.md)
+
+**Estado:** objetivo cumplido: instalador descargable, web y API online. Lo que quedaba (operación, firma y difusión) siguió en la [Fase 10](../fase-10-lanzamiento-y-publicidad.md); las pruebas de instalación y actualización, en la [Fase 8](../fase-8-pruebas-manuales.md).
 
 ## Tareas
 
@@ -28,23 +30,15 @@
 - [x] Registrarse y darse rol de admin (`fibonaku`, admin desde 2026-11-04)
 - [x] Publicar el primer release (`v0.1.0` publicado con .exe y .msi)
 - [x] SSL en Postgres (`db.aoe2overlay.sitemaster.com.ar`, certificado autofirmado)
-- [ ] Obligar SSL en las conexiones externas (`hostssl` en `pg_hba.conf`): hoy todavía acepta conexiones sin cifrar desde afuera
-- [ ] Backups automáticos de la base (Dokploy → base → Backups)
 
 ### Después
 
 - [x] Generar la clave de firma del updater (`~/.tauri/aoe2-overlay.key`, fuera del repo)
 - [x] Clave cargada en GitHub Secrets (`TAURI_SIGNING_PRIVATE_KEY` y `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`); `v0.3.1` publicado con `latest.json` y firmas (2026-11-05)
-- [ ] Guardar una copia de `~/.tauri/aoe2-overlay.key*` en un gestor de contraseñas
 - [x] `tauri-plugin-updater` leyendo `latest.json` del release: busca al abrir y cada 6 h, avisa en Ajustes y se instala con "Actualizar y reiniciar" (0.3.1)
-- [ ] Firma de código del instalador (reduce avisos de SmartScreen y falsos positivos). Opciones, en orden de preferencia:
-  1. **SignPath Foundation**: firma gratis para proyectos open source; se pide en signpath.org y firma desde GitHub Actions
-  2. Certificado OV comercial (~200–400 USD/año, con token USB o HSM en la nube)
-  3. **Azure Artifact Signing (ex Trusted Signing)**: hoy no sirve desde Argentina. Para personas solo acepta EE. UU. y Canadá; para organizaciones, además, UE y Reino Unido (revisado 2026-11-09)
 - [x] Solicitud enviada a SignPath Foundation; política de firma (`CODE_SIGNING.md`), privacidad (`/privacidad`) y línea de crédito publicadas. Falta la aprobación, la app de GitHub, el token y adaptar `release.yml`
 - [x] Metadatos de editor y copyright en el .exe, e instalación por usuario sin pedir administrador (menos heurísticas sospechosas)
 - [x] VirusTotal v0.2.0: 2/71 (Arctic Wolf "Unsafe", SecureAge "Malicious"), falsos positivos típicos de NSIS sin firmar
-- [ ] Reportar falsos positivos: subir el instalador a VirusTotal y, si algún antivirus lo marca, enviarlo como falso positivo (Microsoft Security Intelligence y el antivirus que lo detecte)
 
 ### Proyecto open source
 
@@ -52,11 +46,8 @@
 - [x] Disclaimer de las Microsoft Game Content Usage Rules (README, footer de la web y `apps/web/public/game-assets/README.md`)
 - [x] `SECURITY.md` (cómo reportar vulnerabilidades)
 - [x] CHANGELOG y versionado semántico (`CHANGELOG.md`)
-- [ ] Issues iniciales etiquetadas `good first issue`
 
 ## Criterio de terminado
 
 - [x] `https://aoe2overlay.sitemaster.com.ar` y `https://api.aoe2overlay.sitemaster.com.ar/api/health` responden
 - [x] El tag `v0.1.0` genera el instalador en Releases
-- [ ] Instalar desde la web funciona en una PC limpia
-- [ ] Publicar una versión nueva hace que el overlay instalado ofrezca la actualización (primera prueba posible: con la 0.3.1 instalada, publicar la 0.3.2)

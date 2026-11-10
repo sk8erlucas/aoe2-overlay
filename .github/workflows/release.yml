@@ -50,7 +50,24 @@ jobs:
 
             - **`AoE2.Overlay_*_x64-setup.exe`**: instalador recomendado.
             - `.msi`: alternativa para instalaciones administradas.
+            - `SHA256SUMS.txt`: hashes para comprobar la descarga (`Get-FileHash <archivo>` en PowerShell).
 
             Windows puede mostrar el aviso de SmartScreen porque el instalador todavía no está firmado: "Más información" → "Ejecutar de todas formas".
           releaseDraft: false
           prerelease: false
+
+      # Hashes de los instaladores publicados, para verificar las descargas mientras no estén firmados.
+      - name: Publicar SHA256SUMS.txt
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          New-Item -ItemType Directory -Force hashes | Out-Null
+          gh release download $env:TAG --pattern "*.exe" --pattern "*.msi" --dir hashes
+          $lines = Get-ChildItem hashes | Sort-Object Name | ForEach-Object {
+            "{0}  {1}" -f (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower(), $_.Name
+          }
+          [IO.File]::WriteAllText("$PWD/SHA256SUMS.txt", ($lines -join "`n") + "`n")
+          Get-Content SHA256SUMS.txt
+          gh release upload $env:TAG SHA256SUMS.txt --clobber
