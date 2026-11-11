@@ -1,6 +1,8 @@
 import { Footer } from "@/components/Footer";
 import { About } from "@/components/landing/About";
+import { Demo } from "@/components/landing/Demo";
 import { Hero } from "@/components/landing/Hero";
+import { ReplaysShowcase } from "@/components/landing/ReplaysShowcase";
 import "@/components/landing/landing.css";
 import { api } from "@/lib/api";
 import { getMe } from "@/lib/server";
@@ -22,7 +24,9 @@ export default async function Home() {
   return (
     <div className="landing">
       <Hero me={me} />
+      <Demo />
       <About strategyCount={count} />
+      <ReplaysShowcase />
       <Footer />
     </div>
   );

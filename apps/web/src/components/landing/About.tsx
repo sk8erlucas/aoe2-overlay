@@ -39,7 +39,7 @@ export function About({ strategyCount }: { strategyCount: number | null }) {
           El proyecto
         </span>
         <span className="side-label right" style={{ top: "50%" }}>
-          02 / 03
+          03 / 05
         </span>
         <div>
           <p className="crest-label">[ AoE2 Overlay ]</p>
@@ -63,7 +63,7 @@ export function About({ strategyCount }: { strategyCount: number | null }) {
 
       <div className="card-row">
         <span className="side-label left" style={{ top: "20%" }}>
-          03 / 03
+          04 / 05
         </span>
         <span className="side-label left" style={{ top: "60%" }}>
           AoE2 Overlay
