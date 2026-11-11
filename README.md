@@ -17,7 +17,7 @@ Overlay open source de **estrategias de apertura (build orders)** para **Age of 
 <p align="center">
   <img src="docs/screenshots/overlay-partida.png" alt="Overlay: elegir mapa, civilización y estrategia" width="300">
   &nbsp;
-  <img src="docs/screenshots/overlay-juego.png" alt="Overlay en modo juego: paso actual, recursos y próximo paso" width="360">
+  <img src="docs/screenshots/overlay-demo.gif" alt="Overlay en modo juego: el reloj avanza y van apareciendo los pasos" width="400">
 </p>
 
 > 🚧 En desarrollo temprano. Mirá el [roadmap](docs/README.md) y los [cambios por versión](CHANGELOG.md).
