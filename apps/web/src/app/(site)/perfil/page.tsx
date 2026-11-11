@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { DeleteAccount } from "@/components/DeleteAccount";
 import { StrategyCard } from "@/components/StrategyCard";
 import { getMe, serverApi } from "@/lib/server";
 import type { StrategySummary } from "@/lib/types";
@@ -58,6 +59,10 @@ export default async function ProfilePage() {
             </Link>
           </>,
         )}
+      </section>
+
+      <section className="max-w-md">
+        <DeleteAccount />
       </section>
     </div>
   );

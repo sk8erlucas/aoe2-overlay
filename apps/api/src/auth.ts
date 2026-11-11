@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { bearer, deviceAuthorization } from "better-auth/plugins";
 import type { Database } from "./db/client";
+import { prepareAccountDeletion } from "./db/delete-account";
 import * as schema from "./db/schema";
 import type { Env } from "./env";
 
@@ -38,6 +39,11 @@ export function createAuth(
       additionalFields: {
         // El rol nunca lo elige el usuario: se cambia con `pnpm --filter @age-overlay/api user:role`.
         role: { type: "string", defaultValue: "user", input: false },
+      },
+      // "Eliminar mi cuenta" en /perfil: POST /api/auth/delete-user con la contraseña.
+      deleteUser: {
+        enabled: true,
+        beforeDelete: (account) => prepareAccountDeletion(db, account),
       },
     },
     plugins: [
