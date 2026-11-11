@@ -34,7 +34,12 @@ const SECTIONS: [string, React.ReactNode][] = [
   [
     "Tus derechos",
     <p key="derechos">
-      Podés pedir ver, corregir o eliminar tus datos abriendo una{" "}
+      Podés eliminar tu cuenta cuando quieras desde{" "}
+      <a className="underline" href="/perfil">
+        tu perfil
+      </a>
+      : se borran tu cuenta, tus votos y tus favoritas, y las estrategias que publicaste quedan sin
+      autor. Para ver o corregir tus datos, abrí una{" "}
       <a
         className="underline"
         href={`${GITHUB_URL}/issues/new/choose`}
