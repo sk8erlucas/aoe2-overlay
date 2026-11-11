@@ -25,7 +25,7 @@
 - [ ] Backups automáticos de la base (Dokploy → base → Backups)
 - [ ] Obligar SSL en las conexiones externas (`hostssl` en `pg_hba.conf`): hoy todavía acepta conexiones sin cifrar desde afuera
 - [ ] Guardar una copia de `~/.tauri/aoe2-overlay.key*` en un gestor de contraseñas: sin esa clave no se pueden publicar actualizaciones
-- [ ] Botón "Eliminar mi cuenta" en `/perfil`, para no depender de una issue pública
+- [x] Botón "Eliminar mi cuenta" en `/perfil` (pide la contraseña; las estrategias quedan sin autor)
 
 ### 3. Confianza del instalador
 
@@ -52,8 +52,11 @@ Azure Artifact Signing no sirve desde Argentina: para personas solo acepta EE. U
 
 Cómo hacerlo: ver [Cómo grabar los videos y GIF](#cómo-grabar-los-videos-y-gif).
 
-- [ ] GIF para el README, 8–10 s en partida (`docs/screenshots/overlay-partida.gif`)
-- [ ] Video demo, 30–45 s, en YouTube
+- [x] GIF de la interfaz para el README (`docs/screenshots/overlay-demo.gif`), grabado automáticamente sin el juego atrás
+- [ ] GIF en partida real, 8–10 s, para reemplazar al anterior
+- [x] Video demo de 40 s (interfaz del overlay y web, sin partida), en `Videos\aoe2-overlay\aoe2-overlay-demo.mp4`
+- [ ] Subir el video demo a YouTube
+- [ ] Video en partida real (guion de abajo), para la versión definitiva
 - [ ] Mostrar el video en la landing y en el README
 - [ ] Short vertical (YouTube Shorts o TikTok), 15–30 s
 - [ ] Capturas nuevas de la web y del overlay para los posts
