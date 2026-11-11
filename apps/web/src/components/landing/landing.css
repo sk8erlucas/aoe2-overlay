@@ -395,6 +395,128 @@
   color: color-mix(in srgb, var(--color-ink) 80%, transparent);
 }
 
+/* ---------------- Videos: demo del overlay y AoE2 Replays ---------------- */
+
+.showcase-section {
+  position: relative;
+  padding: calc(120 * var(--u)) calc(200 * var(--u)) calc(140 * var(--u));
+}
+.showcase-section.dark {
+  background: var(--color-ink);
+  color: var(--color-cream);
+}
+.showcase-section .frame-rule {
+  top: 0;
+  color: color-mix(in srgb, var(--color-gold) 45%, transparent);
+}
+.showcase-section .btn-ghost {
+  border-color: color-mix(in srgb, var(--color-cream) 40%, transparent);
+}
+.showcase-section .btn-ghost:hover {
+  background: color-mix(in srgb, var(--color-cream) 10%, transparent);
+}
+.showcase-head {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  margin-bottom: calc(64 * var(--u));
+}
+.showcase-eyebrow {
+  font-size: max(10px, calc(13 * var(--u)));
+  font-weight: 800;
+  font-stretch: 75%;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+.showcase-title {
+  font-family: var(--font-display);
+  font-size: max(40px, calc(110 * var(--u)));
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.showcase-lead {
+  max-width: 640px;
+  margin: calc(20 * var(--u)) auto 0;
+  font-size: max(15px, calc(20 * var(--u)));
+  line-height: 1.45;
+  color: color-mix(in srgb, var(--color-cream) 80%, transparent);
+}
+.showcase {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: calc(64 * var(--u));
+  align-items: center;
+}
+.showcase.reverse {
+  grid-template-columns: 1fr 1.55fr;
+}
+.showcase.reverse .showcase-video {
+  order: 2;
+}
+.showcase-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border: 1px solid color-mix(in srgb, var(--color-gold) 55%, transparent);
+  box-shadow: 0 30px 80px -30px rgb(0 0 0 / 0.7);
+}
+.showcase-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(28 * var(--u));
+}
+.showcase-steps {
+  display: grid;
+  gap: calc(24 * var(--u));
+}
+.showcase-steps li {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.showcase-num {
+  font-family: var(--font-display);
+  font-size: max(28px, calc(46 * var(--u)));
+  line-height: 0.9;
+  color: var(--color-red);
+}
+.showcase-step-title {
+  font-weight: 800;
+  font-size: max(16px, calc(21 * var(--u)));
+}
+.showcase-text {
+  font-size: max(14px, calc(17 * var(--u)));
+  line-height: 1.45;
+  color: color-mix(in srgb, var(--color-cream) 75%, transparent);
+}
+.showcase-points {
+  display: grid;
+  gap: calc(14 * var(--u));
+  font-size: max(14px, calc(17 * var(--u)));
+  line-height: 1.45;
+}
+.showcase-points li {
+  position: relative;
+  padding-left: 22px;
+}
+.showcase-points li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 9px;
+  height: 9px;
+  background: var(--color-gold);
+  transform: rotate(45deg);
+}
+
 /* ---------------- Móvil ---------------- */
 
 @media (max-width: 767px) {
@@ -451,5 +573,16 @@
   }
   .statement {
     font-size: min(4vw, 22px);
+  }
+  .showcase-section {
+    padding: 56px 36px 64px;
+  }
+  .showcase,
+  .showcase.reverse {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .showcase.reverse .showcase-video {
+    order: 0;
   }
 }

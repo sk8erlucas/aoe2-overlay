@@ -57,7 +57,8 @@ Cómo hacerlo: ver [Cómo grabar los videos y GIF](#cómo-grabar-los-videos-y-gi
 - [x] Video demo de 40 s (interfaz del overlay y web, sin partida), en `Videos\aoe2-overlay\aoe2-overlay-demo.mp4`
 - [ ] Subir el video demo a YouTube
 - [ ] Video en partida real (guion de abajo), para la versión definitiva
-- [ ] Mostrar el video en la landing y en el README
+- [x] Mostrar el video en la landing (sección "Miralo en acción")
+- [x] Sección AoE2 Replays en la home, con su video en español y links UTM (`utm_source=aoe2-overlay`)
 - [ ] Short vertical (YouTube Shorts o TikTok), 15–30 s
 - [ ] Capturas nuevas de la web y del overlay para los posts
 

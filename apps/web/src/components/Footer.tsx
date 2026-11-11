@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { GITHUB_URL } from "@/lib/config";
+import { GITHUB_URL, replaysLink } from "@/lib/config";
 
 export function Footer() {
   return (
@@ -25,6 +25,7 @@ export function Footer() {
           <Link href="/estrategias">Estrategias</Link>
           <Link href="/descargar">Descargar</Link>
           <Link href="/privacidad">Privacidad</Link>
+          <a href={replaysLink("/", "footer")}>AoE2 Replays</a>
           <a href={GITHUB_URL} target="_blank" rel="noreferrer">
             GitHub
           </a>

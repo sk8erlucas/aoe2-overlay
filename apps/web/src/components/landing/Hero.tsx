@@ -19,16 +19,16 @@ const DEMO_STEPS = [
 ];
 
 const LEFT_LABELS: [number, string][] = [
-  [225, "01 / 03"],
+  [225, "01 / 05"],
   [560, "AOE2 OVERLAY"],
   [1010, "BUILD ORDERS"],
-  [1180, "01 / 03"],
+  [1180, "01 / 05"],
 ];
 const RIGHT_LABELS: [number, string][] = [
-  [225, "01 / 03"],
+  [225, "01 / 05"],
   [560, "BUILD ORDERS"],
   [1010, "AOE2 OVERLAY"],
-  [1180, "01 / 03"],
+  [1180, "01 / 05"],
 ];
 
 const clamp = (v: number, min = 0, max = 1) => Math.min(max, Math.max(min, v));
