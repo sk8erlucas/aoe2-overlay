@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.installer.1.9.0.schema.json
+PackageIdentifier: sk8erlucas.AoE2Overlay
+PackageVersion: 0.3.3
+InstallerType: nullsoft
+Scope: user
+InstallModes:
+  - interactive
+  - silent
+UpgradeBehavior: install
+ReleaseDate: 2026-11-09
+Installers:
+  - Architecture: x64
+    InstallerUrl: https://github.com/sk8erlucas/aoe2-overlay/releases/download/v0.3.3/AoE2.Overlay_0.3.3_x64-setup.exe
+    InstallerSha256: 49F300C8544336CA4561CCA6DDBF110980765431FDA4BDBE15B676FD339F21BD
+ManifestType: installer
+ManifestVersion: 1.9.0
