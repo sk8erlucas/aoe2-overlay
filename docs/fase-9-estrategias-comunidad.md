@@ -9,10 +9,12 @@
 ### Investigación
 
 - [x] Build Order Guide usa el **mismo formato JSON** que adoptamos en la Fase 1: se valida con `strategySchema` sin convertir
-- [x] Es una app Next.js que lee los datos de Firestore (colección `builds`)
-- [x] No publica términos de uso ni licencia del contenido (`/terms` da 404)
-- [ ] Contactar a los mantenedores de Build Order Guide para pedir permiso o un export oficial
-- [ ] Bajar las estrategias elegidas. La consulta directa a su Firestore fue bloqueada por el sistema de permisos del asistente; ver "Cómo cargar más estrategias"
+- [x] Es una app Next.js que lee los datos de Firestore (proyecto `build-order-guide`)
+- [x] El código es abierto con **licencia MIT**: [bergerjohannes/buildorderguide](https://github.com/bergerjohannes/buildorderguide) (© 2022-2026 Johannes Berger)
+- [x] Las estrategias no están en ese repo: las suben los usuarios y viven en Firestore. Según su [`firestore.rules`](https://github.com/bergerjohannes/buildorderguide/blob/main/firestore.rules), la colección **`published-builds` es de lectura pública** (sin iniciar sesión); `builds` (borradores) y `ratings` son privadas
+- [x] **Decisión (2026-11-12, Lucas):** se pueden importar las estrategias publicadas, siempre con el autor original y el link a la fuente. Si un autor pide que se quite la suya, se quita
+- [ ] Avisarles a los mantenedores, como cortesía, que usamos sus estrategias con crédito (tarea 6 del [brief de publicidad](publicidad-brief-agente.md))
+- [ ] Bajar las estrategias en masa: ver "Importación automática" abajo
 
 ### Importador (`pnpm --filter @age-overlay/api import:community`)
 
@@ -47,6 +49,18 @@
 - [x] 3 TC Boom (genérica) de AOE Companion (`/estrategias/3-tc-boom-aoecom`)
 - [ ] Las más votadas genéricas (scouts, arqueros, drush, FC)
 
+### Importación automática (pendiente)
+
+Hoy cada estrategia se baja a mano (ver "Cómo cargar más estrategias"). El objetivo es un script que traiga el catálogo publicado de una vez y lo pase por el importador que ya existe.
+
+- [ ] Script `pnpm --filter @age-overlay/api fetch:bog` que lea `published-builds` por la API REST de Firestore (`https://firestore.googleapis.com/v1/projects/build-order-guide/databases/(default)/documents/published-builds`, paginado con `pageSize` y `pageToken`)
+- [ ] Convertir los valores tipados de Firestore (`stringValue`, `integerValue`, `arrayValue`, `mapValue`…) a JSON común y guardarlos en `imports/buildorderguide/<id>.json`, con el id del documento. Revisar `src/lib/buildConverter.ts` de su repo, que convierte al formato de RTS Overlay
+- [ ] Respetar el sitio: una pedida por segundo como máximo, `User-Agent` que identifique al proyecto, caché local y sin repetir la bajada completa más de una vez por mes
+- [ ] Elegir qué publicar: ver qué campos traen los documentos (calificación, vistas, fecha, civilización) y quedarse con las mejores por civilización, en vez de publicar todo
+- [ ] Publicar con `import:community --publish` (ya valida, da crédito, es idempotente y agrega el tag `buildorderguide`)
+- [ ] Ampliar el diccionario de `notes.ts` con las palabras que queden en inglés después de importar
+- [ ] Tests del conversor de Firestore con un documento de ejemplo
+
 ## Cómo cargar más estrategias
 
 1. En Build Order Guide, abrí la estrategia y copiá su JSON (el sitio permite exportarla y copiarla) o descargala.
@@ -56,7 +70,7 @@
 
 ## Criterio de terminado
 
-- [ ] Hay permiso o los términos lo permiten (documentado en esta página)
+- [x] Hay permiso o los términos lo permiten: código MIT, estrategias de lectura pública y decisión documentada arriba (2026-11-12)
 - [ ] El catálogo tiene al menos una estrategia buena para cada civilización ranked
 - [x] Cada estrategia importada muestra el autor original y el link a la fuente
 - [x] Correr el import dos veces no crea duplicados
