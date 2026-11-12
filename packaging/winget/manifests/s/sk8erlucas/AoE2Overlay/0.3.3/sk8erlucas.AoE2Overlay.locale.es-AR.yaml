@@ -1,0 +1,14 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.locale.1.9.0.schema.json
+PackageIdentifier: sk8erlucas.AoE2Overlay
+PackageVersion: 0.3.3
+PackageLocale: es-AR
+Publisher: AoE2 Overlay (open source)
+PackageName: AoE2 Overlay
+ShortDescription: Overlay de estrategias de apertura (build orders) para Age of Empires II - Definitive Edition.
+Description: |-
+  Overlay gratis y de código abierto que muestra los pasos de tu apertura encima de
+  Age of Empires II - Definitive Edition, con reloj y atajos de teclado. Los clics pasan al juego.
+  No se inyecta en el juego ni lee su memoria. Las estrategias las crea y las vota la comunidad en
+  aoe2overlay.sitemaster.com.ar.
+ManifestType: locale
+ManifestVersion: 1.9.0

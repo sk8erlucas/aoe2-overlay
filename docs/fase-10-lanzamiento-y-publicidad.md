@@ -4,6 +4,8 @@
 
 **Depende de:** Fases 6 y 9. Conviene avanzar en paralelo con la [Fase 8](fase-8-pruebas-manuales.md).
 
+**Brief para un agente con navegador:** [publicidad-brief-agente.md](publicidad-brief-agente.md).
+
 **Posicionamiento:** ya existen RTS Overlay (que importa desde Build Order Guide), Border y RTS Helper. No competimos como "otro overlay", sino como **el overlay en español, con estrategias votadas por la comunidad, que no toca el juego**.
 
 ## Tareas
@@ -18,6 +20,8 @@
 - [ ] Cargar builds para las civilizaciones más jugadas ([Fase 9](fase-9-estrategias-comunidad.md))
 - [ ] Pedir permiso a los mantenedores de Build Order Guide
 - [x] Imagen para compartir (Open Graph, 1200×630), `sitemap.xml` con las estrategias públicas y `robots.txt`
+- [x] Repo de GitHub con web y temas (`aoe2`, `build-order`, `overlay`…)
+- [ ] Subir la vista previa del repo (`docs/media/github-social-preview.png`) en Settings → Social preview
 - [ ] Reemplazar la ilustración de Microsoft del hero ([Fase 7](fase-7-futuro.md)); no bloquea la difusión
 
 ### 2. Operación y seguridad
@@ -37,7 +41,8 @@
 - [ ] Antes de anunciar cada versión, enviar el `.exe` a Microsoft como **Software developer** en [microsoft.com/wdsi/filesubmission](https://www.microsoft.com/wdsi/filesubmission). Defender es el antivirus que tiene casi todo el público
 - [ ] Revisar cada release en VirusTotal y reportar los falsos positivos al antivirus que lo marque (en la 0.2.0: Arctic Wolf y SecureAge)
 - [ ] Espaciar las versiones: un instalador sin firma junta reputación en SmartScreen por archivo, así que cada versión nueva arranca de cero
-- [ ] Publicarlo en winget (`winget-pkgs`): Microsoft lo valida al aceptarlo y además es otro canal de difusión
+- [x] Manifiestos de winget validados en [`packaging/winget`](../packaging/winget/README.md)
+- [ ] Enviarlos a `winget-pkgs` con `wingetcreate submit`: Microsoft lo valida al aceptarlo y además es otro canal de difusión
 - [ ] Investigar la Microsoft Store con MSIX: el registro es gratis para personas y la Store firma el paquete. Tauri no genera MSIX directamente y la Store tiene su propio sistema de actualizaciones
 
 **Con firma (cuando haya presupuesto o visibilidad):**
@@ -87,7 +92,7 @@ Cómo hacerlo: ver [Cómo grabar los videos y GIF](#cómo-grabar-los-videos-y-gi
 - [ ] Una "build de la semana" en Discord y redes
 - [ ] Publicar los cambios de cada versión
 - [ ] Sumar builds y un tutorial cuando salga un parche o una civilización nueva
-- [ ] Issues iniciales etiquetadas `good first issue`
+- [x] Issues iniciales: #7 y #8 (`good first issue`), #9 (inglés, `help wanted`)
 
 ## Cuidados
 
@@ -107,6 +112,7 @@ gh api repos/sk8erlucas/aoe2-overlay/releases --jq '[.[].assets[] | select(.name
 | Fecha      | Descargas totales | Estrellas | Cuentas | Estrategias de usuarios | Notas                          |
 | ---------- | ----------------- | --------- | ------- | ----------------------- | ------------------------------ |
 | 2026-11-09 | 14                | 1         | —       | —                       | Punto de partida, sin difusión |
+| 2026-11-12 | 18                | 1         | —       | —                       | Antes de la difusión           |
 
 ## Cómo grabar los videos y GIF
 

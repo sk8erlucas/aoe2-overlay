@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.defaultLocale.1.9.0.schema.json
+PackageIdentifier: sk8erlucas.AoE2Overlay
+PackageVersion: 0.3.3
+PackageLocale: en-US
+Publisher: AoE2 Overlay (open source)
+PublisherUrl: https://github.com/sk8erlucas
+PublisherSupportUrl: https://github.com/sk8erlucas/aoe2-overlay/issues
+PrivacyUrl: https://aoe2overlay.sitemaster.com.ar/privacidad
+PackageName: AoE2 Overlay
+PackageUrl: https://aoe2overlay.sitemaster.com.ar
+License: MIT
+LicenseUrl: https://github.com/sk8erlucas/aoe2-overlay/blob/main/LICENSE
+Copyright: Copyright (c) 2026 AoE2 Overlay contributors
+ShortDescription: Build order overlay for Age of Empires II - Definitive Edition.
+Description: |-
+  Free and open source overlay that shows the steps of your opening (build order) on top of
+  Age of Empires II - Definitive Edition, with a timer and hotkeys. Clicks pass through to the
+  game. It does not inject code into the game or read its memory. Strategies are created and
+  voted on by the community at aoe2overlay.sitemaster.com.ar. The interface is in Spanish.
+Moniker: aoe2-overlay
+Tags:
+  - aoe2
+  - age-of-empires
+  - build-order
+  - overlay
+  - gaming
+ReleaseNotesUrl: https://github.com/sk8erlucas/aoe2-overlay/releases/tag/v0.3.3
+ManifestType: defaultLocale
+ManifestVersion: 1.9.0
