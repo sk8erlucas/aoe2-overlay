@@ -97,13 +97,13 @@ En https://github.com/sk8erlucas/aoe2-overlay/settings → General → **Social 
 - Escribirles un mensaje personalizado (máximo 10 en total): mencionar algo concreto de su contenido y ofrecerles **cargar su build favorita en el catálogo, con crédito y link a su canal**. No pedir que lo promocionen ni ofrecer dinero.
 - Hacer un solo seguimiento a la semana si no contestan.
 
-### 6. Build Order Guide (pedir permiso)
+### 6. Build Order Guide (aviso de cortesía)
 
-El catálogo importó estrategias de https://www.buildorderguide.com con crédito a sus autores, pero el sitio no publica términos de uso. Buscar cómo contactar a sus mantenedores (web, Discord o GitHub) y mandar, en inglés:
+El catálogo importa estrategias de https://www.buildorderguide.com con crédito a sus autores. Su código es MIT ([bergerjohannes/buildorderguide](https://github.com/bergerjohannes/buildorderguide)) y las estrategias publicadas son de lectura pública, así que **no hace falta pedir permiso**: es un aviso de cortesía. Buscar cómo contactar al mantenedor (web, Discord o GitHub) y mandar, en inglés:
 
-> Hi! I'm Lucas, I maintain AoE2 Overlay (https://github.com/sk8erlucas/aoe2-overlay), a free, open source build order overlay in Spanish. We'd like to include some Build Order Guide builds in our catalog, always crediting the original author with a link back to the build on your site. Would that be OK with you? If you'd rather we didn't, we'll remove them. Thanks for the great site!
+> Hi! I'm Lucas, I maintain AoE2 Overlay (https://github.com/sk8erlucas/aoe2-overlay), a free, open source build order overlay in Spanish. We include some published Build Order Guide builds in our catalog, always crediting the original author with a link back to the build on your site. If you or any author would rather we didn't include a build, just tell us and we'll remove it. Thanks for the great site!
 
-Anotar la respuesta textual: define si podemos sumar más estrategias.
+Si responden, anotar la respuesta textual.
 
 ### 7. Internacional (después de las tareas 1 a 6)
 
