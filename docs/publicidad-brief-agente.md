@@ -44,6 +44,8 @@ El video y el GIF muestran la interfaz real pero **sin el juego atrás**. Decilo
 
 ## Tareas, en orden
 
+**Estado al 2026-11-12:** las tareas 1 y 2 están hechas ([video en YouTube](https://youtu.be/B-13galXHyM)). De la 3, VirusTotal está revisado (2 de 71: SecureAge y Sophos); faltan los reportes de falso positivo y el envío a Microsoft, que piden adjuntar el `.exe` y los tiene que subir Lucas. Seguí desde la tarea 4 y, para compartir el video, usá el link de YouTube.
+
 ### 1. GitHub: vista previa del repo
 
 En https://github.com/sk8erlucas/aoe2-overlay/settings → General → **Social preview** → subir `docs/media/github-social-preview.png`. Así se ve una tarjeta al compartir el link del repo.
