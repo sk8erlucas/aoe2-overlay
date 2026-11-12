@@ -21,7 +21,7 @@
 - [ ] Pedir permiso a los mantenedores de Build Order Guide
 - [x] Imagen para compartir (Open Graph, 1200×630), `sitemap.xml` con las estrategias públicas y `robots.txt`
 - [x] Repo de GitHub con web y temas (`aoe2`, `build-order`, `overlay`…)
-- [ ] Subir la vista previa del repo (`docs/media/github-social-preview.png`) en Settings → Social preview
+- [x] Vista previa del repo (`docs/media/github-social-preview.png`) subida en Settings → Social preview (2026-11-12)
 - [ ] Reemplazar la ilustración de Microsoft del hero ([Fase 7](fase-7-futuro.md)); no bloquea la difusión
 
 ### 2. Operación y seguridad
@@ -38,8 +38,10 @@
 - [x] Solicitud a SignPath Foundation: **rechazada el 2026-11-10** por falta de visibilidad pública (estrellas, forks, contribuidores, menciones en Reddit o YouTube). Se puede volver a pedir más adelante
 - [x] Quitar la línea de crédito de SignPath del README, `/descargar` y `CODE_SIGNING.md`
 - [x] Publicar `SHA256SUMS.txt` en cada release, para verificar las descargas
-- [ ] Antes de anunciar cada versión, enviar el `.exe` a Microsoft como **Software developer** en [microsoft.com/wdsi/filesubmission](https://www.microsoft.com/wdsi/filesubmission). Defender es el antivirus que tiene casi todo el público
-- [ ] Revisar cada release en VirusTotal y reportar los falsos positivos al antivirus que lo marque (en la 0.2.0: Arctic Wolf y SecureAge)
+- [ ] Antes de anunciar cada versión, enviar el `.exe` a Microsoft como **Software developer** en [microsoft.com/wdsi/filesubmission](https://www.microsoft.com/wdsi/filesubmission). Defender es el antivirus que tiene casi todo el público. **0.3.3: pendiente.** El formulario pide adjuntar el `.exe`, así que lo tiene que subir Lucas; anotar acá el número de envío
+- [x] Revisar la 0.3.3 en VirusTotal (2026-11-12): [2 de 71](https://www.virustotal.com/gui/file/49f300c8544336ca4561cca6ddbf110980765431fda4bdbe15b676fd339f21bd), SecureAge "Malicious" y Sophos "Generic ML PUA". En la 0.2.0 habían sido Arctic Wolf y SecureAge
+- [ ] Reportar el falso positivo de la 0.3.3 a **SecureAge** y a **Sophos**. Cada formulario pide adjuntar el `.exe`: lo tiene que subir Lucas
+- [ ] Revisar cada release nueva en VirusTotal y reportar los falsos positivos al antivirus que lo marque
 - [ ] Espaciar las versiones: un instalador sin firma junta reputación en SmartScreen por archivo, así que cada versión nueva arranca de cero
 - [x] Manifiestos de winget validados en [`packaging/winget`](../packaging/winget/README.md)
 - [ ] Enviarlos a `winget-pkgs` con `wingetcreate submit`: Microsoft lo valida al aceptarlo y además es otro canal de difusión
@@ -60,7 +62,9 @@ Cómo hacerlo: ver [Cómo grabar los videos y GIF](#cómo-grabar-los-videos-y-gi
 - [x] GIF de la interfaz para el README (`docs/screenshots/overlay-demo.gif`), grabado automáticamente sin el juego atrás
 - [ ] GIF en partida real, 8–10 s, para reemplazar al anterior
 - [x] Video demo de 40 s (interfaz del overlay y web, sin partida), en `Videos\aoe2-overlay\aoe2-overlay-demo.mp4`
-- [ ] Subir el video demo a YouTube
+- [x] Video demo subido a YouTube: https://youtu.be/B-13galXHyM (2026-11-12), con título, descripción y UTM del brief
+- [ ] Confirmar en YouTube Studio que el video está público, con etiquetas y sin monetización (al subirlo figuraba "se está estrenando")
+- [ ] Ponerle música al video. La del juego sería ideal, pero es de Microsoft: aunque las Game Content Usage Rules permiten usarla sin fines comerciales, YouTube puede reclamarla por Content ID. Probar primero en un video privado; si hay reclamo, usar música libre de derechos con estilo medieval
 - [ ] Video en partida real (guion de abajo), para la versión definitiva
 - [x] Mostrar el video en la landing (sección "Miralo en acción")
 - [x] Sección AoE2 Replays en la home, con su video en español y links UTM (`utm_source=aoe2-overlay`)
@@ -109,10 +113,10 @@ Actualizar una vez por semana. Las descargas salen de los assets `.exe` y `.msi`
 gh api repos/sk8erlucas/aoe2-overlay/releases --jq '[.[].assets[] | select(.name | test("(exe|msi)$")) | .download_count] | add'
 ```
 
-| Fecha      | Descargas totales | Estrellas | Cuentas | Estrategias de usuarios | Notas                          |
-| ---------- | ----------------- | --------- | ------- | ----------------------- | ------------------------------ |
-| 2026-11-09 | 14                | 1         | —       | —                       | Punto de partida, sin difusión |
-| 2026-11-12 | 18                | 1         | —       | —                       | Antes de la difusión           |
+| Fecha      | Descargas totales | Estrellas | Cuentas | Estrategias de usuarios | Notas                                                                 |
+| ---------- | ----------------- | --------- | ------- | ----------------------- | --------------------------------------------------------------------- |
+| 2026-11-09 | 14                | 1         | —       | —                       | Punto de partida, sin difusión                                        |
+| 2026-11-12 | 18                | 1         | —       | —                       | Antes de la difusión. Video en YouTube y vista previa del repo listos |
 
 ## Cómo grabar los videos y GIF
 

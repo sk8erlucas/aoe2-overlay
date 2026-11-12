@@ -20,6 +20,8 @@ Overlay open source de **estrategias de apertura (build orders)** para **Age of 
   <img src="docs/screenshots/overlay-demo.gif" alt="Overlay en modo juego: el reloj avanza y van apareciendo los pasos" width="400">
 </p>
 
+<p align="center"><a href="https://youtu.be/B-13galXHyM">▶ Mirá el video demo (40 s)</a></p>
+
 > 🚧 En desarrollo temprano. Mirá el [roadmap](docs/README.md) y los [cambios por versión](CHANGELOG.md).
 
 ## Instalación
