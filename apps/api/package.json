@@ -14,6 +14,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "user:role": "tsx --env-file-if-exists=.env src/db/set-role.ts",
+    "fetch:bog": "tsx src/db/fetch-bog.ts",
     "import:community": "tsx --env-file-if-exists=.env src/db/import-community.ts"
   },
   "dependencies": {

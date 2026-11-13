@@ -6,9 +6,11 @@
 import { MAPS, findCiv } from "@age-overlay/game-data";
 import { getCivilizations, strategySchema, type MapType, type Strategy } from "@age-overlay/shared";
 import { slugify } from "../lib/strategy-columns";
+import { bogBuildUrl } from "./bog";
 
 export const BOG_TAG = "buildorderguide";
-export const bogUrl = (id: string) => `https://www.buildorderguide.com/#/build/${id}`;
+/** Link a la estrategia en Build Order Guide (formato actual del sitio). */
+export const bogUrl = bogBuildUrl;
 
 /** Palabras del nombre/descripción → tipo de mapa (solo si la estrategia no lo trae). */
 const MAP_TYPE_HINTS: [RegExp, MapType][] = [

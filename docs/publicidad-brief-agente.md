@@ -11,6 +11,7 @@ Instrucciones para un agente que trabaja en Chrome con las cuentas de Lucas (man
 - Elegís mapa y civilización, te sugiere estrategias, tocás Jugar y arrancás el reloj con `Ctrl+Alt+P`.
 - La interfaz está **solo en español** por ahora.
 - El instalador **no está firmado**: Windows puede mostrar SmartScreen ("Más información" → "Ejecutar de todas formas"). No pide permisos de administrador y se actualiza solo.
+- Catálogo de más de 60 estrategias para más de 40 civilizaciones, con crédito a sus autores (muchas de Build Order Guide, de jugadores como Hera).
 - Diferencial frente a otros overlays (RTS Overlay, Border, RTS Helper): está en español y las estrategias las vota la comunidad.
 
 ## Links y material
@@ -97,15 +98,7 @@ En https://github.com/sk8erlucas/aoe2-overlay/settings → General → **Social 
 - Escribirles un mensaje personalizado (máximo 10 en total): mencionar algo concreto de su contenido y ofrecerles **cargar su build favorita en el catálogo, con crédito y link a su canal**. No pedir que lo promocionen ni ofrecer dinero.
 - Hacer un solo seguimiento a la semana si no contestan.
 
-### 6. Build Order Guide (aviso de cortesía)
-
-El catálogo importa estrategias de https://www.buildorderguide.com con crédito a sus autores. Su código es MIT ([bergerjohannes/buildorderguide](https://github.com/bergerjohannes/buildorderguide)) y las estrategias publicadas son de lectura pública, así que **no hace falta pedir permiso**: es un aviso de cortesía. Buscar cómo contactar al mantenedor (web, Discord o GitHub) y mandar, en inglés:
-
-> Hi! I'm Lucas, I maintain AoE2 Overlay (https://github.com/sk8erlucas/aoe2-overlay), a free, open source build order overlay in Spanish. We include some published Build Order Guide builds in our catalog, always crediting the original author with a link back to the build on your site. If you or any author would rather we didn't include a build, just tell us and we'll remove it. Thanks for the great site!
-
-Si responden, anotar la respuesta textual.
-
-### 7. Internacional (después de las tareas 1 a 6)
+### 6. Internacional (después de las tareas 1 a 5)
 
 La interfaz todavía está en español (issue #9). Antes de publicar en inglés, aclararlo en el texto.
 
@@ -118,7 +111,7 @@ La interfaz todavía está en español (issue #9). Antes de publicar en inglés,
 
 > I built AoE2 Overlay, a free and open source build order overlay for AoE2: DE. It shows your opening steps on top of the game, with a timer and hotkeys, and clicks pass through to the game. It doesn't inject code or read game memory. Strategies are created and voted on the website. The interface is in Spanish for now (English is planned), and the installer isn't signed yet, so Windows may show a warning. Feedback is very welcome: https://aoe2overlay.sitemaster.com.ar
 
-### 8. Proyecto hermano
+### 7. Proyecto hermano
 
 La home enlaza a **AoE2 Replays** (https://aoe2replays.sitemaster.com.ar), del mismo autor. **No lo promociones todavía:** al 2026-11-11 el visor de partidas mostraba "No se pudo conectar" al abrir partidas. Antes de mencionarlo, abrir una partida desde su web y confirmar que se reproduce.
 
@@ -133,5 +126,4 @@ Además, al final:
 
 - Resultado de VirusTotal (detecciones y nombres) y número de envío a Microsoft.
 - Pedidos y críticas de los usuarios, agrupados por tema.
-- Respuesta de Build Order Guide.
 - Lista de creadores contactados y quién respondió.

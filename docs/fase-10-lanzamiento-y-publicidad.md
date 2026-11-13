@@ -18,7 +18,7 @@
 - [ ] Instalar desde la web en una PC limpia
 - [ ] Con una versión anterior instalada, confirmar que ofrece la actualización a la última
 - [ ] Cargar builds para las civilizaciones más jugadas ([Fase 9](fase-9-estrategias-comunidad.md))
-- [x] Build Order Guide: código MIT y estrategias publicadas de lectura pública; se pueden importar con crédito (ver [Fase 9](fase-9-estrategias-comunidad.md)). Queda avisarles como cortesía
+- [x] Build Order Guide: código MIT y estrategias publicadas de lectura pública; se pueden importar con crédito (ver [Fase 9](fase-9-estrategias-comunidad.md)). El 2026-11-13 se importaron 57: el catálogo tiene 66 estrategias públicas
 - [x] Imagen para compartir (Open Graph, 1200×630), `sitemap.xml` con las estrategias públicas y `robots.txt`
 - [x] Repo de GitHub con web y temas (`aoe2`, `build-order`, `overlay`…)
 - [x] Vista previa del repo (`docs/media/github-social-preview.png`) subida en Settings → Social preview (2026-11-12)
