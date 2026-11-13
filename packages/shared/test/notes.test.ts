@@ -97,6 +97,16 @@ describe("palabras clave de la comunidad", () => {
     );
   });
 
+  it("palabras con mayúscula, nombres de dos palabras y comercio", () => {
+    expect(noteToText("Train 3 Militia")).toBe("Entrenar 3 milicias");
+    expect(noteToText("Research Fletching, Bloodlines")).toBe(
+      "Investigar emplumado de flechas, pureza de sangre",
+    );
+    expect(noteToText("Build 1 Archery range")).toBe("Construir 1 galería de tiro");
+    expect(noteToText("Sell 100 food")).toBe("Vender 100 comida");
+    expect(noteToText("constructor toString")).toBe("constructor toString");
+  });
+
   it("no toca el texto en español", async () => {
     const { noteToText } = await import("../src");
     const nota = "Con 6 aldeanos, cómo atraer el jabalí a tu centro urbano";

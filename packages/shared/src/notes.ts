@@ -39,6 +39,59 @@ const ICON_LABELS: ReadonlyArray<[string, string]> = [
   ["wheelbarrow", "carretilla"],
   ["handcart", "carro de mano"],
   ["scout", "explorador"],
+  // Unidades, edificios y tecnologías: nombres oficiales de la versión en español del juego.
+  ["militia", "milicia"],
+  ["manatarms", "hombre de armas"],
+  ["longswordsman", "espadachín de espada larga"],
+  ["spearman", "lancero"],
+  ["archer", "arquero"],
+  ["cavalryarcher", "arquero a caballo"],
+  ["elephantarcher", "arquero en elefante"],
+  ["crossbowman", "ballestero"],
+  ["skirmisher", "hostigador"],
+  ["knight", "caballero"],
+  ["teutonicknight", "caballero de la Orden Teutónica"],
+  ["lightcavalry", "caballería ligera"],
+  ["camelrider", "jinete de camello"],
+  ["monk", "monje"],
+  ["batteringram", "ariete"],
+  ["mangonel", "mangana"],
+  ["scorpion", "escorpión"],
+  ["fishingship", "pesquero"],
+  ["galley", "galera"],
+  ["wargalley", "galera de guerra"],
+  ["firegalley", "galera incendiaria"],
+  ["castle", "castillo"],
+  ["monastery", "monasterio"],
+  ["university", "universidad"],
+  ["dock", "muelle"],
+  ["tower", "torre"],
+  ["watchtower", "atalaya"],
+  ["palisade", "empalizada"],
+  ["stonewall", "muro de piedra"],
+  ["fishtrap", "trampa para peces"],
+  ["doublebitaxe", "hacha de doble filo"],
+  ["bowsaw", "sierra de arco"],
+  ["twomansaw", "sierra a dos"],
+  ["horsecollar", "collera"],
+  ["heavyplow", "arado pesado"],
+  ["goldmining", "minería de oro"],
+  ["stonemining", "cantería"],
+  ["fletching", "emplumado de flechas"],
+  ["bodkinarrow", "flecha de punzón"],
+  ["paddedarcherarmor", "armadura acolchada de arquero"],
+  ["forging", "forja"],
+  ["scalemailarmor", "armadura de láminas"],
+  ["scalebardingarmor", "armadura de láminas de caballería"],
+  ["bloodlines", "pureza de sangre"],
+  ["husbandry", "ganadería"],
+  ["thumbring", "dactilera"],
+  ["ballistics", "balística"],
+  ["chemistry", "química"],
+  ["townwatch", "guardia urbana"],
+  ["gillnets", "red agallera"],
+  ["supllies", "suministros"],
+  ["arson", "incendiarismo"],
   ["feudalage", "Edad Feudal"],
   ["castleage", "Edad de los Castillos"],
   ["imperialage", "Edad Imperial"],
@@ -47,7 +100,8 @@ const ICON_LABELS: ReadonlyArray<[string, string]> = [
 /** Etiqueta legible para un ícono a partir de su ruta. */
 export function iconLabel(path: string): string {
   const file = (path.split("/").pop() ?? path).replace(/\.[a-z]+$/i, "");
-  const key = file.toLowerCase();
+  // Sin guiones ni espacios, para que "Archery_range" coincida con "archeryrange".
+  const key = file.toLowerCase().replace(/[_\-\s]/g, "");
   // Las más específicas primero (p. ej. "femalevill" antes que "malevill").
   const match = [...ICON_LABELS]
     .sort((a, b) => b[0].length - a[0].length)
@@ -97,7 +151,7 @@ const TEXT_KEYWORDS: Record<string, string> = {
   castle: "castillo",
   siegeWorkshop: "taller de asedio",
   batteringRam: "arietes",
-  mangonel: "mangoneles",
+  mangonel: "manganas",
   scorpion: "escorpiones",
   loom: "telar",
   wheelbarrow: "carretilla",
@@ -155,6 +209,11 @@ const TEXT_KEYWORDS: Record<string, string> = {
   Train: "Entrenar",
   Lure: "Atraer",
   Build: "Construir",
+  Sell: "Vender",
+  Buy: "Comprar",
+  food: "comida",
+  wall: "muro",
+  palisade: "empalizada",
   Before: "Antes de",
   In: "En",
   on: "en",
@@ -167,7 +226,26 @@ const TEXT_KEYWORDS: Record<string, string> = {
 const TEXT_PHRASES: ReadonlyArray<[RegExp, string]> = [
   [/\bClick up to\b/g, "Avanzar a"],
   [/\bStart moving close to opponent[’']s\b/g, "Acercarse al rival:"],
+  // Nombres de dos palabras escritos como texto ("Build an Archery range").
+  [/\barchery ranges?\b/gi, "galería de tiro"],
+  [/\btown cent(?:er|re)s?\b/gi, "centro urbano"],
+  [/\blumber camps?\b/gi, "campamento maderero"],
+  [/\bmining camps?\b/gi, "campamento minero"],
+  [/\bsiege workshops?\b/gi, "taller de asedio"],
+  [/\bpalisade walls?\b/gi, "empalizada"],
+  [/\bstone walls?\b/gi, "muro de piedra"],
 ];
+
+/**
+ * Busca una palabra en el diccionario. Si empieza con mayúscula ("Militia", "Fletching") también
+ * prueba con minúscula inicial, como están las claves. `Object.hasOwn` evita que palabras como
+ * "constructor" devuelvan propiedades internas del objeto.
+ */
+function keyword(word: string): string | undefined {
+  if (Object.hasOwn(TEXT_KEYWORDS, word)) return TEXT_KEYWORDS[word];
+  const lower = word.charAt(0).toLowerCase() + word.slice(1);
+  return lower !== word && Object.hasOwn(TEXT_KEYWORDS, lower) ? TEXT_KEYWORDS[lower] : undefined;
+}
 
 /** Plural de las etiquetas que se suelen contar ("5 aldeano" → "5 aldeanos"). */
 const PLURALS: Record<string, string> = {
@@ -189,6 +267,26 @@ const PLURALS: Record<string, string> = {
   universidad: "universidades",
   castillo: "castillos",
   explorador: "exploradores",
+  milicia: "milicias",
+  "hombre de armas": "hombres de armas",
+  "espadachín de espada larga": "espadachines de espada larga",
+  lancero: "lanceros",
+  arquero: "arqueros",
+  "arquero a caballo": "arqueros a caballo",
+  "arquero en elefante": "arqueros en elefante",
+  ballestero: "ballesteros",
+  hostigador: "hostigadores",
+  caballero: "caballeros",
+  "jinete de camello": "jinetes de camello",
+  monje: "monjes",
+  ariete: "arietes",
+  mangana: "manganas",
+  escorpión: "escorpiones",
+  pesquero: "pesqueros",
+  galera: "galeras",
+  "galera de guerra": "galeras de guerra",
+  torre: "torres",
+  empalizada: "empalizadas",
   muelle: "muelles",
   atalaya: "atalayas",
   reliquia: "reliquias",
@@ -220,7 +318,7 @@ export function translateKeywords(text: string): string {
   // Cada palabra entera se busca en el diccionario; si no está, queda igual. \p{L} incluye
   // las letras acentuadas: así "cómo" no se parte en pedazos que coincidan con una clave.
   return phrased.replace(/\p{L}+/gu, (w, offset: number) => {
-    const es = TEXT_KEYWORDS[w];
+    const es = keyword(w);
     return es ? countAware(es, phrased.slice(0, offset)) : w;
   });
 }
