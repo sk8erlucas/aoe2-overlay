@@ -63,7 +63,7 @@ Cómo hacerlo: ver [Cómo grabar los videos y GIF](#cómo-grabar-los-videos-y-gi
 - [ ] GIF en partida real, 8–10 s, para reemplazar al anterior
 - [x] Video demo de 40 s (interfaz del overlay y web, sin partida), en `Videos\aoe2-overlay\aoe2-overlay-demo.mp4`
 - [x] Video demo subido a YouTube: https://youtu.be/B-13galXHyM (2026-11-12), con título, descripción y UTM del brief
-- [ ] Confirmar en YouTube Studio que el video está público, con etiquetas y sin monetización (al subirlo figuraba "se está estrenando")
+- [x] YouTube Studio (2026-11-13): el video está público y sin monetización; se le agregaron 15 etiquetas (aoe2, age of empires 2, build order, aoe2 overlay, estrategias aoe2, hera, en español…)
 - [ ] Ponerle música al video. La del juego sería ideal, pero es de Microsoft: aunque las Game Content Usage Rules permiten usarla sin fines comerciales, YouTube puede reclamarla por Content ID. Probar primero en un video privado; si hay reclamo, usar música libre de derechos con estilo medieval
 - [ ] Video en partida real (guion de abajo), para la versión definitiva
 - [x] Mostrar el video en la landing (sección "Miralo en acción")
