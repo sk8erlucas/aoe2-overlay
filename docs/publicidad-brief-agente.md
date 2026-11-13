@@ -45,7 +45,7 @@ El video y el GIF muestran la interfaz real pero **sin el juego atrás**. Decilo
 
 ## Tareas, en orden
 
-**Estado al 2026-11-12:** las tareas 1 y 2 están hechas ([video en YouTube](https://youtu.be/B-13galXHyM)). De la 3, VirusTotal está revisado (2 de 71: SecureAge y Sophos); faltan los reportes de falso positivo y el envío a Microsoft, que piden adjuntar el `.exe` y los tiene que subir Lucas. Seguí desde la tarea 4 y, para compartir el video, usá el link de YouTube.
+**Estado al 2026-11-13:** las tareas 1 y 2 están hechas ([video en YouTube](https://youtu.be/B-13galXHyM)). De la 3, VirusTotal está revisado (2 de 71: SecureAge y Sophos); faltan los reportes de falso positivo y el envío a Microsoft, que piden adjuntar el `.exe` y los tiene que subir Lucas. Las tareas 4 y 5 tienen hecha la primera ronda: falta publicar donde den permiso, hacer los seguimientos y repetir con creadores nuevos (ver "Rondas siguientes").
 
 ### 1. GitHub: vista previa del repo
 
@@ -97,6 +97,9 @@ En https://github.com/sk8erlucas/aoe2-overlay/settings → General → **Social 
 - Armar una lista de **10 creadores chicos o medianos** de AoE2 en español (YouTube o Twitch) con: nombre, link, seguidores, frecuencia de publicación y forma de contacto pública.
 - Escribirles un mensaje personalizado (máximo 10 en total): mencionar algo concreto de su contenido y ofrecerles **cargar su build favorita en el catálogo, con crédito y link a su canal**. No pedir que lo promocionen ni ofrecer dinero.
 - Hacer un solo seguimiento a la semana si no contestan.
+- Si un canal ya no hace AoE2: DE o no publica en español, descartarlo y reemplazarlo. Un creador más grande que "chico o mediano" sirve como reemplazo si está activo.
+
+**Rondas siguientes:** repetir esta tarea cada 1–2 meses con 10 creadores nuevos, sin volver a escribirle a quien ya se contactó (aunque no haya respondido). Antes de cada ronda, pedirle a Lucas el registro de las anteriores. Conviene hacerlas después de una versión nueva o de sumar estrategias, para tener algo concreto que contar.
 
 ### 6. Internacional (después de las tareas 1 a 5)
 
@@ -116,6 +119,8 @@ La interfaz todavía está en español (issue #9). Antes de publicar en inglés,
 La home enlaza a **AoE2 Replays** (https://aoe2replays.sitemaster.com.ar), del mismo autor. **No lo promociones todavía:** al 2026-11-11 el visor de partidas mostraba "No se pudo conectar" al abrir partidas. Antes de mencionarlo, abrir una partida desde su web y confirmar que se reproduce.
 
 ## Registro (entregar al terminar)
+
+**El registro no va en este repo:** es público y el registro tiene nombres de personas, comunidades y cuentas. Entregárselo a Lucas, que lo guarda aparte; en el repo solo se anotan totales (cuántos mensajes, cuántas publicaciones, cuántas respuestas).
 
 Devolver una tabla con una fila por acción:
 

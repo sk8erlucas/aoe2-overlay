@@ -75,14 +75,16 @@ Cómo hacerlo: ver [Cómo grabar los videos y GIF](#cómo-grabar-los-videos-y-gi
 
 **Semana 1: comunidad hispana**
 
-- [ ] Discords, grupos y foros de AoE2 en español. Decir que sos el desarrollador y pedir feedback antes que descargas
+- [x] Primera ronda (2026-11-13): publicado en 1 comunidad, en su canal para compartir contenido. Otras 3 solo aceptan promoción con permiso de un admin: pedido en 2, falta en 1
+- [ ] Publicar en esas comunidades cuando den permiso, y sumar otras hasta llegar a 3–5
+- [ ] Responder preguntas durante las 48 h siguientes a cada publicación
 - [ ] Anotar cada pedido o queja en una issue
 
 **Semanas 2–3: creadores**
 
-- [ ] Lista de 10 casters o streamers hispanos chicos y medianos
-- [ ] Ofrecerles una build propia en el catálogo, con crédito y link a su canal
-- [ ] Hacer el seguimiento una sola vez; si no responden, seguir con otro
+- [x] Ronda 1 (2026-11-13): 6 mensajes personalizados a creadores hispanos y 3 más en curso. De la lista inicial, 3 se descartaron (ya no hacen AoE2: DE en español) y 1 no tiene un contacto público vigente
+- [ ] Seguimiento de la ronda 1 a la semana (una sola vez) y cargar la build de quien acepte
+- [ ] **Rondas siguientes (repetir cada 1–2 meses):** 10 creadores nuevos por ronda con los mismos criterios del [brief](publicidad-brief-agente.md#5-creadores-de-contenido-hispanos), sin repetir a quien ya se contactó. Buen momento: después de una versión nueva o de sumar estrategias
 
 **Semanas 3–4: internacional** (requiere overlay y web en inglés, [Fase 7](fase-7-futuro.md))
 
