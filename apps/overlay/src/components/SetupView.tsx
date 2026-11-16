@@ -1,10 +1,18 @@
 import { CIVS, MAPS, mapTypeOf } from "@age-overlay/game-data";
-import { POSITIONS, suggest, type Position } from "@age-overlay/shared";
-import { useMemo, useState } from "react";
+import {
+  POSITIONS,
+  estimateStepTimes,
+  formatClock,
+  populationOf,
+  suggest,
+  type Position,
+} from "@age-overlay/shared";
+import { Fragment, useMemo, useState } from "react";
 import { favoritesFirst } from "../lib/account";
 import type { Selection } from "../lib/settings";
 import type { LoadedStrategy } from "../lib/strategies";
 import type { SyncStatus } from "../lib/sync";
+import { Resources, StepNotes } from "./StepCard";
 
 const POSITION_LABELS: Record<Position, string> = {
   "1v1": "1 contra 1",
@@ -23,6 +31,32 @@ function timeAgo(iso: string): string {
   if (min < 60) return `hace ${min} min`;
   const h = Math.round(min / 60);
   return h < 24 ? `hace ${h} h` : `hace ${Math.round(h / 24)} días`;
+}
+
+const AGE_NAMES = ["", "Alta Edad Media", "Edad Feudal", "Edad de los Castillos", "Edad Imperial"];
+
+/** Lista completa de pasos de una estrategia, para mirarla antes de jugar. */
+function StrategyPreview({ strategy }: { strategy: LoadedStrategy }) {
+  const times = useMemo(() => estimateStepTimes(strategy.build_order), [strategy]);
+  return (
+    <ol className="preview">
+      {strategy.build_order.map((step, i) => (
+        <Fragment key={i}>
+          {step.age !== strategy.build_order[i - 1]?.age && (
+            <li className="preview-age">{AGE_NAMES[step.age]}</li>
+          )}
+          <li className="preview-step">
+            <div className="preview-head">
+              <span className="preview-time">{formatClock(times[i] ?? 0)}</span>
+              <span>👥 {populationOf(step)}</span>
+              <Resources step={step} />
+            </div>
+            <StepNotes step={step} />
+          </li>
+        </Fragment>
+      ))}
+    </ol>
+  );
 }
 
 function SyncLine({ status, count }: { status: SyncStatus; count: number }) {
@@ -68,6 +102,7 @@ export function SetupView({
   onPlay,
 }: Props) {
   const [query, setQuery] = useState("");
+  const [previewId, setPreviewId] = useState<string>();
   const set = <K extends keyof Selection>(key: K, value: Selection[K]) =>
     onChange({ ...selection, [key]: value || undefined });
 
@@ -194,6 +229,25 @@ export function SetupView({
                   {reasons.join(" · ") || "general"} · {s.build_order.length} pasos · {s.author}
                 </span>
               </button>
+              <button
+                className={`row-action ${previewId === s.id ? "on" : ""}`}
+                aria-pressed={previewId === s.id}
+                title={previewId === s.id ? "Ocultar pasos" : "Ver todos los pasos"}
+                onClick={() => setPreviewId(previewId === s.id ? undefined : s.id)}
+              >
+                👁
+              </button>
+              <button
+                className="row-action play-row"
+                title={`Jugar: ${s.name}`}
+                onClick={() => {
+                  onChange({ ...selection, strategyId: s.id });
+                  onPlay();
+                }}
+              >
+                ▶
+              </button>
+              {previewId === s.id && <StrategyPreview strategy={s} />}
             </li>
           ))}
         </ul>

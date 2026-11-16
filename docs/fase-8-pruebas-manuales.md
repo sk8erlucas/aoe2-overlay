@@ -59,6 +59,8 @@ Requiere el overlay **0.3.0** instalado y la API y la web redesplegadas.
 - [ ] "Abrir en el overlay" en la web, con el overlay abierto: lo muestra y elige la estrategia
 - [ ] Lo mismo con el overlay cerrado: lo abre y elige la estrategia
 - [ ] "Ram Spam" (Cumanos) se ve bien en el overlay: notas traducidas (taller de asedio, arietes)
+- [ ] El ▶ a la derecha de una estrategia la elige y arranca la partida en modo juego
+- [ ] El 👁 despliega todos los pasos de la estrategia (con scroll si es larga) y al tocarlo de nuevo se cierran
 
 ## Actualizaciones (de la Fase 6)
 

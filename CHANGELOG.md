@@ -4,6 +4,13 @@ Cambios del overlay de escritorio (los instaladores están en [Releases](https:/
 
 El proyecto usa [versionado semántico](https://semver.org/lang/es/): mientras la versión sea `0.x`, un cambio de minor (`0.3` → `0.4`) puede traer cambios grandes; un patch (`0.3.0` → `0.3.1`) solo trae arreglos y mejoras chicas.
 
+## [Sin publicar]
+
+### Agregado
+
+- Botón ▶ a la derecha de cada estrategia para empezar a jugarla sin bajar hasta el final de la lista.
+- Botón 👁 para ver todos los pasos de una estrategia (tiempo, población, recursos y notas, separados por edad) antes de jugarla.
+
 ## [0.3.3] - 2026-11-09
 
 ### Cambiado
