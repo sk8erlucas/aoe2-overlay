@@ -44,6 +44,26 @@ export interface Selection {
   strategyId?: string;
 }
 
+export const CORNERS = ["top-right", "top-left", "bottom-right", "bottom-left"] as const;
+export type Corner = (typeof CORNERS)[number];
+
+export const CORNER_LABELS: Record<Corner, string> = {
+  "top-right": "Arriba a la derecha",
+  "top-left": "Arriba a la izquierda",
+  "bottom-right": "Abajo a la derecha",
+  "bottom-left": "Abajo a la izquierda",
+};
+
+/** Cuánta información muestra el overlay durante la partida. */
+export const LAYOUTS = ["normal", "compact", "detailed"] as const;
+export type Layout = (typeof LAYOUTS)[number];
+
+export const LAYOUT_LABELS: Record<Layout, string> = {
+  normal: "Normal: paso actual y siguiente",
+  compact: "Compacto: solo el paso actual",
+  detailed: "Detallado: nombre y los próximos 3 pasos",
+};
+
 export interface Settings {
   speed: number;
   /** Opacidad del fondo del panel (0.2 – 1). */
@@ -53,6 +73,10 @@ export interface Settings {
   sound: boolean;
   hotkeys: Record<HotkeyAction, string>;
   selection: Selection;
+  corner: Corner;
+  /** Índice del monitor; sin valor, el principal. */
+  monitor?: number;
+  layout: Layout;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -62,6 +86,8 @@ export const DEFAULT_SETTINGS: Settings = {
   sound: false,
   hotkeys: DEFAULT_HOTKEYS,
   selection: {},
+  corner: "top-right",
+  layout: "normal",
 };
 
 const KEY = "settings";

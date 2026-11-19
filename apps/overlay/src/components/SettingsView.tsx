@@ -1,12 +1,18 @@
 import { DEFAULT_SPEED } from "@age-overlay/shared";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Account } from "../lib/account";
 import type { AvailableUpdate } from "../lib/updater";
 import { AccountSection } from "./AccountSection";
 import { UpdateSection } from "./UpdateSection";
-import type { HotkeyError } from "../lib/native";
+import { listMonitors, type HotkeyError, type MonitorInfo } from "../lib/native";
 import {
+  CORNER_LABELS,
+  CORNERS,
   DEFAULT_HOTKEYS,
+  LAYOUT_LABELS,
+  LAYOUTS,
+  type Corner,
+  type Layout,
   HOTKEY_ACTIONS,
   HOTKEY_LABELS,
   type HotkeyAction,
@@ -47,6 +53,10 @@ export function SettingsView({
 }: Props) {
   // Las hotkeys se editan como texto y se aplican al salir del campo.
   const [draft, setDraft] = useState(settings.hotkeys);
+  const [monitors, setMonitors] = useState<MonitorInfo[]>([]);
+  useEffect(() => {
+    void listMonitors().then(setMonitors);
+  }, []);
 
   const commitHotkey = (action: HotkeyAction) => {
     if (draft[action] !== settings.hotkeys[action]) {
@@ -111,6 +121,55 @@ export function SettingsView({
         Sonido al cambiar de paso
       </label>
 
+      <h3>Pantalla</h3>
+      <label>
+        Diseño durante la partida
+        <select
+          value={settings.layout}
+          onChange={(e) => onChange({ layout: e.target.value as Layout })}
+        >
+          {LAYOUTS.map((l) => (
+            <option key={l} value={l}>
+              {LAYOUT_LABELS[l]}
+            </option>
+          ))}
+        </select>
+      </label>
+      <label>
+        Esquina
+        <select
+          value={settings.corner}
+          onChange={(e) => onChange({ corner: e.target.value as Corner })}
+        >
+          {CORNERS.map((c) => (
+            <option key={c} value={c}>
+              {CORNER_LABELS[c]}
+            </option>
+          ))}
+        </select>
+      </label>
+      {monitors.length > 1 && (
+        <label>
+          Monitor
+          <select
+            value={settings.monitor ?? ""}
+            onChange={(e) =>
+              onChange({ monitor: e.target.value === "" ? undefined : Number(e.target.value) })
+            }
+          >
+            <option value="">El principal</option>
+            {monitors.map((m) => (
+              <option key={m.index} value={m.index}>
+                {m.index + 1}. {m.name} ({m.width}×{m.height}){m.primary ? " · principal" : ""}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
+      <div className="row">
+        <button onClick={onResetPosition}>Volver a la esquina</button>
+      </div>
+
       <h3>Atajos de teclado</h3>
       <p className="muted">
         Funcionan aunque el juego tenga el foco. Formato: <code>Control+Alt+P</code>,{" "}
@@ -144,7 +203,6 @@ export function SettingsView({
         >
           Restaurar atajos
         </button>
-        <button onClick={onResetPosition}>Volver a la esquina</button>
       </div>
 
       <h3>Estrategias de la comunidad</h3>

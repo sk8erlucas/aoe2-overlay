@@ -92,12 +92,16 @@ export function GameView({
     );
   }
 
+  const layout = settings.layout;
   const steps = strategy.build_order;
   const current = steps[position.index]!;
   const next = position.nextIndex === null ? undefined : steps[position.nextIndex];
+  // Detallado: además del siguiente, los dos que vienen después.
+  const later = layout === "detailed" ? steps.slice(position.index + 2, position.index + 4) : [];
 
   return (
-    <div className="game">
+    <div className={`game layout-${layout}`}>
+      {layout === "detailed" && <p className="game-title">{strategy.name}</p>}
       <header className="game-header">
         <span className={`clock ${running ? "" : "paused"}`}>{formatClock(gameSeconds)}</span>
         <span className="age">{AGE_NAMES[current.age]}</span>
@@ -118,7 +122,7 @@ export function GameView({
         <StepNotes step={current} />
       </section>
 
-      {next && (
+      {next && layout !== "compact" && (
         <section className="next">
           <div className="next-meta">
             Siguiente en <strong>{formatClock(position.secondsToNext ?? 0)}</strong> · pob.{" "}
@@ -127,6 +131,13 @@ export function GameView({
           <StepNotes step={next} />
         </section>
       )}
+
+      {later.map((step, i) => (
+        <section key={position.index + 2 + i} className="next later">
+          <div className="next-meta">pob. {populationOf(step)}</div>
+          <StepNotes step={step} />
+        </section>
+      ))}
 
       {!running && gameSeconds === 0 && (
         <p className="hint">Tocá ▶ o {settings.hotkeys.startPause} al empezar la partida</p>

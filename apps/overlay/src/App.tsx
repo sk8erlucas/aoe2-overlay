@@ -23,6 +23,7 @@ import {
   registerHotkeys,
   resetPosition,
   setGameMode,
+  setPlacement,
   showOverlay,
   toggleVisibility,
   type HotkeyError,
@@ -79,6 +80,14 @@ function Overlay({ initialSettings }: { initialSettings: Settings }) {
     setSettings(next);
     void saveSettings(next);
   }, []);
+
+  // --- Esquina y monitor: al arrancar solo se informan (la ventana recuerda dónde quedó);
+  // si el usuario los cambia en Ajustes, se mueve ahí. ---
+  const placedOnce = useRef(false);
+  useEffect(() => {
+    void setPlacement(settings.corner, settings.monitor, placedOnce.current);
+    placedOnce.current = true;
+  }, [settings.corner, settings.monitor]);
 
   // --- Estrategias: base + descargadas de la API (con caché offline) ---
   const [cache, setCache] = useState<StrategyCache | null>(null);
