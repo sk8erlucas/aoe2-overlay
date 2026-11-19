@@ -60,6 +60,7 @@
 - [x] Sajones y Varegos agregados a `game-data` (faltaban)
 - [x] Tests en `apps/api/test/bog.test.ts`
 - [ ] Repetir una vez por mes (`fetch:bog --refresh` y `import:community --publish`): suma las que vayan recibiendo calificaciones
+- [x] 2026-11-19: ícono de comida, "to/on forward" (al frente), "stragglers"/"straggler trees" (árboles sueltos), `Add` y `Send`
 - [ ] Lo que queda en inglés es texto libre de cada autor ("Use your scout to…"); se podría traducir aparte
 
 ## Cómo cargar más estrategias
