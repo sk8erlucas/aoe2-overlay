@@ -2,7 +2,14 @@ import Link from "next/link";
 import { civLabel, DIFFICULTY_LABELS, MAP_TYPE_LABELS, mapLabel } from "@/lib/labels";
 import type { StrategySummary } from "@/lib/types";
 
-export function StrategyCard({ s }: { s: StrategySummary }) {
+/** `heading`: nivel del título según la página (h2 si no hay otro h2 arriba). */
+export function StrategyCard({
+  s,
+  heading: Heading = "h3",
+}: {
+  s: StrategySummary;
+  heading?: "h2" | "h3";
+}) {
   const where = s.maps.length
     ? s.maps.slice(0, 3).map(mapLabel).join(", ")
     : s.mapTypes.map((t) => MAP_TYPE_LABELS[t] ?? t).join(", ") || "Cualquier mapa";
@@ -13,7 +20,9 @@ export function StrategyCard({ s }: { s: StrategySummary }) {
       className="card group flex flex-col gap-3 p-5 transition hover:-translate-y-0.5 hover:shadow-lg"
     >
       <div className="flex items-start justify-between gap-3">
-        <h3 className="text-lg leading-tight font-extrabold group-hover:text-red">{s.name}</h3>
+        <Heading className="text-lg leading-tight font-extrabold group-hover:text-red">
+          {s.name}
+        </Heading>
         <span
           className={`label shrink-0 rounded-full px-2 py-0.5 text-xs ${
             s.score > 0 ? "bg-gold/30" : s.score < 0 ? "bg-red/10 text-red" : "bg-ink/5"

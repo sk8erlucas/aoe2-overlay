@@ -69,7 +69,7 @@ export default async function StrategiesPage({
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {list.items.map((s) => (
-                <StrategyCard key={s.id} s={s} />
+                <StrategyCard key={s.id} s={s} heading="h2" />
               ))}
             </div>
           )}

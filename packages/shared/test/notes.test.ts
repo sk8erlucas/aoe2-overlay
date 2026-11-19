@@ -107,6 +107,19 @@ describe("palabras clave de la comunidad", () => {
     expect(noteToText("constructor toString")).toBe("constructor toString");
   });
 
+  it("frente, árboles sueltos, comida como ícono y Add/Send", () => {
+    expect(
+      noteToText("Move 1 @resource/MaleVillDE.jpg@ from @resource/Aoe2de_food.png@ to forward"),
+    ).toBe("Mover 1 aldeano de comida al frente");
+    expect(noteToText("Create 1 @resource/MaleVillDE.jpg@ on forward")).toBe(
+      "Crear 1 aldeano al frente",
+    );
+    expect(noteToText("Next 5 on stragglers")).toBe("Next 5 en árboles sueltos");
+    expect(noteToText("send 3 to straggler trees")).toBe("send 3 a árboles sueltos");
+    expect(noteToText("Add @mill/FarmDE.png@")).toBe("Agregar granja");
+    expect(noteToText("Send 1 @resource/MaleVillDE.jpg@")).toBe("Enviar 1 aldeano");
+  });
+
   it("no toca el texto en español", async () => {
     const { noteToText } = await import("../src");
     const nota = "Con 6 aldeanos, cómo atraer el jabalí a tu centro urbano";

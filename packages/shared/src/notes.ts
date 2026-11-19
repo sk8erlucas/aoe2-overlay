@@ -20,6 +20,7 @@ const ICON_LABELS: ReadonlyArray<[string, string]> = [
   ["deer", "ciervos"],
   ["berrybush", "bayas"],
   ["wood", "madera"],
+  ["food", "comida"],
   ["gold", "oro"],
   ["stone", "piedra"],
   ["hammer", "construir"],
@@ -211,6 +212,8 @@ const TEXT_KEYWORDS: Record<string, string> = {
   Build: "Construir",
   Sell: "Vender",
   Buy: "Comprar",
+  Add: "Agregar",
+  Send: "Enviar",
   food: "comida",
   wall: "muro",
   palisade: "empalizada",
@@ -225,6 +228,10 @@ const TEXT_KEYWORDS: Record<string, string> = {
 /** Frases de varias palabras: se reemplazan antes que las palabras sueltas. */
 const TEXT_PHRASES: ReadonlyArray<[RegExp, string]> = [
   [/\bClick up to\b/g, "Avanzar a"],
+  // "forward" es la posición adelantada, cerca del rival: "Move 1 from wood to forward".
+  [/\b(?:to|on) forward\b/g, "al frente"],
+  [/\bstraggler tree\b/gi, "árbol suelto"],
+  [/\bstraggler trees\b|\bstragglers\b/gi, "árboles sueltos"],
   [/\bStart moving close to opponent[’']s\b/g, "Acercarse al rival:"],
   // Nombres de dos palabras escritos como texto ("Build an Archery range").
   [/\barchery ranges?\b/gi, "galería de tiro"],
