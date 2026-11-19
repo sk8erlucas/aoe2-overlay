@@ -88,6 +88,8 @@ interface Props {
   selection: Selection;
   onChange: (selection: Selection) => void;
   onPlay: () => void;
+  /** Estado de la detección automática (null si está apagada). */
+  detectLine?: string | null;
 }
 
 /** Pantalla previa a la partida: elegir mapa, civs y posición, y ver sugerencias. */
@@ -100,6 +102,7 @@ export function SetupView({
   selection,
   onChange,
   onPlay,
+  detectLine,
 }: Props) {
   const [query, setQuery] = useState("");
   const [previewId, setPreviewId] = useState<string>();
@@ -139,6 +142,7 @@ export function SetupView({
   return (
     <div className="setup">
       <SyncLine status={syncStatus} count={strategies.length} />
+      {detectLine && <p className="sync-status">{detectLine}</p>}
       <div className="fields">
         <label>
           Mapa

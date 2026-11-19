@@ -8,6 +8,7 @@ import { SetupView } from "./components/SetupView";
 import {
   fetchFavorites,
   loadAccount,
+  reportResult,
   saveAccount,
   setFavorite,
   signOut,
@@ -15,6 +16,14 @@ import {
 } from "./lib/account";
 import * as clock from "./lib/clock";
 import { onDeepLink, type DeepLink } from "./lib/deeplink";
+import {
+  chooseStrategy,
+  DETECT_INTERVAL_MS,
+  elapsedGameSeconds,
+  fetchLatestMatch,
+  isOngoing,
+  type DetectedMatch,
+} from "./lib/detect";
 import { checkForUpdate, UPDATE_CHECK_INTERVAL_MS, type AvailableUpdate } from "./lib/updater";
 import {
   beep,
@@ -41,6 +50,24 @@ import {
 } from "./lib/sync";
 
 type Mode = "edit" | "game";
+
+/** Línea de estado de la detección automática para la pestaña Partida. */
+function detectLine(
+  settings: Settings,
+  match: DetectedMatch | null,
+  lastResult: { won: boolean; reported: boolean } | null,
+): string | null {
+  const name = settings.detect.profileName ?? "tu perfil";
+  if (!settings.detect.profileId) return null;
+  if (lastResult) {
+    return `${lastResult.won ? "🏆 Victoria" : "Derrota"} en la última partida${lastResult.reported ? " · reportada" : ""}`;
+  }
+  if (match && isOngoing(match)) {
+    const vs = match.vsCiv ? ` vs ${match.vsCiv}` : "";
+    return `🎮 Partida en curso${match.civ ? `: ${match.civ}${vs}` : ""}`;
+  }
+  return `🔎 Esperando la próxima partida de ${name}`;
+}
 type Tab = "match" | "settings";
 
 export function App() {
@@ -325,6 +352,91 @@ function Overlay({ initialSettings }: { initialSettings: Settings }) {
     };
   }, [settings.hotkeys]);
 
+  // --- Detección automática de la partida (AoE2 Companion) ---
+  const [detected, setDetected] = useState<DetectedMatch | null>(null);
+  /** Resultado de la última partida jugada con el overlay (se muestra en Partida). */
+  const [lastResult, setLastResult] = useState<{ won: boolean; reported: boolean } | null>(null);
+  const handledMatch = useRef<number | null>(null);
+  /** Partida que se está jugando con una estrategia: para reportar el resultado al terminar. */
+  const playing = useRef<{ matchId: number; slug: string; done: boolean } | null>(null);
+
+  useEffect(() => {
+    const profileId = settings.detect.profileId;
+    if (!profileId) {
+      setDetected(null);
+      return;
+    }
+    let cancelled = false;
+    const tick = async () => {
+      let match: DetectedMatch | null;
+      try {
+        match = await fetchLatestMatch(profileId);
+      } catch {
+        return; // Sin conexión o la API no responde: se reintenta en el próximo ciclo.
+      }
+      if (cancelled || !match) return;
+      setDetected(match);
+      const s = settingsRef.current;
+
+      // Empezó una partida nueva: elegir filtros y estrategia, y arrancar el reloj.
+      if (isOngoing(match) && handledMatch.current !== match.matchId) {
+        handledMatch.current = match.matchId;
+        setLastResult(null);
+        const speed = match.speed ?? s.speed;
+        const strategyId = chooseStrategy(
+          strategiesRef.current,
+          match,
+          s.selection.strategyId,
+          favoritesRef.current,
+        );
+        updateSettings({
+          selection: {
+            civ: match.civ,
+            vsCiv: match.vsCiv,
+            map: match.map,
+            position: match.position,
+            strategyId,
+          },
+          speed,
+        });
+        playing.current = strategyId
+          ? { matchId: match.matchId, slug: strategyId, done: false }
+          : null;
+        if (s.detect.autoStart && strategyId) {
+          const t = performance.now();
+          setClockState(
+            clock.jumpTo(clock.start(clock.reset(), t), t, speed, elapsedGameSeconds(match, speed)),
+          );
+          setMode("game");
+        }
+      }
+
+      // Terminó la partida que se jugaba: pausar y reportar el resultado.
+      const current = playing.current;
+      if (match.finished && current?.matchId === match.matchId && !current.done) {
+        current.done = true;
+        setClockState((c) => clock.pause(c, performance.now()));
+        if (match.won === undefined) return;
+        const acc = accountRef.current;
+        let reported = false;
+        if (s.detect.autoReport && acc) {
+          try {
+            reported = await reportResult(acc, current.slug, match.won, String(match.matchId));
+          } catch {
+            // Sin conexión: no se reporta (la partida ya no se vuelve a ofrecer).
+          }
+        }
+        setLastResult({ won: match.won, reported });
+      }
+    };
+    void tick();
+    const id = setInterval(() => void tick(), DETECT_INTERVAL_MS);
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+    };
+  }, [settings.detect.profileId, updateSettings]);
+
   const play = () => {
     setClockState(clock.reset());
     setMode("game");
@@ -371,6 +483,7 @@ function Overlay({ initialSettings }: { initialSettings: Settings }) {
                 selection={settings.selection}
                 onChange={(selection) => updateSettings({ selection })}
                 onPlay={play}
+                detectLine={detectLine(settings, detected, lastResult)}
               />
             )}
             {/* Siempre montado: el login sigue esperando aunque se cambie de pestaña. */}

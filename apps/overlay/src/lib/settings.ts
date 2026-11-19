@@ -77,6 +77,18 @@ export interface Settings {
   /** Índice del monitor; sin valor, el principal. */
   monitor?: number;
   layout: Layout;
+  /** Detección automática con AoE2 Companion (ver lib/detect.ts). */
+  detect: DetectSettings;
+}
+
+export interface DetectSettings {
+  /** Id de perfil del jugador en AoE2 Companion; sin él, no se detecta nada. */
+  profileId?: number;
+  profileName?: string;
+  /** Al detectar una partida, arrancar el reloj y pasar a modo juego. */
+  autoStart: boolean;
+  /** Al terminar, reportar si se ganó (necesita cuenta). */
+  autoReport: boolean;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -88,6 +100,7 @@ export const DEFAULT_SETTINGS: Settings = {
   selection: {},
   corner: "top-right",
   layout: "normal",
+  detect: { autoStart: true, autoReport: true },
 };
 
 const KEY = "settings";
@@ -101,6 +114,7 @@ function merge(saved: (Partial<Settings> & { apiUrl?: unknown }) | null | undefi
     ...rest,
     hotkeys: { ...DEFAULT_HOTKEYS, ...saved?.hotkeys },
     selection: { ...saved?.selection },
+    detect: { ...DEFAULT_SETTINGS.detect, ...saved?.detect },
   };
 }
 

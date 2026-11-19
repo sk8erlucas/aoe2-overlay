@@ -541,3 +541,15 @@ input[type="range"] {
 .next.later {
   opacity: 0.7;
 }
+
+.profiles {
+  list-style: none;
+  margin: 4px 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+.profiles button {
+  width: 100%;
+  text-align: left;
+}

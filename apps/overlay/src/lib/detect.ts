@@ -7,8 +7,9 @@
  * - De ahí salen el mapa, la civ propia, la del rival, la posición y la velocidad.
  * - Cuando la partida termina, `won` dice si se ganó (sirve para reportar el resultado).
  */
-import { CIVS, MAPS } from "@age-overlay/game-data";
-import type { Position } from "@age-overlay/shared";
+import { CIVS, MAPS, mapTypeOf } from "@age-overlay/game-data";
+import { suggest, type Position } from "@age-overlay/shared";
+import type { LoadedStrategy } from "./strategies";
 
 export const COMPANION_API = "https://data.aoe2companion.com/api";
 /** Cada cuánto se consulta mientras la detección está activa. */
@@ -120,4 +121,35 @@ export async function searchProfiles(name: string): Promise<CompanionProfile[]> 
   if (!res.ok) throw new Error(`AoE2 Companion respondió ${res.status}`);
   const body = (await res.json()) as { profiles?: CompanionProfile[] };
   return (body.profiles ?? []).slice(0, 10);
+}
+
+/**
+ * Estrategia para la partida detectada: se mantiene la elegida si sigue siendo sugerida
+ * para esa civ y mapa; si no, la mejor sugerencia (favoritas primero).
+ */
+export function chooseStrategy(
+  strategies: readonly LoadedStrategy[],
+  match: DetectedMatch,
+  currentId: string | undefined,
+  favorites: readonly string[] = [],
+): string | undefined {
+  const results = suggest(
+    strategies,
+    {
+      civ: match.civ,
+      vsCiv: match.vsCiv,
+      map: match.map,
+      mapType: match.map ? mapTypeOf(match.map) : undefined,
+      position: match.position,
+    },
+    { limit: strategies.length, getVotes: (s) => s.score ?? 0 },
+  );
+  if (currentId && results.some((r) => r.strategy.id === currentId)) return currentId;
+  const fav = results.find((r) => favorites.includes(r.strategy.id));
+  return (fav ?? results[0])?.strategy.id;
+}
+
+/** Segundos de juego transcurridos desde que empezó la partida. */
+export function elapsedGameSeconds(match: DetectedMatch, speed: number, now = Date.now()): number {
+  return Math.max(0, ((now - match.startedAt) / 1000) * (match.speed ?? speed));
 }

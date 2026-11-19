@@ -4,6 +4,7 @@ import type { Account } from "../lib/account";
 import type { AvailableUpdate } from "../lib/updater";
 import { AccountSection } from "./AccountSection";
 import { UpdateSection } from "./UpdateSection";
+import { searchProfiles, type CompanionProfile } from "../lib/detect";
 import { listMonitors, type HotkeyError, type MonitorInfo } from "../lib/native";
 import {
   CORNER_LABELS,
@@ -121,6 +122,8 @@ export function SettingsView({
         Sonido al cambiar de paso
       </label>
 
+      <DetectSection settings={settings} onChange={onChange} loggedIn={!!account} />
+
       <h3>Pantalla</h3>
       <label>
         Diseño durante la partida
@@ -217,5 +220,106 @@ export function SettingsView({
         </button>
       </div>
     </div>
+  );
+}
+
+/** Detección automática: el usuario busca su perfil de AoE2 Companion por nombre. */
+function DetectSection({
+  settings,
+  onChange,
+  loggedIn,
+}: {
+  settings: Settings;
+  onChange: (patch: Partial<Settings>) => void;
+  loggedIn: boolean;
+}) {
+  const detect = settings.detect;
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<CompanionProfile[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const setDetect = (patch: Partial<Settings["detect"]>) =>
+    onChange({ detect: { ...detect, ...patch } });
+
+  const search = async () => {
+    if (query.trim().length < 2) return;
+    setError(null);
+    try {
+      setResults(await searchProfiles(query));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    }
+  };
+
+  return (
+    <>
+      <h3>Detección automática</h3>
+      <p className="muted">
+        Con tu perfil de AoE2 Companion, el overlay detecta cuándo empezás una partida: elige mapa,
+        civs y estrategia, y arranca el reloj. No lee nada del juego, solo tu historial público.
+      </p>
+      {detect.profileId ? (
+        <div className="row">
+          <span>
+            Jugador: <strong>{detect.profileName ?? detect.profileId}</strong>
+          </span>
+          <button onClick={() => setDetect({ profileId: undefined, profileName: undefined })}>
+            Quitar
+          </button>
+        </div>
+      ) : (
+        <>
+          <div className="row">
+            <input
+              className="search"
+              placeholder="Tu nombre en el juego"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && void search()}
+            />
+            <button onClick={() => void search()}>Buscar</button>
+          </div>
+          {error && <span className="error">{error}</span>}
+          {results &&
+            (results.length === 0 ? (
+              <p className="muted">No se encontró ningún jugador con ese nombre.</p>
+            ) : (
+              <ul className="profiles">
+                {results.map((p) => (
+                  <li key={p.profileId}>
+                    <button
+                      onClick={() => {
+                        setDetect({ profileId: p.profileId, profileName: p.name });
+                        setResults(null);
+                        setQuery("");
+                      }}
+                    >
+                      {p.name}
+                      {p.country ? ` · ${p.country.toUpperCase()}` : ""}
+                      {p.games ? ` · ${p.games} partidas` : ""}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ))}
+        </>
+      )}
+      <label className="checkbox">
+        <input
+          type="checkbox"
+          checked={detect.autoStart}
+          onChange={(e) => setDetect({ autoStart: e.target.checked })}
+        />
+        Arrancar el reloj solo al empezar la partida
+      </label>
+      <label className="checkbox">
+        <input
+          type="checkbox"
+          checked={detect.autoReport}
+          onChange={(e) => setDetect({ autoReport: e.target.checked })}
+        />
+        Reportar si gané o perdí (winrate de la estrategia)
+        {!loggedIn && " · necesita iniciar sesión"}
+      </label>
+    </>
   );
 }
