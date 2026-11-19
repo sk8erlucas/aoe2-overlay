@@ -41,13 +41,28 @@ const RES_FIELDS: [keyof StepForm, string][] = [
 interface Props {
   /** Si viene, se edita esa estrategia; si no, se crea una nueva. */
   existing?: StrategyDetail;
+  /** Fork: arranca con una copia de esta estrategia y la guarda como "basada en". */
+  basedOn?: StrategyDetail;
   authorName: string;
 }
 
-export function StrategyEditor({ existing, authorName }: Props) {
+export function StrategyEditor({ existing, basedOn, authorName }: Props) {
   const router = useRouter();
   const [form, setForm] = useState<EditorForm>(() =>
-    existing ? fromStrategy(existing.data, existing.visibility) : emptyForm(authorName),
+    existing
+      ? fromStrategy(existing.data, existing.visibility)
+      : basedOn
+        ? fromStrategy(
+            {
+              ...basedOn.data,
+              name: `${basedOn.data.name} (variante)`.slice(0, 100),
+              author: authorName,
+              // La fuente es la original: se muestra aparte como "basada en".
+              source: undefined,
+            },
+            "public",
+          )
+        : emptyForm(authorName),
   );
   const [errors, setErrors] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
@@ -93,7 +108,11 @@ export function StrategyEditor({ existing, authorName }: Props) {
     setSaving(true);
     setErrors([]);
     try {
-      const body = { ...result.strategy, visibility: form.visibility };
+      const body = {
+        ...result.strategy,
+        visibility: form.visibility,
+        ...(!existing && basedOn && { basedOnId: basedOn.id }),
+      };
       const saved = existing
         ? await api<StrategyDetail>(`/api/strategies/${existing.id}`, { method: "PUT", body })
         : await api<StrategyDetail>("/api/strategies", { method: "POST", body });

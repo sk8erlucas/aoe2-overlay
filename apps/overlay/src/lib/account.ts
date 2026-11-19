@@ -185,6 +185,31 @@ export async function setFavorite(
   return true;
 }
 
+/**
+ * Reporta si se ganó o perdió con una estrategia (winrate). Con `matchId` la API no la
+ * cuenta dos veces. Devuelve false si la sesión ya no vale.
+ */
+export async function reportResult(
+  account: Account,
+  slug: string,
+  won: boolean,
+  matchId?: string,
+  fetchImpl: typeof fetch = fetch,
+): Promise<boolean> {
+  const res = await fetchImpl(
+    `${account.apiUrl}/api/strategies/slug/${encodeURIComponent(slug)}/results`,
+    {
+      method: "POST",
+      headers: { ...authHeaders(account), "content-type": "application/json" },
+      body: JSON.stringify({ won, ...(matchId && { matchId }) }),
+      signal: AbortSignal.timeout(15_000),
+    },
+  );
+  if (res.status === 401) return false;
+  if (!res.ok) throw new Error(`La API respondió ${res.status}`);
+  return true;
+}
+
 /** Cierra la sesión en la API (si falla, igual se olvida el token local). */
 export async function signOut(account: Account, fetchImpl: typeof fetch = fetch): Promise<void> {
   try {

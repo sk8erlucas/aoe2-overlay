@@ -1,16 +1,16 @@
 //! Parte nativa del overlay: ventana transparente encima del juego, modo click-through,
 //! zonas clickeables (botones) en modo juego, mostrar sin robar el foco, recordar la
-//! posición, ícono en la bandeja del sistema y links `ageoverlay://` desde la web.
+//! posición (esquina y monitor elegibles), ícono en la bandeja del sistema y links `ageoverlay://` desde la web.
 //!
 //! La lógica (reloj, estrategias, hotkeys, sincronización) vive en el frontend (React).
 
 use std::sync::Mutex;
 use std::time::Duration;
 
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use tauri::menu::{Menu, MenuItem};
 use tauri::tray::TrayIconBuilder;
-use tauri::{AppHandle, Emitter, Manager, PhysicalPosition, WebviewWindow};
+use tauri::{AppHandle, Emitter, Manager, Monitor, PhysicalPosition, WebviewWindow};
 use tauri_plugin_deep_link::DeepLinkExt;
 use tauri_plugin_window_state::{AppHandleExt, StateFlags};
 
@@ -72,20 +72,76 @@ fn toggle_window(window: &WebviewWindow) -> bool {
     !visible
 }
 
-/// Ubica la ventana arriba a la derecha del monitor principal.
-fn place_top_right(window: &WebviewWindow) -> tauri::Result<()> {
-    let monitor = match window.primary_monitor()? {
-        Some(m) => m,
-        None => return Ok(()),
+/// Esquina de la pantalla donde se ubica el overlay.
+#[derive(Debug, Clone, Copy, Default, Deserialize, PartialEq)]
+#[serde(rename_all = "kebab-case")]
+enum Corner {
+    #[default]
+    TopRight,
+    TopLeft,
+    BottomRight,
+    BottomLeft,
+}
+
+/// Dónde se ubica el overlay: esquina y monitor (índice de `available_monitors`;
+/// `None` = el principal). Lo elige el usuario en Ajustes.
+#[derive(Debug, Clone, Copy, Default, Deserialize)]
+struct Placement {
+    corner: Corner,
+    monitor: Option<usize>,
+}
+
+struct PlacementState(Mutex<Placement>);
+
+/// Monitor elegido; si ya no está conectado, el principal.
+fn target_monitor(window: &WebviewWindow, index: Option<usize>) -> tauri::Result<Option<Monitor>> {
+    if let Some(i) = index {
+        if let Some(m) = window.available_monitors()?.into_iter().nth(i) {
+            return Ok(Some(m));
+        }
+    }
+    window.primary_monitor()
+}
+
+/// Ubica la ventana en la esquina elegida (arriba a la derecha del principal por defecto).
+fn place(window: &WebviewWindow, placement: Placement) -> tauri::Result<()> {
+    let Some(monitor) = target_monitor(window, placement.monitor)? else {
+        return Ok(());
     };
     let scale = monitor.scale_factor();
     let margin = (MARGIN * scale).round() as i32;
     let area = monitor.size();
     let origin = monitor.position();
     let size = window.outer_size()?;
-    let x = origin.x + area.width as i32 - size.width as i32 - margin;
-    let y = origin.y + margin;
+    let left = origin.x + margin;
+    let right = origin.x + area.width as i32 - size.width as i32 - margin;
+    let top = origin.y + margin;
+    let bottom = origin.y + area.height as i32 - size.height as i32 - margin;
+    let (x, y) = match placement.corner {
+        Corner::TopRight => (right, top),
+        Corner::TopLeft => (left, top),
+        Corner::BottomRight => (right, bottom),
+        Corner::BottomLeft => (left, bottom),
+    };
     window.set_position(PhysicalPosition::new(x, y))
+}
+
+fn saved_placement(app: &AppHandle) -> Placement {
+    app.state::<PlacementState>()
+        .0
+        .lock()
+        .map(|p| *p)
+        .unwrap_or_default()
+}
+
+/// Nombre de un monitor para mostrar en Ajustes.
+#[derive(Debug, Serialize)]
+struct MonitorInfo {
+    index: usize,
+    name: String,
+    width: u32,
+    height: u32,
+    primary: bool,
 }
 
 fn main_window(app: &AppHandle) -> Option<WebviewWindow> {
@@ -136,9 +192,46 @@ fn toggle_visibility(window: WebviewWindow) -> bool {
     toggle_window(&window)
 }
 
+/// Vuelve a la esquina y al monitor elegidos.
 #[tauri::command]
-fn reset_position(window: WebviewWindow) -> Result<(), String> {
-    place_top_right(&window).map_err(|e| e.to_string())
+fn reset_position(app: AppHandle, window: WebviewWindow) -> Result<(), String> {
+    place(&window, saved_placement(&app)).map_err(|e| e.to_string())
+}
+
+/// Guarda la esquina y el monitor elegidos. Con `apply`, además mueve la ventana ahí.
+#[tauri::command]
+fn set_placement(
+    window: WebviewWindow,
+    state: tauri::State<PlacementState>,
+    placement: Placement,
+    apply: bool,
+) -> Result<(), String> {
+    *state.0.lock().map_err(|e| e.to_string())? = placement;
+    if apply {
+        place(&window, placement).map_err(|e| e.to_string())?;
+    }
+    Ok(())
+}
+
+/// Monitores conectados, para elegir en cuál se muestra el overlay.
+#[tauri::command]
+fn list_monitors(window: WebviewWindow) -> Result<Vec<MonitorInfo>, String> {
+    let primary = window
+        .primary_monitor()
+        .map_err(|e| e.to_string())?
+        .map(|m| *m.position());
+    let monitors = window.available_monitors().map_err(|e| e.to_string())?;
+    Ok(monitors
+        .into_iter()
+        .enumerate()
+        .map(|(index, m)| MonitorInfo {
+            index,
+            name: m.name().cloned().unwrap_or_else(|| format!("Monitor {}", index + 1)),
+            width: m.size().width,
+            height: m.size().height,
+            primary: primary == Some(*m.position()),
+        })
+        .collect())
 }
 
 /// Cierra la app guardando posición y tamaño de la ventana.
@@ -212,7 +305,7 @@ fn build_tray(app: &AppHandle) -> tauri::Result<()> {
             }
             "corner" => {
                 if let Some(w) = main_window(app) {
-                    let _ = place_top_right(&w);
+                    let _ = place(&w, saved_placement(app));
                 }
             }
             "quit" => quit(app),
@@ -249,12 +342,15 @@ pub fn run() {
         .plugin(tauri_plugin_global_shortcut::Builder::new().build())
         .plugin(tauri_plugin_store::Builder::new().build())
         .manage(HitTestState(Mutex::new(HitTest::default())))
+        .manage(PlacementState(Mutex::new(Placement::default())))
         .invoke_handler(tauri::generate_handler![
             set_game_mode,
             set_interactive_rects,
             show_overlay,
             toggle_visibility,
             reset_position,
+            set_placement,
+            list_monitors,
             quit_app
         ])
         .setup(|app| {
@@ -271,7 +367,7 @@ pub fn run() {
                     show_without_focus(&w);
                 }
             });
-            // Si no hay posición guardada (primera vez), arriba a la derecha.
+            // Si no hay posición guardada (primera vez), arriba a la derecha del principal.
             let saved = app
                 .path()
                 .app_config_dir()
@@ -279,7 +375,7 @@ pub fn run() {
                 .unwrap_or(false);
             if !saved {
                 if let Some(w) = main_window(app.handle()) {
-                    place_top_right(&w)?;
+                    place(&w, Placement::default())?;
                 }
             }
             spawn_hit_test(app.handle().clone());

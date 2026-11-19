@@ -64,6 +64,8 @@ Ya existe y tiene las tablas creadas (`aoe2-overlaydb`). Dos opciones:
    | `CORS_ORIGINS`       | URLs de la web que pueden llamar a la API, separadas por coma.                       |
    | `COOKIE_DOMAIN`      | Dominio padre, **sin** `https://` ni subdominio. Comparte la sesión entre web y API. |
 
+   Opcional, para el botón "Ingresar con Discord": creá una aplicación en [discord.com/developers/applications](https://discord.com/developers/applications), en **OAuth2** agregá el redirect `https://api.tudominio.com/api/auth/callback/discord` y copiá el client ID y el secret a `DISCORD_CLIENT_ID` y `DISCORD_CLIENT_SECRET`. Sin esas dos variables el botón no aparece.
+
 5. **Domains → Add Domain:**
    - Host: `api.tudominio.com`
    - Path: `/`

@@ -8,6 +8,7 @@ import { favorites, reports, strategies, user, votes } from "../db/schema";
 import {
   detailSchema,
   errorSchema,
+  basedOnBody,
   favoriteBody,
   idParams,
   listQuery,
@@ -114,12 +115,24 @@ export const strategyRoutes: FastifyPluginAsyncZod<Deps> = async (app, { db, ses
       myVote = v?.value ?? 0;
       isFavorite = !!f;
     }
+    const [parent] = row.basedOnId
+      ? await db
+          .select({
+            slug: strategies.slug,
+            name: strategies.name,
+            visibility: strategies.visibility,
+          })
+          .from(strategies)
+          .where(eq(strategies.id, row.basedOnId))
+      : [];
     return {
       ...toSummary(row, author ?? null),
       data: row.data,
       myVote,
       isFavorite,
       canEdit: !!me && (row.authorId === me.id || isStaff(me)),
+      basedOn:
+        parent && parent.visibility !== "hidden" ? { slug: parent.slug, name: parent.name } : null,
     };
   }
 
@@ -190,19 +203,23 @@ export const strategyRoutes: FastifyPluginAsyncZod<Deps> = async (app, { db, ses
       schema: {
         tags: TAG,
         summary: "Crear una estrategia",
-        body: strategySchema.extend(visibilityBody.shape),
-        response: { 201: detailSchema, 401: errorSchema },
+        body: strategySchema.extend(visibilityBody.shape).extend(basedOnBody.shape),
+        response: { 201: detailSchema, 401: errorSchema, 404: errorSchema },
       },
     },
     async (req, reply) => {
       const me = await session.requireUser(req);
-      const { visibility, ...data } = req.body;
+      const { visibility, basedOnId, ...data } = req.body;
+      if (basedOnId && !canSee(await findById(basedOnId), me)) {
+        throw new HttpError(404, "Estrategia no encontrada");
+      }
       const [row] = await db
         .insert(strategies)
         .values({
           ...toColumns(data),
           slug: uniqueSlug(data.name),
           authorId: me.id,
+          basedOnId: basedOnId ?? null,
           data,
           // Solo el staff puede crear estrategias ocultas.
           visibility:

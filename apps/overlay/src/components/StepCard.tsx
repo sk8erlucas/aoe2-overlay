@@ -1,17 +1,20 @@
 import { parseNote, type Step } from "@age-overlay/shared";
+import { useLang, useT } from "../lib/i18n";
 
 const RESOURCES = [
-  { key: "wood", icon: "🪵", label: "Madera" },
-  { key: "food", icon: "🍖", label: "Comida" },
-  { key: "gold", icon: "🪙", label: "Oro" },
-  { key: "stone", icon: "🪨", label: "Piedra" },
-  { key: "builder", icon: "🔨", label: "Construyendo" },
+  { key: "wood", icon: "🪵" },
+  { key: "food", icon: "🍖" },
+  { key: "gold", icon: "🪙" },
+  { key: "stone", icon: "🪨" },
+  { key: "builder", icon: "🔨" },
 ] as const;
 
 export function Resources({ step }: { step: Step }) {
+  const t = useT();
   return (
     <div className="resources">
-      {RESOURCES.map(({ key, icon, label }) => {
+      {RESOURCES.map(({ key, icon }) => {
+        const label = t(`res.${key}`);
         const value = step.resources[key];
         if (key === "builder" && !value) return null;
         return (
@@ -26,9 +29,10 @@ export function Resources({ step }: { step: Step }) {
 }
 
 export function Note({ text }: { text: string }) {
+  const lang = useLang();
   return (
     <li>
-      {parseNote(text).map((seg, i) =>
+      {parseNote(text, lang).map((seg, i) =>
         seg.type === "text" ? (
           <span key={i}>{seg.text}</span>
         ) : (

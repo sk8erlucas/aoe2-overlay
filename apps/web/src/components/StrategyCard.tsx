@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { civLabel, DIFFICULTY_LABELS, MAP_TYPE_LABELS, mapLabel } from "@/lib/labels";
-import type { StrategySummary } from "@/lib/types";
+import { winrateLabel, type StrategySummary } from "@/lib/types";
 
 /** `heading`: nivel del título según la página (h2 si no hay otro h2 arriba). */
 export function StrategyCard({
@@ -37,6 +37,7 @@ export function StrategyCard({
       <div className="mt-auto flex flex-wrap gap-x-3 gap-y-1 text-xs text-ink/60">
         <span>🗺 {where}</span>
         <span>{s.stepCount} pasos</span>
+        {winrateLabel(s) && <span title="Victorias reportadas">🏆 {winrateLabel(s)}</span>}
         {s.difficulty && <span>{DIFFICULTY_LABELS[s.difficulty] ?? s.difficulty}</span>}
         {s.verified && <span className="font-bold text-gold-dark">✔ Verificada</span>}
         {s.visibility !== "public" && (

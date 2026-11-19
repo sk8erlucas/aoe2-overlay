@@ -12,13 +12,14 @@ import {
   validatorCompiler,
   type ZodTypeProvider,
 } from "fastify-type-provider-zod";
-import type { Auth } from "./auth";
+import { discordEnabled, type Auth } from "./auth";
 import type { Database } from "./db/client";
 import type { Env } from "./env";
 import { HttpError, sessionHelpers } from "./lib/session";
 import { miscRoutes } from "./routes/misc";
 import { overlayRoutes } from "./routes/overlay";
 import { reportRoutes } from "./routes/reports";
+import { socialRoutes } from "./routes/social";
 import { strategyRoutes } from "./routes/strategies";
 import { suggestionRoutes } from "./routes/suggestions";
 
@@ -36,7 +37,8 @@ export const OVERLAY_ORIGINS = [
 export interface AppDeps {
   db: Database;
   auth: Auth;
-  env: Pick<Env, "CORS_ORIGINS" | "BETTER_AUTH_URL">;
+  env: Pick<Env, "CORS_ORIGINS" | "BETTER_AUTH_URL"> &
+    Partial<Pick<Env, "DISCORD_CLIENT_ID" | "DISCORD_CLIENT_SECRET">>;
   logger?: FastifyServerOptions["logger"];
   /** Desactivar en tests. */
   rateLimit?: boolean;
@@ -129,8 +131,14 @@ export async function buildApp({
   });
 
   const session = sessionHelpers(auth);
-  await app.register(miscRoutes, { prefix: "/api", db, session });
+  await app.register(miscRoutes, {
+    prefix: "/api",
+    db,
+    session,
+    loginOptions: { discord: discordEnabled(env) },
+  });
   await app.register(strategyRoutes, { prefix: "/api", db, session });
+  await app.register(socialRoutes, { prefix: "/api", db, session });
   await app.register(suggestionRoutes, { prefix: "/api", db });
   await app.register(reportRoutes, { prefix: "/api", db, session });
   await app.register(overlayRoutes, { prefix: "/api", db });

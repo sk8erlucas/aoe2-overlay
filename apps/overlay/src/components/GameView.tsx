@@ -2,7 +2,8 @@ import { formatClock, populationOf, type StepPosition } from "@age-overlay/share
 import { useEffect, useRef } from "react";
 import { setInteractiveRects } from "../lib/native";
 import type { HotkeyAction, Settings } from "../lib/settings";
-import { AGE_NAMES, type LoadedStrategy } from "../lib/strategies";
+import { useT, type TKey } from "../lib/i18n";
+import type { LoadedStrategy } from "../lib/strategies";
 import { Resources, StepNotes } from "./StepCard";
 
 interface Props {
@@ -47,6 +48,7 @@ function Controls({
   onAction,
 }: Pick<Props, "running" | "settings" | "onAction">) {
   const ref = useInteractiveZone<HTMLDivElement>();
+  const t = useT();
   const k = settings.hotkeys;
   const btn = (action: HotkeyAction | "hide", label: string, title: string, cls = "") => (
     <button className={`ctl ${cls}`} title={title} onClick={() => onAction(action)}>
@@ -55,19 +57,19 @@ function Controls({
   );
   return (
     <div className="controls" ref={ref}>
-      {btn("prevStep", "⏮", `Paso anterior (${k.prevStep})`)}
-      {btn("minus5", "−5", `Atrasar 5 s (${k.minus5})`)}
+      {btn("prevStep", "⏮", t("game.prevStep", { key: k.prevStep }))}
+      {btn("minus5", "−5", t("game.minus5", { key: k.minus5 }))}
       {btn(
         "startPause",
         running ? "⏸" : "▶",
-        `${running ? "Pausar" : "Iniciar"} (${k.startPause})`,
+        t(running ? "game.pause" : "game.start", { key: k.startPause }),
         "main",
       )}
-      {btn("plus5", "+5", `Adelantar 5 s (${k.plus5})`)}
-      {btn("nextStep", "⏭", `Paso siguiente (${k.nextStep})`)}
+      {btn("plus5", "+5", t("game.plus5", { key: k.plus5 }))}
+      {btn("nextStep", "⏭", t("game.nextStep", { key: k.nextStep }))}
       <span className="ctl-sep" />
-      {btn("toggleMode", "⚙", `Modo edición (${k.toggleMode})`)}
-      {btn("hide", "✕", `Ocultar (${k.toggleVisible}). Para salir: ícono de la bandeja`, "close")}
+      {btn("toggleMode", "⚙", t("game.editMode", { key: k.toggleMode }))}
+      {btn("hide", "✕", t("game.hide", { key: k.toggleVisible }), "close")}
     </div>
   );
 }
@@ -82,25 +84,30 @@ export function GameView({
   settings,
   onAction,
 }: Props) {
+  const t = useT();
   if (!strategy) {
     return (
       <div className="game empty">
         <Controls running={running} settings={settings} onAction={onAction} />
-        <p>No hay estrategia elegida.</p>
-        <p className="hint">Tocá ⚙ o {settings.hotkeys.toggleMode} para elegir una</p>
+        <p>{t("game.noStrategy")}</p>
+        <p className="hint">{t("game.pickHint", { key: settings.hotkeys.toggleMode })}</p>
       </div>
     );
   }
 
+  const layout = settings.layout;
   const steps = strategy.build_order;
   const current = steps[position.index]!;
   const next = position.nextIndex === null ? undefined : steps[position.nextIndex];
+  // Detallado: además del siguiente, los dos que vienen después.
+  const later = layout === "detailed" ? steps.slice(position.index + 2, position.index + 4) : [];
 
   return (
-    <div className="game">
+    <div className={`game layout-${layout}`}>
+      {layout === "detailed" && <p className="game-title">{strategy.name}</p>}
       <header className="game-header">
         <span className={`clock ${running ? "" : "paused"}`}>{formatClock(gameSeconds)}</span>
-        <span className="age">{AGE_NAMES[current.age]}</span>
+        <span className="age">{t(`age.${current.age}` as TKey)}</span>
         <span className="step-count">
           {position.index + 1}/{steps.length}
         </span>
@@ -109,27 +116,36 @@ export function GameView({
 
       <section className={`current ${flash ? "flash" : ""}`}>
         <div className="current-meta">
-          <span className="pop" title="Población total: aldeanos + explorador inicial">
+          <span className="pop" title={t("game.popTitle")}>
             👥 <strong>{populationOf(current)}</strong>
-            <span className="pop-detail"> ({current.villager_count} ald. + explorador)</span>
+            <span className="pop-detail">{t("game.popDetail", { n: current.villager_count })}</span>
           </span>
           <Resources step={current} />
         </div>
         <StepNotes step={current} />
       </section>
 
-      {next && (
+      {next && layout !== "compact" && (
         <section className="next">
           <div className="next-meta">
-            Siguiente en <strong>{formatClock(position.secondsToNext ?? 0)}</strong> · pob.{" "}
-            {populationOf(next)}
+            {t("game.nextIn")} <strong>{formatClock(position.secondsToNext ?? 0)}</strong> ·{" "}
+            {t("game.pop")} {populationOf(next)}
           </div>
           <StepNotes step={next} />
         </section>
       )}
 
+      {later.map((step, i) => (
+        <section key={position.index + 2 + i} className="next later">
+          <div className="next-meta">
+            {t("game.pop")} {populationOf(step)}
+          </div>
+          <StepNotes step={step} />
+        </section>
+      ))}
+
       {!running && gameSeconds === 0 && (
-        <p className="hint">Tocá ▶ o {settings.hotkeys.startPause} al empezar la partida</p>
+        <p className="hint">{t("game.startHint", { key: settings.hotkeys.startPause })}</p>
       )}
     </div>
   );

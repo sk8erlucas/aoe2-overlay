@@ -43,7 +43,7 @@ Jugar cada una al menos una vez contra la IA y anotar ajustes en `strategies/*.j
 - [ ] Recorrido completo en el navegador: registro → crear estrategia → votar con otro usuario
 - [ ] La landing se ve bien en móvil y escritorio
 - [ ] Con "reducir movimiento" activado en el sistema, no hay animaciones
-- [x] Lighthouse: rendimiento y accesibilidad > 90 en la landing y en /estrategias. 2026-11-19: landing 98/100/100/100 y /estrategias 100/94/100/92 (rendimiento, accesibilidad, buenas prácticas, SEO). Se corrigió el orden de títulos de /estrategias; queda el contraste del rojo de marca `#e40038` sobre crema (4,37:1, pide 4,5:1)
+- [x] Lighthouse: rendimiento y accesibilidad > 90 en la landing y en /estrategias. 2026-11-19: landing 98/100/100/100 y /estrategias 100/94/100/92 (rendimiento, accesibilidad, buenas prácticas, SEO). Se corrigió el orden de títulos de /estrategias. El rojo de marca pasó de `#e40038` a `#d60034` para llegar al contraste 4,5:1 sobre crema
 - [ ] El efecto del caballero se ve fluido en una PC común y en un celular
 
 ## Cuenta y links (de la Fase 5)

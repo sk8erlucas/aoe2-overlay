@@ -6,6 +6,12 @@ import { prepareAccountDeletion } from "./db/delete-account";
 import * as schema from "./db/schema";
 import type { Env } from "./env";
 
+/** ¿Hay credenciales de Discord? (la web muestra el botón solo en ese caso). */
+export const discordEnabled = (env: {
+  DISCORD_CLIENT_ID?: string;
+  DISCORD_CLIENT_SECRET?: string;
+}) => !!env.DISCORD_CLIENT_ID && !!env.DISCORD_CLIENT_SECRET;
+
 /** client_id que manda el overlay de escritorio en el flujo device-code. */
 export const OVERLAY_CLIENT_ID = "aoe2-overlay";
 
@@ -13,6 +19,8 @@ export function createAuth(
   db: Database,
   env: Pick<Env, "BETTER_AUTH_SECRET" | "BETTER_AUTH_URL" | "CORS_ORIGINS"> & {
     COOKIE_DOMAIN?: string;
+    DISCORD_CLIENT_ID?: string;
+    DISCORD_CLIENT_SECRET?: string;
   },
 ) {
   return betterAuth({
@@ -35,6 +43,15 @@ export function createAuth(
       minPasswordLength: 8,
       maxPasswordLength: 128,
     },
+    // Login con Discord, solo si está configurado (ver env.ts).
+    socialProviders: discordEnabled(env)
+      ? {
+          discord: {
+            clientId: env.DISCORD_CLIENT_ID!,
+            clientSecret: env.DISCORD_CLIENT_SECRET!,
+          },
+        }
+      : {},
     user: {
       additionalFields: {
         // El rol nunca lo elige el usuario: se cambia con `pnpm --filter @age-overlay/api user:role`.

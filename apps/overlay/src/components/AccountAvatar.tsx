@@ -1,4 +1,5 @@
 import type { Account } from "../lib/account";
+import { useT } from "../lib/i18n";
 
 interface Props {
   account: Account | null;
@@ -7,12 +8,13 @@ interface Props {
 
 /** Barra superior: inicial del usuario, o silueta punteada si no inició sesión. */
 export function AccountAvatar({ account, onClick }: Props) {
+  const t = useT();
   if (account) {
     return (
       <button
         className="avatar in"
-        title={`Conectado como ${account.name}`}
-        aria-label={`Cuenta: ${account.name}`}
+        title={t("avatar.in", { name: account.name })}
+        aria-label={t("avatar.inAria", { name: account.name })}
         onClick={onClick}
       >
         {Array.from(account.name.trim())[0]?.toUpperCase() ?? "?"}
@@ -22,8 +24,8 @@ export function AccountAvatar({ account, onClick }: Props) {
   return (
     <button
       className="avatar out"
-      title="Sin sesión: iniciar sesión o registrarse"
-      aria-label="Iniciar sesión o registrarse"
+      title={t("avatar.out")}
+      aria-label={t("avatar.outAria")}
       onClick={onClick}
     >
       <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">

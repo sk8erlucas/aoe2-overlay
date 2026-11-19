@@ -15,7 +15,11 @@ export function DeleteAccount() {
     setBusy(true);
     setError(null);
     try {
-      await api("/api/auth/delete-user", { method: "POST", body: { password } });
+      // Las cuentas creadas con Discord no tienen contraseña: alcanza con la sesión.
+      await api("/api/auth/delete-user", {
+        method: "POST",
+        body: password ? { password } : {},
+      });
       window.location.assign("/");
     } catch (err) {
       setError(
@@ -36,12 +40,13 @@ export function DeleteAccount() {
           el catálogo sin autor.
         </p>
         <label className="block space-y-1">
-          <span className="text-ink/70">Confirmá con tu contraseña</span>
+          <span className="text-ink/70">
+            Confirmá con tu contraseña (si entraste con Discord, dejalo vacío)
+          </span>
           <input
             className="w-full rounded border border-ink/20 bg-white px-3 py-2"
             type="password"
             autoComplete="current-password"
-            required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -51,7 +56,7 @@ export function DeleteAccount() {
             {error}
           </p>
         )}
-        <button className="btn btn-red text-xs" type="submit" disabled={busy || !password}>
+        <button className="btn btn-red text-xs" type="submit" disabled={busy}>
           {busy ? "Eliminando…" : "Eliminar mi cuenta"}
         </button>
       </form>

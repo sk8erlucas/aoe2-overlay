@@ -30,10 +30,3 @@ function load(): LoadedStrategy[] {
 }
 
 export const BUNDLED_STRATEGIES: readonly LoadedStrategy[] = load();
-
-export const AGE_NAMES: Record<number, string> = {
-  1: "Alta Edad Media",
-  2: "Feudal",
-  3: "Castillos",
-  4: "Imperial",
-};

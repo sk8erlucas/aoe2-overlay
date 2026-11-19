@@ -26,6 +26,9 @@ export interface StrategySummary {
   tags: string[];
   stepCount: number;
   score: number;
+  /** Partidas reportadas y ganadas (winrate = wins / games). */
+  games: number;
+  wins: number;
   verified: boolean;
   visibility: Visibility;
   createdAt: string;
@@ -37,6 +40,22 @@ export interface StrategyDetail extends StrategySummary {
   myVote: number;
   isFavorite: boolean;
   canEdit: boolean;
+  basedOn: { slug: string; name: string } | null;
+}
+
+export interface Comment {
+  id: string;
+  body: string;
+  author: { id: string; name: string };
+  createdAt: string;
+  canDelete: boolean;
+}
+
+/** "62% de 13 partidas", o null si todavía no hay resultados. */
+export function winrateLabel(s: Pick<StrategySummary, "games" | "wins">): string | null {
+  if (s.games === 0) return null;
+  const pct = Math.round((s.wins / s.games) * 100);
+  return `${pct}% de ${s.games} ${s.games === 1 ? "partida" : "partidas"}`;
 }
 
 export interface StrategyList {

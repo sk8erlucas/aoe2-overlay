@@ -6,7 +6,7 @@ export const alt = "AoE2 Overlay: tu apertura paso a paso, encima del juego";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-const RED = "#e40038";
+const RED = "#d60034";
 const CREAM = "#faf3e9";
 const INK = "#201408";
 const GOLD = "#e2b04a";

@@ -21,6 +21,8 @@ export function toSummary(row: StrategyRow, author: AuthorRow): StrategySummary 
     tags: d.tags ?? [],
     stepCount: d.build_order.length,
     score: row.score,
+    games: row.games,
+    wins: row.wins,
     verified: row.verified,
     visibility: row.visibility,
     createdAt: row.createdAt.toISOString(),

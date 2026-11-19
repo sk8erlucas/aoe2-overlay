@@ -4,7 +4,7 @@
  */
 import { invoke, isTauri } from "@tauri-apps/api/core";
 import { listen, type UnlistenFn } from "@tauri-apps/api/event";
-import type { HotkeyAction } from "./settings";
+import type { Corner, HotkeyAction } from "./settings";
 
 export async function setGameMode(enabled: boolean): Promise<void> {
   if (isTauri()) await invoke("set_game_mode", { enabled });
@@ -38,6 +38,32 @@ export async function toggleVisibility(): Promise<void> {
 
 export async function resetPosition(): Promise<void> {
   if (isTauri()) await invoke("reset_position");
+}
+
+/**
+ * Le pasa a la parte nativa la esquina y el monitor elegidos (los usa "Volver a la
+ * esquina" de la bandeja). Con `apply`, mueve la ventana ahí.
+ */
+export async function setPlacement(
+  corner: Corner,
+  monitor: number | undefined,
+  apply: boolean,
+): Promise<void> {
+  if (isTauri())
+    await invoke("set_placement", { placement: { corner, monitor: monitor ?? null }, apply });
+}
+
+export interface MonitorInfo {
+  index: number;
+  name: string;
+  width: number;
+  height: number;
+  primary: boolean;
+}
+
+export async function listMonitors(): Promise<MonitorInfo[]> {
+  if (!isTauri()) return [];
+  return invoke<MonitorInfo[]>("list_monitors");
 }
 
 /** Evento que emite el menú de la bandeja del sistema. */
