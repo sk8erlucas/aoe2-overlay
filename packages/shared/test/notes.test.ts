@@ -126,3 +126,14 @@ describe("palabras clave de la comunidad", () => {
     expect(noteToText(nota)).toBe(nota);
   });
 });
+
+describe("notas en inglés", () => {
+  it("deja el texto original y pone etiquetas en inglés a los íconos", () => {
+    expect(
+      noteToText("Create 6 @resource/MaleVillDE.jpg@ on @animal/Sheep_aoe2DE.png@", "en"),
+    ).toBe("Create 6 villager on sheep");
+    expect(noteToText("Before feudalAge build @resource/Aoe2de_hammer.png@", "en")).toBe(
+      "Before Feudal Age build build",
+    );
+  });
+});

@@ -9,41 +9,47 @@ import {
 } from "@age-overlay/shared";
 import { Fragment, useMemo, useState } from "react";
 import { favoritesFirst } from "../lib/account";
+import { useLang, useT, type T, type TKey } from "../lib/i18n";
 import type { Selection } from "../lib/settings";
 import type { LoadedStrategy } from "../lib/strategies";
 import type { SyncStatus } from "../lib/sync";
 import { Resources, StepNotes } from "./StepCard";
 
-const POSITION_LABELS: Record<Position, string> = {
-  "1v1": "1 contra 1",
-  flank: "Flanco",
-  pocket: "Bolsillo (pocket)",
+const normalize = (s: string) =>
+  s
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+
+/** Motivos de la sugerencia (vienen en español de packages/shared). */
+const REASONS_EN: Record<string, string> = {
+  genérica: "generic",
+  civ: "civ",
+  mapa: "map",
+  "tipo de mapa": "map type",
+  rival: "opponent",
+  posición: "position",
+  búsqueda: "search",
 };
 
-const civsSorted = [...CIVS].sort((a, b) => a.name.es.localeCompare(b.name.es, "es"));
-const mapsSorted = [...MAPS].sort((a, b) => a.name.es.localeCompare(b.name.es, "es"));
-
-const normalize = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
-
-function timeAgo(iso: string): string {
+function timeAgo(iso: string, t: T): string {
   const min = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
-  if (min < 1) return "recién";
-  if (min < 60) return `hace ${min} min`;
+  if (min < 1) return t("ago.now");
+  if (min < 60) return t("ago.min", { n: min });
   const h = Math.round(min / 60);
-  return h < 24 ? `hace ${h} h` : `hace ${Math.round(h / 24)} días`;
+  return h < 24 ? t("ago.hours", { n: h }) : t("ago.days", { n: Math.round(h / 24) });
 }
-
-const AGE_NAMES = ["", "Alta Edad Media", "Edad Feudal", "Edad de los Castillos", "Edad Imperial"];
 
 /** Lista completa de pasos de una estrategia, para mirarla antes de jugar. */
 function StrategyPreview({ strategy }: { strategy: LoadedStrategy }) {
+  const t = useT();
   const times = useMemo(() => estimateStepTimes(strategy.build_order), [strategy]);
   return (
     <ol className="preview">
       {strategy.build_order.map((step, i) => (
         <Fragment key={i}>
           {step.age !== strategy.build_order[i - 1]?.age && (
-            <li className="preview-age">{AGE_NAMES[step.age]}</li>
+            <li className="preview-age">{t(`ageFull.${step.age}` as TKey)}</li>
           )}
           <li className="preview-step">
             <div className="preview-head">
@@ -60,21 +66,20 @@ function StrategyPreview({ strategy }: { strategy: LoadedStrategy }) {
 }
 
 function SyncLine({ status, count }: { status: SyncStatus; count: number }) {
-  if (status.state === "syncing") return <p className="sync-status">Sincronizando estrategias…</p>;
+  const t = useT();
+  if (status.state === "syncing") return <p className="sync-status">{t("sync.syncing")}</p>;
   if (status.state === "ok")
     return (
-      <p className="sync-status">
-        ✓ {count} estrategias · sincronizado {timeAgo(status.syncedAt)}
-      </p>
+      <p className="sync-status">{t("sync.ok", { count, ago: timeAgo(status.syncedAt, t) })}</p>
     );
   if (status.state === "offline")
     return (
       <p className="sync-status offline" title={status.message}>
-        Sin conexión: usando {count} estrategias guardadas
-        {status.syncedAt ? ` (${timeAgo(status.syncedAt)})` : ""}
+        {t("sync.offline", { count })}
+        {status.syncedAt ? ` (${timeAgo(status.syncedAt, t)})` : ""}
       </p>
     );
-  return <p className="sync-status">{count} estrategias</p>;
+  return <p className="sync-status">{t("sync.idle", { count })}</p>;
 }
 
 interface Props {
@@ -104,6 +109,17 @@ export function SetupView({
   onPlay,
   detectLine,
 }: Props) {
+  const t = useT();
+  const lang = useLang();
+  const civsSorted = useMemo(
+    () => [...CIVS].sort((a, b) => a.name[lang].localeCompare(b.name[lang], lang)),
+    [lang],
+  );
+  const mapsSorted = useMemo(
+    () => [...MAPS].sort((a, b) => a.name[lang].localeCompare(b.name[lang], lang)),
+    [lang],
+  );
+  const reason = (r: string) => (lang === "en" ? (REASONS_EN[r] ?? r) : r);
   const [query, setQuery] = useState("");
   const [previewId, setPreviewId] = useState<string>();
   const set = <K extends keyof Selection>(key: K, value: Selection[K]) =>
@@ -145,63 +161,63 @@ export function SetupView({
       {detectLine && <p className="sync-status">{detectLine}</p>}
       <div className="fields">
         <label>
-          Mapa
+          {t("setup.map")}
           <select value={selection.map ?? ""} onChange={(e) => set("map", e.target.value)}>
-            <option value="">— Cualquiera —</option>
+            <option value="">{t("setup.any")}</option>
             {mapsSorted.map((m) => (
               <option key={m.id} value={m.id}>
-                {m.name.es}
+                {m.name[lang]}
               </option>
             ))}
           </select>
         </label>
         <label>
-          Mi civilización
+          {t("setup.civ")}
           <select value={selection.civ ?? ""} onChange={(e) => set("civ", e.target.value)}>
-            <option value="">— Cualquiera —</option>
+            <option value="">{t("setup.any")}</option>
             {civsSorted.map((c) => (
               <option key={c.id} value={c.name.en}>
-                {c.name.es}
+                {c.name[lang]}
               </option>
             ))}
           </select>
         </label>
         <label>
-          Rival
+          {t("setup.vsCiv")}
           <select value={selection.vsCiv ?? ""} onChange={(e) => set("vsCiv", e.target.value)}>
-            <option value="">— No sé —</option>
+            <option value="">{t("setup.dontKnow")}</option>
             {civsSorted.map((c) => (
               <option key={c.id} value={c.name.en}>
-                {c.name.es}
+                {c.name[lang]}
               </option>
             ))}
           </select>
         </label>
         <label>
-          Posición
+          {t("setup.position")}
           <select
             value={selection.position ?? ""}
             onChange={(e) => set("position", e.target.value as Position)}
           >
-            <option value="">— Cualquiera —</option>
+            <option value="">{t("setup.any")}</option>
             {POSITIONS.map((p) => (
               <option key={p} value={p}>
-                {POSITION_LABELS[p]}
+                {t(`position.${p}`)}
               </option>
             ))}
           </select>
         </label>
       </div>
 
-      <h3>{query.trim() ? "Resultados" : "Sugerencias"}</h3>
+      <h3>{query.trim() ? t("setup.results") : t("setup.suggestions")}</h3>
       <input
         className="search"
-        placeholder="Buscar por nombre…"
+        placeholder={t("setup.search")}
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
       {results.length === 0 ? (
-        <p className="muted">No hay estrategias para esa combinación.</p>
+        <p className="muted">{t("setup.none")}</p>
       ) : (
         <ul className="suggestions">
           {results.map(({ strategy: s, reasons }) => (
@@ -211,10 +227,10 @@ export function SetupView({
                 aria-pressed={favSet.has(s.id)}
                 title={
                   !loggedIn
-                    ? "Iniciá sesión para guardar favoritas"
+                    ? t("setup.favLogin")
                     : favSet.has(s.id)
-                      ? "Quitar de favoritas"
-                      : "Agregar a favoritas"
+                      ? t("setup.favRemove")
+                      : t("setup.favAdd")
                 }
                 onClick={() => onToggleFavorite(s.id)}
               >
@@ -230,20 +246,21 @@ export function SetupView({
                   {(s.score ?? 0) > 0 && <span className="badge">▲ {s.score}</span>}
                 </span>
                 <span className="s-meta">
-                  {reasons.join(" · ") || "general"} · {s.build_order.length} pasos · {s.author}
+                  {reasons.map(reason).join(" · ") || t("setup.general")} ·{" "}
+                  {t("setup.steps", { n: s.build_order.length })} · {s.author}
                 </span>
               </button>
               <button
                 className={`row-action ${previewId === s.id ? "on" : ""}`}
                 aria-pressed={previewId === s.id}
-                title={previewId === s.id ? "Ocultar pasos" : "Ver todos los pasos"}
+                title={previewId === s.id ? t("setup.previewHide") : t("setup.previewShow")}
                 onClick={() => setPreviewId(previewId === s.id ? undefined : s.id)}
               >
                 👁
               </button>
               <button
                 className="row-action play-row"
-                title={`Jugar: ${s.name}`}
+                title={t("setup.playThis", { name: s.name })}
                 onClick={() => {
                   onChange({ ...selection, strategyId: s.id });
                   onPlay();
@@ -260,7 +277,7 @@ export function SetupView({
       {chosen?.description && <p className="description">{chosen.description}</p>}
 
       <button className="primary play" disabled={!chosen} onClick={onPlay}>
-        {chosen ? `▶ Jugar: ${chosen.name}` : "▶ Jugar con esta estrategia"}
+        {chosen ? t("setup.playNamed", { name: chosen.name }) : t("setup.play")}
       </button>
     </div>
   );

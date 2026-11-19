@@ -1,5 +1,6 @@
 import { DEFAULT_SPEED, type Position } from "@age-overlay/shared";
 import { isTauri } from "@tauri-apps/api/core";
+import { systemLang, type Lang } from "./i18n";
 
 export const HOTKEY_ACTIONS = [
   "toggleMode",
@@ -12,17 +13,6 @@ export const HOTKEY_ACTIONS = [
   "toggleVisible",
 ] as const;
 export type HotkeyAction = (typeof HOTKEY_ACTIONS)[number];
-
-export const HOTKEY_LABELS: Record<HotkeyAction, string> = {
-  toggleMode: "Modo edición / juego",
-  startPause: "Iniciar / pausar reloj",
-  reset: "Reiniciar reloj",
-  plus5: "Adelantar 5 s",
-  minus5: "Atrasar 5 s",
-  nextStep: "Paso siguiente",
-  prevStep: "Paso anterior",
-  toggleVisible: "Mostrar / ocultar",
-};
 
 /** Con Ctrl+Alt se evita chocar con los atajos del juego. */
 export const DEFAULT_HOTKEYS: Record<HotkeyAction, string> = {
@@ -47,24 +37,12 @@ export interface Selection {
 export const CORNERS = ["top-right", "top-left", "bottom-right", "bottom-left"] as const;
 export type Corner = (typeof CORNERS)[number];
 
-export const CORNER_LABELS: Record<Corner, string> = {
-  "top-right": "Arriba a la derecha",
-  "top-left": "Arriba a la izquierda",
-  "bottom-right": "Abajo a la derecha",
-  "bottom-left": "Abajo a la izquierda",
-};
-
 /** Cuánta información muestra el overlay durante la partida. */
 export const LAYOUTS = ["normal", "compact", "detailed"] as const;
 export type Layout = (typeof LAYOUTS)[number];
 
-export const LAYOUT_LABELS: Record<Layout, string> = {
-  normal: "Normal: paso actual y siguiente",
-  compact: "Compacto: solo el paso actual",
-  detailed: "Detallado: nombre y los próximos 3 pasos",
-};
-
 export interface Settings {
+  lang: Lang;
   speed: number;
   /** Opacidad del fondo del panel (0.2 – 1). */
   opacity: number;
@@ -92,6 +70,7 @@ export interface DetectSettings {
 }
 
 export const DEFAULT_SETTINGS: Settings = {
+  lang: systemLang(),
   speed: DEFAULT_SPEED,
   opacity: 0.75,
   scale: 1,

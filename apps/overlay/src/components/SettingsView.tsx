@@ -6,16 +6,14 @@ import { AccountSection } from "./AccountSection";
 import { UpdateSection } from "./UpdateSection";
 import { searchProfiles, type CompanionProfile } from "../lib/detect";
 import { listMonitors, type HotkeyError, type MonitorInfo } from "../lib/native";
+import { LANG_LABELS, LANGS, useT, type Lang } from "../lib/i18n";
 import {
-  CORNER_LABELS,
   CORNERS,
   DEFAULT_HOTKEYS,
-  LAYOUT_LABELS,
   LAYOUTS,
   type Corner,
   type Layout,
   HOTKEY_ACTIONS,
-  HOTKEY_LABELS,
   type HotkeyAction,
   type Settings,
 } from "../lib/settings";
@@ -34,11 +32,11 @@ interface Props {
 }
 
 const SPEEDS = [
-  { value: 1.0, label: "Lenta (1.0)" },
-  { value: 1.5, label: "Casual (1.5)" },
-  { value: DEFAULT_SPEED, label: "Normal (1.7)" },
-  { value: 2.0, label: "Rápida (2.0)" },
-];
+  { value: 1.0, label: "speed.slow" },
+  { value: 1.5, label: "speed.casual" },
+  { value: DEFAULT_SPEED, label: "speed.normal" },
+  { value: 2.0, label: "speed.fast" },
+] as const;
 
 export function SettingsView({
   settings,
@@ -53,6 +51,7 @@ export function SettingsView({
   update,
 }: Props) {
   // Las hotkeys se editan como texto y se aplican al salir del campo.
+  const t = useT();
   const [draft, setDraft] = useState(settings.hotkeys);
   const [monitors, setMonitors] = useState<MonitorInfo[]>([]);
   useEffect(() => {
@@ -71,26 +70,36 @@ export function SettingsView({
     <div className="settings">
       {update && <UpdateSection update={update} />}
 
-      <h3>Cuenta</h3>
+      <h3>{t("settings.account")}</h3>
       <AccountSection account={account} onLogin={onLogin} onLogout={onLogout} />
 
-      <h3>Partida</h3>
+      <h3>{t("settings.match")}</h3>
       <label>
-        Velocidad de la partida
+        {t("settings.language")}
+        <select value={settings.lang} onChange={(e) => onChange({ lang: e.target.value as Lang })}>
+          {LANGS.map((l) => (
+            <option key={l} value={l}>
+              {LANG_LABELS[l]}
+            </option>
+          ))}
+        </select>
+      </label>
+      <label>
+        {t("settings.speed")}
         <select
           value={settings.speed}
           onChange={(e) => onChange({ speed: Number(e.target.value) })}
         >
           {SPEEDS.map((s) => (
             <option key={s.value} value={s.value}>
-              {s.label}
+              {t(s.label)}
             </option>
           ))}
         </select>
       </label>
 
       <label>
-        Opacidad del fondo: {Math.round(settings.opacity * 100)}%
+        {t("settings.opacity", { n: Math.round(settings.opacity * 100) })}
         <input
           type="range"
           min={0.2}
@@ -102,7 +111,7 @@ export function SettingsView({
       </label>
 
       <label>
-        Tamaño del texto: {Math.round(settings.scale * 100)}%
+        {t("settings.scale", { n: Math.round(settings.scale * 100) })}
         <input
           type="range"
           min={0.8}
@@ -119,71 +128,72 @@ export function SettingsView({
           checked={settings.sound}
           onChange={(e) => onChange({ sound: e.target.checked })}
         />
-        Sonido al cambiar de paso
+        {t("settings.sound")}
       </label>
 
       <DetectSection settings={settings} onChange={onChange} loggedIn={!!account} />
 
-      <h3>Pantalla</h3>
+      <h3>{t("settings.screen")}</h3>
       <label>
-        Diseño durante la partida
+        {t("settings.layout")}
         <select
           value={settings.layout}
           onChange={(e) => onChange({ layout: e.target.value as Layout })}
         >
           {LAYOUTS.map((l) => (
             <option key={l} value={l}>
-              {LAYOUT_LABELS[l]}
+              {t(`layout.${l}`)}
             </option>
           ))}
         </select>
       </label>
       <label>
-        Esquina
+        {t("settings.corner")}
         <select
           value={settings.corner}
           onChange={(e) => onChange({ corner: e.target.value as Corner })}
         >
           {CORNERS.map((c) => (
             <option key={c} value={c}>
-              {CORNER_LABELS[c]}
+              {t(`corner.${c}`)}
             </option>
           ))}
         </select>
       </label>
       {monitors.length > 1 && (
         <label>
-          Monitor
+          {t("settings.monitor")}
           <select
             value={settings.monitor ?? ""}
             onChange={(e) =>
               onChange({ monitor: e.target.value === "" ? undefined : Number(e.target.value) })
             }
           >
-            <option value="">El principal</option>
+            <option value="">{t("settings.primaryMonitor")}</option>
             {monitors.map((m) => (
               <option key={m.index} value={m.index}>
-                {m.index + 1}. {m.name} ({m.width}×{m.height}){m.primary ? " · principal" : ""}
+                {m.index + 1}. {m.name} ({m.width}×{m.height})
+                {m.primary ? t("settings.primarySuffix") : ""}
               </option>
             ))}
           </select>
         </label>
       )}
       <div className="row">
-        <button onClick={onResetPosition}>Volver a la esquina</button>
+        <button onClick={onResetPosition}>{t("settings.resetPosition")}</button>
       </div>
 
-      <h3>Atajos de teclado</h3>
+      <h3>{t("settings.hotkeys")}</h3>
       <p className="muted">
-        Funcionan aunque el juego tenga el foco. Formato: <code>Control+Alt+P</code>,{" "}
-        <code>Shift+F2</code>, <code>Control+Alt+PageDown</code>.
+        {t("settings.hotkeysHelp")} <code>Control+Alt+P</code>, <code>Shift+F2</code>,{" "}
+        <code>Control+Alt+PageDown</code>.
       </p>
       <div className="hotkeys">
         {HOTKEY_ACTIONS.map((action) => {
           const error = errorFor(action);
           return (
             <label key={action} className={error ? "invalid" : ""}>
-              {HOTKEY_LABELS[action]}
+              {t(`hotkey.${action}`)}
               <input
                 value={draft[action]}
                 onChange={(e) => setDraft({ ...draft, [action]: e.target.value })}
@@ -191,7 +201,11 @@ export function SettingsView({
                 onKeyDown={(e) => e.key === "Enter" && commitHotkey(action)}
                 spellCheck={false}
               />
-              {error && <span className="error">No se pudo registrar: {error.message}</span>}
+              {error && (
+                <span className="error">
+                  {t("settings.hotkeyError", { message: error.message })}
+                </span>
+              )}
             </label>
           );
         })}
@@ -204,19 +218,19 @@ export function SettingsView({
             onChange({ hotkeys: DEFAULT_HOTKEYS });
           }}
         >
-          Restaurar atajos
+          {t("settings.resetHotkeys")}
         </button>
       </div>
 
-      <h3>Estrategias de la comunidad</h3>
+      <h3>{t("settings.community")}</h3>
       <div className="row">
-        <button onClick={onSyncNow}>Sincronizar ahora</button>
+        <button onClick={onSyncNow}>{t("settings.syncNow")}</button>
       </div>
 
-      <h3>Aplicación</h3>
+      <h3>{t("settings.app")}</h3>
       <div className="row">
         <button className="danger" onClick={onQuit}>
-          Salir de AoE2 Overlay
+          {t("settings.quit")}
         </button>
       </div>
     </div>
@@ -233,6 +247,7 @@ function DetectSection({
   onChange: (patch: Partial<Settings>) => void;
   loggedIn: boolean;
 }) {
+  const t = useT();
   const detect = settings.detect;
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<CompanionProfile[] | null>(null);
@@ -252,18 +267,15 @@ function DetectSection({
 
   return (
     <>
-      <h3>Detección automática</h3>
-      <p className="muted">
-        Con tu perfil de AoE2 Companion, el overlay detecta cuándo empezás una partida: elige mapa,
-        civs y estrategia, y arranca el reloj. No lee nada del juego, solo tu historial público.
-      </p>
+      <h3>{t("detectSettings.title")}</h3>
+      <p className="muted">{t("detectSettings.help")}</p>
       {detect.profileId ? (
         <div className="row">
           <span>
-            Jugador: <strong>{detect.profileName ?? detect.profileId}</strong>
+            {t("detectSettings.player")} <strong>{detect.profileName ?? detect.profileId}</strong>
           </span>
           <button onClick={() => setDetect({ profileId: undefined, profileName: undefined })}>
-            Quitar
+            {t("detectSettings.remove")}
           </button>
         </div>
       ) : (
@@ -271,17 +283,17 @@ function DetectSection({
           <div className="row">
             <input
               className="search"
-              placeholder="Tu nombre en el juego"
+              placeholder={t("detectSettings.placeholder")}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && void search()}
             />
-            <button onClick={() => void search()}>Buscar</button>
+            <button onClick={() => void search()}>{t("detectSettings.search")}</button>
           </div>
           {error && <span className="error">{error}</span>}
           {results &&
             (results.length === 0 ? (
-              <p className="muted">No se encontró ningún jugador con ese nombre.</p>
+              <p className="muted">{t("detectSettings.notFound")}</p>
             ) : (
               <ul className="profiles">
                 {results.map((p) => (
@@ -295,7 +307,7 @@ function DetectSection({
                     >
                       {p.name}
                       {p.country ? ` · ${p.country.toUpperCase()}` : ""}
-                      {p.games ? ` · ${p.games} partidas` : ""}
+                      {p.games ? t("detectSettings.games", { n: p.games }) : ""}
                     </button>
                   </li>
                 ))}
@@ -309,7 +321,7 @@ function DetectSection({
           checked={detect.autoStart}
           onChange={(e) => setDetect({ autoStart: e.target.checked })}
         />
-        Arrancar el reloj solo al empezar la partida
+        {t("detectSettings.autoStart")}
       </label>
       <label className="checkbox">
         <input
@@ -317,8 +329,8 @@ function DetectSection({
           checked={detect.autoReport}
           onChange={(e) => setDetect({ autoReport: e.target.checked })}
         />
-        Reportar si gané o perdí (winrate de la estrategia)
-        {!loggedIn && " · necesita iniciar sesión"}
+        {t("detectSettings.autoReport")}
+        {!loggedIn && t("detectSettings.needsLogin")}
       </label>
     </>
   );

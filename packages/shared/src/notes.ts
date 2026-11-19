@@ -10,6 +10,9 @@ export type NoteSegment =
 
 const ICON_PATTERN = /@([^@\s]+\.(?:png|jpg|jpeg|webp|svg))@/gi;
 
+/** Idioma en que se muestran las notas. En inglés se deja el texto original del autor. */
+export type NoteLang = "es" | "en";
+
 /** Palabras clave del nombre de archivo → etiqueta en español. Se busca por "contiene". */
 const ICON_LABELS: ReadonlyArray<[string, string]> = [
   ["malevill", "aldeano"],
@@ -99,7 +102,94 @@ const ICON_LABELS: ReadonlyArray<[string, string]> = [
 ];
 
 /** Etiqueta legible para un ícono a partir de su ruta. */
-export function iconLabel(path: string): string {
+/** Las mismas claves de ICON_LABELS, en inglés. */
+const ICON_LABELS_EN: Record<string, string> = {
+  malevill: "villager",
+  femalevill: "villager",
+  villager: "villager",
+  sheep: "sheep",
+  boar: "boar",
+  deer: "deer",
+  berrybush: "berries",
+  wood: "wood",
+  food: "food",
+  gold: "gold",
+  stone: "stone",
+  hammer: "build",
+  farm: "farm",
+  house: "house",
+  mill: "mill",
+  lumbercamp: "lumber camp",
+  miningcamp: "mining camp",
+  barracks: "barracks",
+  archeryrange: "archery range",
+  stable: "stable",
+  blacksmith: "blacksmith",
+  market: "market",
+  siegeworkshop: "siege workshop",
+  towncenter: "town center",
+  loom: "loom",
+  wheelbarrow: "wheelbarrow",
+  handcart: "hand cart",
+  scout: "scout",
+  militia: "militia",
+  manatarms: "man-at-arms",
+  longswordsman: "long swordsman",
+  spearman: "spearman",
+  archer: "archer",
+  cavalryarcher: "cavalry archer",
+  elephantarcher: "elephant archer",
+  crossbowman: "crossbowman",
+  skirmisher: "skirmisher",
+  knight: "knight",
+  teutonicknight: "teutonic knight",
+  lightcavalry: "light cavalry",
+  camelrider: "camel rider",
+  monk: "monk",
+  batteringram: "battering ram",
+  mangonel: "mangonel",
+  scorpion: "scorpion",
+  fishingship: "fishing ship",
+  galley: "galley",
+  wargalley: "war galley",
+  firegalley: "fire galley",
+  castle: "castle",
+  monastery: "monastery",
+  university: "university",
+  dock: "dock",
+  tower: "tower",
+  watchtower: "watch tower",
+  palisade: "palisade wall",
+  stonewall: "stone wall",
+  fishtrap: "fish trap",
+  doublebitaxe: "double-bit axe",
+  bowsaw: "bow saw",
+  twomansaw: "two-man saw",
+  horsecollar: "horse collar",
+  heavyplow: "heavy plow",
+  goldmining: "gold mining",
+  stonemining: "stone mining",
+  fletching: "fletching",
+  bodkinarrow: "bodkin arrow",
+  paddedarcherarmor: "padded archer armor",
+  forging: "forging",
+  scalemailarmor: "scale mail armor",
+  scalebardingarmor: "scale barding armor",
+  bloodlines: "bloodlines",
+  husbandry: "husbandry",
+  thumbring: "thumb ring",
+  ballistics: "ballistics",
+  chemistry: "chemistry",
+  townwatch: "town watch",
+  gillnets: "gillnets",
+  supllies: "supplies",
+  arson: "arson",
+  feudalage: "Feudal Age",
+  castleage: "Castle Age",
+  imperialage: "Imperial Age",
+};
+
+export function iconLabel(path: string, lang: NoteLang = "es"): string {
   const file = (path.split("/").pop() ?? path).replace(/\.[a-z]+$/i, "");
   // Sin guiones ni espacios, para que "Archery_range" coincida con "archeryrange".
   const key = file.toLowerCase().replace(/[_\-\s]/g, "");
@@ -107,7 +197,7 @@ export function iconLabel(path: string): string {
   const match = [...ICON_LABELS]
     .sort((a, b) => b[0].length - a[0].length)
     .find(([needle]) => key.includes(needle));
-  if (match) return match[1];
+  if (match) return lang === "en" ? (ICON_LABELS_EN[match[0]] ?? match[1]) : match[1];
   return file
     .replace(/(_aoe2de|_alpha|aoe2de_|de$)/gi, "")
     .replace(/[_-]+/g, " ")
@@ -330,8 +420,12 @@ export function translateKeywords(text: string): string {
   });
 }
 
-/** Separa una nota en segmentos de texto e ícono. */
-export function parseNote(rawNote: string): NoteSegment[] {
+/**
+ * Separa una nota en segmentos de texto e ícono. En español traduce las palabras clave;
+ * en inglés deja el texto original y solo pone etiquetas en inglés a los íconos.
+ */
+export function parseNote(rawNote: string, lang: NoteLang = "es"): NoteSegment[] {
+  if (lang === "en") return parseNoteEn(rawNote);
   const note = withAgeArticle(rawNote);
   const segments: NoteSegment[] = [];
   let last = 0;
@@ -350,9 +444,43 @@ export function parseNote(rawNote: string): NoteSegment[] {
   return segments;
 }
 
+/** Palabras clave de la comunidad escritas juntas ("feudalAge") → texto en inglés. */
+const TEXT_KEYWORDS_EN: Record<string, string> = {
+  foodUnderTC: "food under TC",
+  stragglerTree: "straggler tree",
+  stragglerTrees: "straggler trees",
+  darkAge: "Dark Age",
+  feudalAge: "Feudal Age",
+  castleAge: "Castle Age",
+  imperialAge: "Imperial Age",
+  battleElephant: "battle elephants",
+  scoutCavalry: "scouts",
+  manAtArms: "men-at-arms",
+  watchTower: "watch tower",
+  palisadeWall: "palisade wall",
+  stoneWall: "stone wall",
+};
+
+const keywordsEn = (text: string) =>
+  text.replace(/\p{L}+/gu, (w) => (Object.hasOwn(TEXT_KEYWORDS_EN, w) ? TEXT_KEYWORDS_EN[w]! : w));
+
+function parseNoteEn(note: string): NoteSegment[] {
+  const segments: NoteSegment[] = [];
+  let last = 0;
+  for (const match of note.matchAll(ICON_PATTERN)) {
+    const start = match.index ?? 0;
+    if (start > last) segments.push({ type: "text", text: keywordsEn(note.slice(last, start)) });
+    const path = match[1] ?? "";
+    segments.push({ type: "icon", path, label: iconLabel(path, "en") });
+    last = start + match[0].length;
+  }
+  if (last < note.length) segments.push({ type: "text", text: keywordsEn(note.slice(last)) });
+  return segments;
+}
+
 /** Nota como texto plano, reemplazando los íconos por su etiqueta. */
-export function noteToText(note: string): string {
-  return parseNote(note)
+export function noteToText(note: string, lang: NoteLang = "es"): string {
+  return parseNote(note, lang)
     .map((s) => (s.type === "text" ? s.text : s.label))
     .join("");
 }

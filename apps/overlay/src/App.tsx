@@ -16,6 +16,7 @@ import {
 } from "./lib/account";
 import * as clock from "./lib/clock";
 import { onDeepLink, type DeepLink } from "./lib/deeplink";
+import { LangContext, translate } from "./lib/i18n";
 import {
   chooseStrategy,
   DETECT_INTERVAL_MS,
@@ -57,16 +58,21 @@ function detectLine(
   match: DetectedMatch | null,
   lastResult: { won: boolean; reported: boolean } | null,
 ): string | null {
-  const name = settings.detect.profileName ?? "tu perfil";
+  const t = (key: Parameters<typeof translate>[1], vars?: Record<string, string>) =>
+    translate(settings.lang, key, vars);
+  const name = settings.detect.profileName ?? t("detect.yourProfile");
   if (!settings.detect.profileId) return null;
   if (lastResult) {
-    return `${lastResult.won ? "🏆 Victoria" : "Derrota"} en la última partida${lastResult.reported ? " · reportada" : ""}`;
+    return (
+      t(lastResult.won ? "detect.won" : "detect.lost") +
+      (lastResult.reported ? t("detect.reported") : "")
+    );
   }
   if (match && isOngoing(match)) {
     const vs = match.vsCiv ? ` vs ${match.vsCiv}` : "";
-    return `🎮 Partida en curso${match.civ ? `: ${match.civ}${vs}` : ""}`;
+    return t("detect.ongoing") + (match.civ ? `: ${match.civ}${vs}` : "");
   }
-  return `🔎 Esperando la próxima partida de ${name}`;
+  return t("detect.waiting", { name });
 }
 type Tab = "match" | "settings";
 
@@ -448,78 +454,90 @@ function Overlay({ initialSettings }: { initialSettings: Settings }) {
   } as CSSProperties;
 
   return (
-    <main className={`panel mode-${mode}`} style={style}>
-      {mode === "edit" && (
-        <>
-          <header className="titlebar" data-tauri-drag-region>
-            <span data-tauri-drag-region>AoE2 Overlay</span>
-            <nav>
-              <button className={tab === "match" ? "active" : ""} onClick={() => setTab("match")}>
-                Partida
-              </button>
-              <button
-                className={tab === "settings" ? "active" : ""}
-                onClick={() => setTab("settings")}
-                title={update ? `Versión ${update.version} disponible` : undefined}
-              >
-                Ajustes{update && <span className="dot" aria-label="actualización disponible" />}
-              </button>
-              <AccountAvatar account={account} onClick={() => setTab("settings")} />
-              {isTauri() && (
-                <button title="Ocultar" onClick={() => void toggleVisibility()}>
-                  ✕
+    <LangContext.Provider value={settings.lang}>
+      <main className={`panel mode-${mode}`} style={style}>
+        {mode === "edit" && (
+          <>
+            <header className="titlebar" data-tauri-drag-region>
+              <span data-tauri-drag-region>AoE2 Overlay</span>
+              <nav>
+                <button className={tab === "match" ? "active" : ""} onClick={() => setTab("match")}>
+                  {translate(settings.lang, "tab.match")}
                 </button>
+                <button
+                  className={tab === "settings" ? "active" : ""}
+                  onClick={() => setTab("settings")}
+                  title={
+                    update
+                      ? translate(settings.lang, "title.updateAvailable", {
+                          version: update.version,
+                        })
+                      : undefined
+                  }
+                >
+                  {translate(settings.lang, "tab.settings")}
+                  {update && <span className="dot" aria-label="actualización disponible" />}
+                </button>
+                <AccountAvatar account={account} onClick={() => setTab("settings")} />
+                {isTauri() && (
+                  <button
+                    title={translate(settings.lang, "title.hide")}
+                    onClick={() => void toggleVisibility()}
+                  >
+                    ✕
+                  </button>
+                )}
+              </nav>
+            </header>
+            <div className="content">
+              {tab === "match" && (
+                <SetupView
+                  strategies={strategies}
+                  favorites={favorites}
+                  loggedIn={!!account}
+                  onToggleFavorite={(slug) => void toggleFavorite(slug)}
+                  syncStatus={syncStatus}
+                  selection={settings.selection}
+                  onChange={(selection) => updateSettings({ selection })}
+                  onPlay={play}
+                  detectLine={detectLine(settings, detected, lastResult)}
+                />
               )}
-            </nav>
-          </header>
-          <div className="content">
-            {tab === "match" && (
-              <SetupView
-                strategies={strategies}
-                favorites={favorites}
-                loggedIn={!!account}
-                onToggleFavorite={(slug) => void toggleFavorite(slug)}
-                syncStatus={syncStatus}
-                selection={settings.selection}
-                onChange={(selection) => updateSettings({ selection })}
-                onPlay={play}
-                detectLine={detectLine(settings, detected, lastResult)}
-              />
-            )}
-            {/* Siempre montado: el login sigue esperando aunque se cambie de pestaña. */}
-            <div hidden={tab !== "settings"}>
-              <SettingsView
-                settings={settings}
-                hotkeyErrors={hotkeyErrors}
-                onChange={updateSettings}
-                onResetPosition={() => void resetPosition()}
-                onSyncNow={() => void runSync()}
-                account={account}
-                onLogin={login}
-                onLogout={() => void logout()}
-                update={update}
-                onQuit={() => void quitApp()}
-              />
+              {/* Siempre montado: el login sigue esperando aunque se cambie de pestaña. */}
+              <div hidden={tab !== "settings"}>
+                <SettingsView
+                  settings={settings}
+                  hotkeyErrors={hotkeyErrors}
+                  onChange={updateSettings}
+                  onResetPosition={() => void resetPosition()}
+                  onSyncNow={() => void runSync()}
+                  account={account}
+                  onLogin={login}
+                  onLogout={() => void logout()}
+                  update={update}
+                  onQuit={() => void quitApp()}
+                />
+              </div>
             </div>
-          </div>
-          <footer className="footer muted">
-            {settings.hotkeys.toggleMode}: modo juego · {settings.hotkeys.toggleVisible}: ocultar
-          </footer>
-        </>
-      )}
-      {mode === "game" && (
-        <GameView
-          strategy={strategy}
-          position={position}
-          gameSeconds={gameSeconds}
-          running={clockState.running}
-          flash={flash}
-          settings={settings}
-          onAction={(action) =>
-            action === "hide" ? void toggleVisibility() : actions.current[action]()
-          }
-        />
-      )}
-    </main>
+            <footer className="footer muted">
+              {settings.hotkeys.toggleMode}: modo juego · {settings.hotkeys.toggleVisible}: ocultar
+            </footer>
+          </>
+        )}
+        {mode === "game" && (
+          <GameView
+            strategy={strategy}
+            position={position}
+            gameSeconds={gameSeconds}
+            running={clockState.running}
+            flash={flash}
+            settings={settings}
+            onAction={(action) =>
+              action === "hide" ? void toggleVisibility() : actions.current[action]()
+            }
+          />
+        )}
+      </main>
+    </LangContext.Provider>
   );
 }

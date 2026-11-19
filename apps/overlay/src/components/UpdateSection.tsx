@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useT } from "../lib/i18n";
 import type { AvailableUpdate } from "../lib/updater";
 
 /** Aviso de versión nueva en Ajustes. Instalar cierra y reabre el overlay. */
 export function UpdateSection({ update }: { update: AvailableUpdate }) {
+  const t = useT();
   const [state, setState] = useState<"idle" | "installing" | "error">("idle");
   const [progress, setProgress] = useState<number | null>(null);
 
@@ -19,11 +21,9 @@ export function UpdateSection({ update }: { update: AvailableUpdate }) {
   return (
     <div className="update">
       <p>
-        Hay una versión nueva: <strong>{update.version}</strong>
+        {t("update.available")} <strong>{update.version}</strong>
       </p>
-      {state === "error" && (
-        <p className="error">No se pudo actualizar. Probá de nuevo o bajala desde la web.</p>
-      )}
+      {state === "error" && <p className="error">{t("update.error")}</p>}
       <div className="row">
         <button
           className="primary"
@@ -32,14 +32,12 @@ export function UpdateSection({ update }: { update: AvailableUpdate }) {
         >
           {state === "installing"
             ? progress === null
-              ? "Descargando…"
-              : `Descargando… ${Math.round(progress * 100)}%`
-            : "Actualizar y reiniciar"}
+              ? t("update.downloading")
+              : `${t("update.downloading")} ${Math.round(progress * 100)}%`
+            : t("update.install")}
         </button>
       </div>
-      <p className="muted">
-        No la instales en medio de una partida: el overlay se cierra un momento.
-      </p>
+      <p className="muted">{t("update.notInGame")}</p>
     </div>
   );
 }
