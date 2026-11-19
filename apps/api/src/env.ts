@@ -23,6 +23,20 @@ const envSchema = z.object({
     .trim()
     .optional()
     .transform((v) => v || undefined),
+  /**
+   * Login con Discord (opcional): app creada en https://discord.com/developers/applications
+   * con el redirect `${BETTER_AUTH_URL}/api/auth/callback/discord`. Sin las dos, no se ofrece.
+   */
+  DISCORD_CLIENT_ID: z
+    .string()
+    .trim()
+    .optional()
+    .transform((v) => v || undefined),
+  DISCORD_CLIENT_SECRET: z
+    .string()
+    .trim()
+    .optional()
+    .transform((v) => v || undefined),
   PORT: z.coerce.number().int().default(3001),
   HOST: z.string().default("0.0.0.0"),
   LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"]).default("info"),

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Comments } from "@/components/Comments";
+import { ResultReport } from "@/components/ResultReport";
 import { StepTimeline } from "@/components/StepTimeline";
 import { StrategyActions } from "@/components/StrategyActions";
 import { ApiError } from "@/lib/api";
@@ -76,6 +78,14 @@ export default async function StrategyPage({ params }: Props) {
               </>
             )}
           </p>
+          {s.basedOn && (
+            <p className="text-sm text-ink/60">
+              Basada en{" "}
+              <Link className="underline" href={`/estrategias/${s.basedOn.slug}`}>
+                {s.basedOn.name}
+              </Link>
+            </p>
+          )}
           <StrategyActions s={s} loggedIn={!!me} />
         </header>
 
@@ -87,6 +97,8 @@ export default async function StrategyPage({ params }: Props) {
             edad), igual que en el overlay.
           </p>
         </section>
+
+        <Comments strategyId={s.id} slug={s.slug} loggedIn={!!me} />
       </div>
 
       <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
@@ -107,6 +119,25 @@ export default async function StrategyPage({ params }: Props) {
             ))}
           </div>
         )}
+        <ResultReport
+          strategyId={s.id}
+          slug={s.slug}
+          loggedIn={!!me}
+          initial={{ games: s.games, wins: s.wins }}
+        />
+        <div className="card space-y-2 p-4 text-sm">
+          <p className="font-bold">¿La querés cambiar?</p>
+          <p className="text-ink/70">
+            Hacé tu propia variante: se copia la estrategia, la editás y se publica con un link a
+            esta.
+          </p>
+          <Link
+            href={`/estrategias/nueva?basada-en=${encodeURIComponent(s.slug)}`}
+            className="btn btn-ghost w-full text-xs"
+          >
+            Hacer una variante
+          </Link>
+        </div>
         <div className="card space-y-2 p-4 text-sm">
           <p className="font-bold">¿Usarla en el juego?</p>
           <p className="text-ink/70">

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api, errorMessage } from "@/lib/api";
 import { safeNext } from "@/lib/safe-next";
 
@@ -11,6 +11,32 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const register = mode === "register";
+  // Discord aparece solo si la API lo tiene configurado.
+  const [discord, setDiscord] = useState(false);
+  useEffect(() => {
+    api<{ discord: boolean }>("/api/login-options")
+      .then((o) => setDiscord(o.discord))
+      .catch(() => setDiscord(false));
+  }, []);
+
+  const withDiscord = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      const { url } = await api<{ url: string }>("/api/auth/sign-in/social", {
+        method: "POST",
+        body: {
+          provider: "discord",
+          callbackURL: `${window.location.origin}${safeNext(params.get("next"))}`,
+          errorCallbackURL: `${window.location.origin}/ingresar`,
+        },
+      });
+      window.location.assign(url);
+    } catch (err) {
+      setError(errorMessage(err));
+      setBusy(false);
+    }
+  };
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -96,6 +122,16 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
       <button className="btn btn-red w-full" disabled={busy}>
         {busy ? "…" : register ? "Crear cuenta" : "Ingresar"}
       </button>
+      {discord && (
+        <button
+          type="button"
+          className="btn btn-ghost w-full"
+          disabled={busy}
+          onClick={() => void withDiscord()}
+        >
+          {register ? "Crear cuenta con Discord" : "Ingresar con Discord"}
+        </button>
+      )}
       <p className="text-center text-sm text-ink/70">
         {register ? (
           <>

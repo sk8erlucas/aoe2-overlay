@@ -7,10 +7,24 @@ import type { Database } from "../db/client";
 import { errorSchema } from "../lib/schemas";
 import type { SessionHelpers } from "../lib/session";
 
-export const miscRoutes: FastifyPluginAsyncZod<{ db: Database; session: SessionHelpers }> = async (
-  app,
-  { db, session },
-) => {
+export const miscRoutes: FastifyPluginAsyncZod<{
+  db: Database;
+  session: SessionHelpers;
+  /** Proveedores de login externos configurados. */
+  loginOptions: { discord: boolean };
+}> = async (app, { db, session, loginOptions }) => {
+  app.get(
+    "/login-options",
+    {
+      schema: {
+        tags: ["cuenta"],
+        summary: "Formas de ingresar disponibles además de email y contraseña",
+        response: { 200: z.object({ discord: z.boolean() }) },
+      },
+    },
+    async () => loginOptions,
+  );
+
   app.get(
     "/health",
     {
