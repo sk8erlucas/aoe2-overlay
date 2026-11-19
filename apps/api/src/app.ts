@@ -19,6 +19,7 @@ import { HttpError, sessionHelpers } from "./lib/session";
 import { miscRoutes } from "./routes/misc";
 import { overlayRoutes } from "./routes/overlay";
 import { reportRoutes } from "./routes/reports";
+import { socialRoutes } from "./routes/social";
 import { strategyRoutes } from "./routes/strategies";
 import { suggestionRoutes } from "./routes/suggestions";
 
@@ -131,6 +132,7 @@ export async function buildApp({
   const session = sessionHelpers(auth);
   await app.register(miscRoutes, { prefix: "/api", db, session });
   await app.register(strategyRoutes, { prefix: "/api", db, session });
+  await app.register(socialRoutes, { prefix: "/api", db, session });
   await app.register(suggestionRoutes, { prefix: "/api", db });
   await app.register(reportRoutes, { prefix: "/api", db, session });
   await app.register(overlayRoutes, { prefix: "/api", db });

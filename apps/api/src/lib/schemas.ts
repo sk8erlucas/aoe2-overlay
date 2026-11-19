@@ -46,6 +46,9 @@ export const summarySchema = z.object({
   tags: z.array(z.string()),
   stepCount: z.number().int(),
   score: z.number().int(),
+  /** Partidas reportadas y ganadas con esta estrategia (winrate = wins / games). */
+  games: z.number().int(),
+  wins: z.number().int(),
   verified: z.boolean(),
   visibility: z.enum(VISIBILITIES),
   createdAt: z.string(),
@@ -66,12 +69,32 @@ export const detailSchema = summarySchema.extend({
   myVote: z.number().int(),
   isFavorite: z.boolean(),
   canEdit: z.boolean(),
+  /** Fork: la estrategia en la que se basa, si sigue visible. */
+  basedOn: z.object({ slug: z.string(), name: z.string() }).nullable(),
 });
 
 export const voteBody = z.object({ value: z.union([z.literal(1), z.literal(-1), z.literal(0)]) });
 export const favoriteBody = z.object({ favorite: z.boolean() });
 export const reportBody = z.object({ reason: z.string().trim().min(3).max(500) });
 export const visibilityBody = z.object({ visibility: z.enum(VISIBILITIES).optional() });
+/** Al crear: id de la estrategia en la que se basa (fork). */
+export const basedOnBody = z.object({ basedOnId: z.uuid().optional() });
+
+export const resultBody = z.object({
+  won: z.boolean(),
+  /** Id de la partida en AoE2 Companion, si el overlay la detectó. Evita reportarla dos veces. */
+  matchId: z.string().trim().min(1).max(40).optional(),
+});
+export const resultResponse = z.object({ games: z.number().int(), wins: z.number().int() });
+
+export const commentBody = z.object({ body: z.string().trim().min(1).max(1000) });
+export const commentSchema = z.object({
+  id: z.uuid(),
+  body: z.string(),
+  author: z.object({ id: z.string(), name: z.string() }),
+  createdAt: z.string(),
+  canDelete: z.boolean(),
+});
 
 export const reportsQuery = z.object({ status: z.enum(REPORT_STATUSES).default("open") });
 export const reportPatchBody = z.object({

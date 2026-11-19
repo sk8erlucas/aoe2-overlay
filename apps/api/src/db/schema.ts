@@ -1,6 +1,7 @@
 import type { Strategy } from "@age-overlay/shared";
 import { sql } from "drizzle-orm";
 import {
+  type AnyPgColumn,
   boolean,
   index,
   integer,
@@ -10,6 +11,7 @@ import {
   smallint,
   text,
   timestamp,
+  uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
 
@@ -144,6 +146,13 @@ export const strategies = pgTable(
     verified: boolean("verified").notNull().default(false),
     /** Suma de votos (+1/−1), recalculada en cada voto. */
     score: integer("score").notNull().default(0),
+    /** Fork: estrategia en la que se basa ("basada en…"). */
+    basedOnId: uuid("based_on_id").references((): AnyPgColumn => strategies.id, {
+      onDelete: "set null",
+    }),
+    /** Resultados reportados por los usuarios, recalculados en cada reporte. */
+    games: integer("games").notNull().default(0),
+    wins: integer("wins").notNull().default(0),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
   },
@@ -205,4 +214,45 @@ export const reports = pgTable(
     createdAt: createdAt(),
   },
   (t) => [index("reports_status_idx").on(t.status)],
+);
+
+export const comments = pgTable(
+  "comments",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    strategyId: uuid("strategy_id")
+      .notNull()
+      .references(() => strategies.id, { onDelete: "cascade" }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    body: text("body").notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [index("comments_strategy_idx").on(t.strategyId, t.createdAt)],
+);
+
+/**
+ * Resultado de una partida jugada con una estrategia (para el winrate). El overlay lo
+ * reporta solo si detectó la partida (`matchId` de AoE2 Companion); si no, lo carga el
+ * usuario a mano. Un mismo usuario no puede reportar dos veces la misma partida.
+ */
+export const results = pgTable(
+  "results",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    strategyId: uuid("strategy_id")
+      .notNull()
+      .references(() => strategies.id, { onDelete: "cascade" }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    matchId: text("match_id"),
+    won: boolean("won").notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [
+    index("results_strategy_idx").on(t.strategyId),
+    uniqueIndex("results_user_match_idx").on(t.userId, t.matchId),
+  ],
 );
