@@ -24,7 +24,7 @@ La landing cuenta lo que hace el producto: **una estrategia se arma paso a paso*
 
 | Token         | Valor     | Uso                                                      |
 | ------------- | --------- | -------------------------------------------------------- |
-| Rojo          | `#E40038` | Fondo del hero, reglas, acentos                          |
+| Rojo          | `#D60034` | Fondo del hero, reglas, acentos                          |
 | Crema         | `#FAF3E9` | Fondo de secciones, texto sobre rojo                     |
 | Tinta         | `#201408` | Texto principal sobre crema                              |
 | Oro (nuestro) | `#E2B04A` | Logo, botón de descarga, detalles (igual que el overlay) |

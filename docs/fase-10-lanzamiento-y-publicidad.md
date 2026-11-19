@@ -28,7 +28,7 @@
 
 - [ ] Backups automáticos de la base (Dokploy → base → Backups)
 - [ ] Obligar SSL en las conexiones externas (`hostssl` en `pg_hba.conf`): hoy todavía acepta conexiones sin cifrar desde afuera
-- [ ] Guardar una copia de `~/.tauri/aoe2-overlay.key*` en un gestor de contraseñas: sin esa clave no se pueden publicar actualizaciones
+- [x] Guardar una copia de `~/.tauri/aoe2-overlay.key*` en un gestor de contraseñas: sin esa clave no se pueden publicar actualizaciones
 - [x] Botón "Eliminar mi cuenta" en `/perfil` (pide la contraseña; las estrategias quedan sin autor)
 
 ### 3. Confianza del instalador
