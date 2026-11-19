@@ -11,6 +11,7 @@
   - Validación compartida con **Zod**.
 - Tooling: **pnpm workspaces + Turborepo**, Vitest, ESLint, Prettier.
 - El overlay **no lee datos del juego**. El usuario da _Start_ al iniciar la partida y un reloj avanza ajustado a la velocidad de la partida (por defecto **1.7**, la velocidad "Normal" de DE).
+- **Detección automática (opcional, Fase 7):** con el id de perfil del jugador, el overlay consulta el historial público de [AoE2 Companion](https://www.aoe2companion.com). Una partida sin terminar es la que se está jugando: de ahí salen mapa, civs, posición y hora de inicio para arrancar el reloj, y al terminar, el resultado para el winrate.
 - Sugerencias: **selección manual** (mapa, civ, rival, posición) primero. La detección automática queda para el futuro.
 - Estrategias **públicas, con votos, favoritos y reportes**.
 
@@ -47,6 +48,7 @@ age_overlay/
 - **Tabla `strategies`:** guarda el JSON completo (`jsonb`) más columnas derivadas para filtrar: slug, authorId, civs[], maps[], map_types[], positions[], votes, visibility, verified, createdAt y updatedAt.
 - **User**, **Session** y **Account** (Better Auth), con rol `user | moderator | admin`.
 - **Vote** (userId, strategyId, valor ±1), **Favorite**, **Report**.
+- **Comment** (strategyId, userId, body) y **Result** (strategyId, userId, matchId?, won). `strategies.games` y `strategies.wins` se recalculan en cada resultado; `strategies.based_on_id` guarda el fork.
 
 ### Score de sugerencias
 

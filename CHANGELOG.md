@@ -4,6 +4,15 @@ Cambios del overlay de escritorio (los instaladores están en [Releases](https:/
 
 El proyecto usa [versionado semántico](https://semver.org/lang/es/): mientras la versión sea `0.x`, un cambio de minor (`0.3` → `0.4`) puede traer cambios grandes; un patch (`0.3.0` → `0.3.1`) solo trae arreglos y mejoras chicas.
 
+## [0.4.0] - 2026-11-19
+
+### Agregado
+
+- **Detección automática de la partida:** buscá tu perfil de AoE2 Companion en **Ajustes → Detección automática**. Al empezar una partida, el overlay elige mapa, civs, posición y estrategia, y arranca el reloj con el tiempo que ya pasó. No lee nada del juego, solo tu historial público.
+- **Winrate:** al terminar una partida detectada, el overlay reporta si ganaste (con sesión iniciada). En la web se ve el porcentaje de cada estrategia.
+- **Idioma:** la interfaz está en español e inglés (**Ajustes → Idioma**). En inglés, los pasos se muestran con el texto original del autor.
+- **Pantalla:** elegí la esquina y el monitor donde aparece el overlay, y el diseño durante la partida: normal, compacto o detallado.
+
 ## [0.3.4] - 2026-11-16
 
 ### Agregado

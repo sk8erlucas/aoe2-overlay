@@ -7,8 +7,14 @@ const SECTIONS: [string, React.ReactNode][] = [
   [
     "Qué datos guardamos",
     <ul key="datos" className="list-disc space-y-1 pl-5">
-      <li>Si creás una cuenta: nombre, email y contraseña (guardada como hash, nunca en claro).</li>
-      <li>Lo que hacés con tu cuenta: estrategias que publicás, votos, favoritas y reportes.</li>
+      <li>
+        Si creás una cuenta: nombre, email y contraseña (guardada como hash, nunca en claro). Si
+        entrás con Discord, tu nombre, email e id de Discord (no guardamos ninguna contraseña).
+      </li>
+      <li>
+        Lo que hacés con tu cuenta: estrategias que publicás, votos, favoritas, comentarios,
+        resultados de partidas que reportás y reportes.
+      </li>
       <li>
         Por cada sesión iniciada: dirección IP y navegador, para mantener la sesión y proteger la
         cuenta.
@@ -20,7 +26,7 @@ const SECTIONS: [string, React.ReactNode][] = [
   ],
   [
     "Qué es público",
-    "Tu nombre aparece junto a las estrategias que publiques. Tu email no se muestra a otros usuarios.",
+    "Tu nombre aparece junto a las estrategias y los comentarios que publiques. Los resultados que reportás solo se muestran sumados (winrate). Tu email no se muestra a otros usuarios.",
   ],
   [
     "Para qué los usamos",
@@ -29,7 +35,7 @@ const SECTIONS: [string, React.ReactNode][] = [
   ["Cookies", "La web usa únicamente las cookies necesarias para mantener tu sesión iniciada."],
   [
     "El overlay de escritorio",
-    "No se inyecta en el juego ni lee su memoria. Se conecta a nuestra API para bajar estrategias y, si iniciás sesión, para sincronizar tus favoritas. También consulta GitHub para saber si hay una versión nueva. Tus ajustes, la caché de estrategias y la sesión se guardan en tu PC.",
+    "No se inyecta en el juego ni lee su memoria. Se conecta a nuestra API para bajar estrategias y, si iniciás sesión, para sincronizar tus favoritas. También consulta GitHub para saber si hay una versión nueva. Si activás la detección automática, consulta tu historial público de partidas en AoE2 Companion (aoe2companion.com) con tu id de perfil; esa consulta va directo desde tu PC a ellos. Tus ajustes, la caché de estrategias y la sesión se guardan en tu PC.",
   ],
   [
     "Tus derechos",
