@@ -1,5 +1,7 @@
 # Fase 8: Pruebas manuales
 
+> **Fase cerrada el 2026-11-23** al dar el proyecto por terminado. Lo que quedó sin marcar pasó a [mantenimiento.md](../mantenimiento.md).
+
 **Objetivo:** verificar a mano, con el juego y en el navegador, lo que los tests automáticos no pueden cubrir.
 
 **Depende de:** se va completando a medida que avanzan las demás fases. Conviene hacer una pasada completa antes de cada release.

@@ -53,6 +53,11 @@ export async function setPlacement(
     await invoke("set_placement", { placement: { corner, monitor: monitor ?? null }, apply });
 }
 
+/** Idioma del menú de la bandeja del sistema. */
+export async function setTrayLang(lang: "es" | "en"): Promise<void> {
+  if (isTauri()) await invoke("set_tray_lang", { lang });
+}
+
 export interface MonitorInfo {
   index: number;
   name: string;

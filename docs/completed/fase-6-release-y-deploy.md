@@ -6,7 +6,7 @@
 
 **Guía paso a paso:** [deploy-dokploy.md](../deploy-dokploy.md)
 
-**Estado:** objetivo cumplido: instalador descargable, web y API online. Lo que quedaba (operación, firma y difusión) siguió en la [Fase 10](../fase-10-lanzamiento-y-publicidad.md); las pruebas de instalación y actualización, en la [Fase 8](../fase-8-pruebas-manuales.md).
+**Estado:** objetivo cumplido: instalador descargable, web y API online. Lo que quedaba (operación, firma y difusión) siguió en la [Fase 10](fase-10-lanzamiento-y-publicidad.md); las pruebas de instalación y actualización, en la [Fase 8](fase-8-pruebas-manuales.md).
 
 ## Tareas
 

@@ -4,6 +4,13 @@ Cambios del overlay de escritorio (los instaladores están en [Releases](https:/
 
 El proyecto usa [versionado semántico](https://semver.org/lang/es/): mientras la versión sea `0.x`, un cambio de minor (`0.3` → `0.4`) puede traer cambios grandes; un patch (`0.3.0` → `0.3.1`) solo trae arreglos y mejoras chicas.
 
+## [0.4.1] - 2026-11-23
+
+### Cambiado
+
+- El menú del ícono de la bandeja del sistema también cambia a inglés si elegís ese idioma.
+- Con esta versión el proyecto queda terminado: sigue funcionando y actualizándose, pero no se planean funciones nuevas salvo que haya muchos usuarios.
+
 ## [0.4.0] - 2026-11-19
 
 ### Agregado

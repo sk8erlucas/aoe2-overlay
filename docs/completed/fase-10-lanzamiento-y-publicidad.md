@@ -1,10 +1,12 @@
 # Fase 10: Lanzamiento y publicidad
 
+> **Fase cerrada el 2026-11-23** al dar el proyecto por terminado. Lo que quedó sin marcar pasó a [mantenimiento.md](../mantenimiento.md).
+
 **Objetivo:** que jugadores reales conozcan y usen el overlay, empezando por la comunidad hispana, con un instalador en el que se pueda confiar.
 
 **Depende de:** Fases 6 y 9. Conviene avanzar en paralelo con la [Fase 8](fase-8-pruebas-manuales.md).
 
-**Brief para un agente con navegador:** [publicidad-brief-agente.md](publicidad-brief-agente.md).
+**Brief para un agente con navegador:** [publicidad-brief-agente.md](../publicidad-brief-agente.md).
 
 **Posicionamiento:** ya existen RTS Overlay (que importa desde Build Order Guide), Border y RTS Helper. No competimos como "otro overlay", sino como **el overlay en español, con estrategias votadas por la comunidad, que no toca el juego**.
 
@@ -43,7 +45,7 @@
 - [ ] Reportar el falso positivo de la 0.3.3 a **SecureAge** y a **Sophos**. Cada formulario pide adjuntar el `.exe`: lo tiene que subir Lucas
 - [ ] Revisar cada release nueva en VirusTotal y reportar los falsos positivos al antivirus que lo marque
 - [ ] Espaciar las versiones: un instalador sin firma junta reputación en SmartScreen por archivo, así que cada versión nueva arranca de cero
-- [x] Manifiestos de winget validados en [`packaging/winget`](../packaging/winget/README.md)
+- [x] Manifiestos de winget validados en [`packaging/winget`](../../packaging/winget/README.md)
 - [ ] Enviarlos a `winget-pkgs` con `wingetcreate submit`: Microsoft lo valida al aceptarlo y además es otro canal de difusión
 - [ ] Investigar la Microsoft Store con MSIX: el registro es gratis para personas y la Store firma el paquete. Tauri no genera MSIX directamente y la Store tiene su propio sistema de actualizaciones
 
@@ -84,7 +86,7 @@ Cómo hacerlo: ver [Cómo grabar los videos y GIF](#cómo-grabar-los-videos-y-gi
 
 - [x] Ronda 1 (2026-11-13): 6 mensajes personalizados a creadores hispanos y 3 más en curso. De la lista inicial, 3 se descartaron (ya no hacen AoE2: DE en español) y 1 no tiene un contacto público vigente
 - [ ] Seguimiento de la ronda 1 a la semana (una sola vez) y cargar la build de quien acepte
-- [ ] **Rondas siguientes (repetir cada 1–2 meses):** 10 creadores nuevos por ronda con los mismos criterios del [brief](publicidad-brief-agente.md#5-creadores-de-contenido-hispanos), sin repetir a quien ya se contactó. Buen momento: después de una versión nueva o de sumar estrategias
+- [ ] **Rondas siguientes (repetir cada 1–2 meses):** 10 creadores nuevos por ronda con los mismos criterios del [brief](../publicidad-brief-agente.md#5-creadores-de-contenido-hispanos), sin repetir a quien ya se contactó. Buen momento: después de una versión nueva o de sumar estrategias
 
 **Semanas 3–4: internacional** (requiere overlay y web en inglés, [Fase 7](fase-7-futuro.md))
 

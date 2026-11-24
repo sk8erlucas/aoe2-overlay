@@ -1,6 +1,6 @@
 # Brief de publicidad para un agente con navegador
 
-Instrucciones para un agente que trabaja en Chrome con las cuentas de Lucas (mantenedor del proyecto). El plan completo y su seguimiento están en [fase-10-lanzamiento-y-publicidad.md](fase-10-lanzamiento-y-publicidad.md).
+Instrucciones para un agente que trabaja en Chrome con las cuentas de Lucas (mantenedor del proyecto). El plan completo y su seguimiento están en [fase-10-lanzamiento-y-publicidad.md](completed/fase-10-lanzamiento-y-publicidad.md).
 
 ## Qué es el producto
 

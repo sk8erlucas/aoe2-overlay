@@ -3,7 +3,10 @@ import { ShowcaseVideo } from "./ShowcaseVideo";
 
 const STEPS = [
   ["Elegí mapa y civilización", "Te sugiere estrategias para tu civ y el mapa que te tocó."],
-  ["Dale start", "El reloj sigue al del juego y cada paso aparece a su tiempo."],
+  [
+    "Dale start (o dejá que lo detecte)",
+    "El reloj sigue al del juego y cada paso aparece a su tiempo. Con tu perfil, arranca solo al empezar la partida.",
+  ],
   ["Seguí el ritmo", "Aldeanos, recursos y lo que viene después, sin salir del juego."],
 ];
 

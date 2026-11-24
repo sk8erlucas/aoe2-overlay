@@ -55,11 +55,11 @@
 ## Criterio de terminado
 
 - [x] Un usuario nuevo se registra, crea una estrategia y la vota (probado en navegador)
-- [ ] Lighthouse aceptable (rendimiento y accesibilidad > 90) → pasa a la [Fase 8](../fase-8-pruebas-manuales.md)
+- [ ] Lighthouse aceptable (rendimiento y accesibilidad > 90) → pasa a la [Fase 8](fase-8-pruebas-manuales.md)
 
 ## Notas
 
-- **Ilustración del hero:** `apps/web/public/game-assets/teutonic-knight.webp` es arte de Age of Empires II (© Microsoft). Se usa según las Game Content Usage Rules (proyecto gratuito, sin fines de lucro) y **no** está bajo la licencia MIT; ver el README de esa carpeta. Es una sola capa, así que en lugar de "armar la armadura" se hace la transición de luz y cámara. Reemplazarla por una propia en capas está en la [Fase 7](../fase-7-futuro.md).
+- **Ilustración del hero:** `apps/web/public/game-assets/teutonic-knight.webp` es arte de Age of Empires II (© Microsoft). Se usa según las Game Content Usage Rules (proyecto gratuito, sin fines de lucro) y **no** está bajo la licencia MIT; ver el README de esa carpeta. Es una sola capa, así que en lugar de "armar la armadura" se hace la transición de luz y cámara. Reemplazarla por una propia en capas está en la [Fase 7](fase-7-futuro.md).
 - La imagen es de 500×500 px: el escenario se limita a ~760u y el zoom a 1.16× para que no se pixele.
 - Después de login, registro o salida se hace una navegación completa (`window.location.assign`) para que el header, que es un layout en caché, muestre la sesión nueva.
 - En producción la web y la API tienen que compartir dominio padre (por ejemplo `aoe2overlay.com` y `api.aoe2overlay.com`) para que la cookie de sesión llegue a ambas. Configurar en la Fase 6.
