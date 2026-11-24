@@ -11,8 +11,7 @@ Lo mínimo para estar tranquilo de que funciona en una PC real. El resto de la [
 - [ ] **Actualización:** con la 0.4.0 instalada, confirmar que ofrece la 0.4.1 y que se instala sola
 - [ ] **Defender:** subir el `.exe` de la última versión en [microsoft.com/wdsi/filesubmission](https://www.microsoft.com/wdsi/filesubmission) como _Software developer_
 - [ ] **Base de datos:** activar los backups automáticos (Dokploy → base → Backups) y obligar SSL en las conexiones externas (`hostssl` en `pg_hba.conf`)
-- [ ] **Estrategias:** publicar la importación de Build Order Guide que quedó lista el 2026-11-23 (58 estrategias; ya bajadas en `imports/buildorderguide-auto`):
-      `pnpm --filter @age-overlay/api import:community ../../imports/buildorderguide-auto --author tu@email.com --publish`
+- [x] **Estrategias:** importación de Build Order Guide publicada el 2026-11-23 (58 estrategias; el catálogo quedó en 67 públicas)
 
 ## 2. Rutina liviana (opcional)
 
