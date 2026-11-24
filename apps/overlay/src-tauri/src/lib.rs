@@ -284,12 +284,38 @@ fn spawn_hit_test(app: AppHandle) {
     });
 }
 
+/// Ítems del menú de la bandeja, para cambiarles el texto según el idioma elegido.
+struct TrayItems(Vec<(&'static str, MenuItem<tauri::Wry>)>);
+
+/// Texto de cada ítem de la bandeja: (id, español, inglés).
+const TRAY_LABELS: [(&str, &str, &str); 4] = [
+    ("toggle", "Mostrar / ocultar", "Show / hide"),
+    ("mode", "Modo edición / juego", "Edit / game mode"),
+    ("corner", "Volver a la esquina", "Back to the corner"),
+    ("quit", "Salir", "Quit"),
+];
+
+/// El frontend avisa el idioma elegido en Ajustes ("es" o "en").
+#[tauri::command]
+fn set_tray_lang(items: tauri::State<TrayItems>, lang: String) {
+    for (id, item) in &items.0 {
+        if let Some((_, es, en)) = TRAY_LABELS.iter().find(|(i, _, _)| i == id) {
+            let _ = item.set_text(if lang == "en" { *en } else { *es });
+        }
+    }
+}
+
 fn build_tray(app: &AppHandle) -> tauri::Result<()> {
-    let toggle = MenuItem::with_id(app, "toggle", "Mostrar / ocultar", true, None::<&str>)?;
-    let mode = MenuItem::with_id(app, "mode", "Modo edición / juego", true, None::<&str>)?;
-    let corner = MenuItem::with_id(app, "corner", "Volver a la esquina", true, None::<&str>)?;
-    let quit_item = MenuItem::with_id(app, "quit", "Salir", true, None::<&str>)?;
-    let menu = Menu::with_items(app, &[&toggle, &mode, &corner, &quit_item])?;
+    let mut items = Vec::new();
+    for (id, es, _) in TRAY_LABELS {
+        items.push((id, MenuItem::with_id(app, id, es, true, None::<&str>)?));
+    }
+    let refs: Vec<&dyn tauri::menu::IsMenuItem<tauri::Wry>> = items
+        .iter()
+        .map(|(_, item)| item as &dyn tauri::menu::IsMenuItem<tauri::Wry>)
+        .collect();
+    let menu = Menu::with_items(app, &refs)?;
+    app.manage(TrayItems(items));
 
     let mut tray = TrayIconBuilder::with_id("main")
         .tooltip("AoE2 Overlay")
@@ -351,6 +377,7 @@ pub fn run() {
             reset_position,
             set_placement,
             list_monitors,
+            set_tray_lang,
             quit_app
         ])
         .setup(|app| {

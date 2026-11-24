@@ -26,6 +26,10 @@ const STEPS = [
     "Jugá",
     "Tocá «Jugar», y cuando arranque la partida apretá Ctrl + Alt + P. El overlay va mostrando cada paso a tiempo.",
   ],
+  [
+    "Opcional: que lo haga solo",
+    "En Ajustes → Detección automática buscá tu nombre del juego. Al empezar cada partida, el overlay elige civs, mapa y estrategia, y arranca el reloj. También podés ponerlo en inglés, elegir la esquina y el monitor.",
+  ],
 ];
 
 export default function DownloadPage() {

@@ -1,5 +1,7 @@
 # Fase 9: Cargar estrategias de la comunidad
 
+> **Fase cerrada el 2026-11-23** al dar el proyecto por terminado. Lo que quedó sin marcar pasó a [mantenimiento.md](../mantenimiento.md).
+
 **Objetivo:** que la web y el overlay arranquen con un catálogo útil: las estrategias más importantes y mejor valoradas de [Build Order Guide](https://www.buildorderguide.com/), publicadas con la cuenta del dueño del proyecto y con crédito a sus autores originales.
 
 **Depende de:** Fases 3 y 6.

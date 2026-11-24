@@ -4,8 +4,10 @@ Overlay open source de **estrategias de apertura (build orders)** para **Age of 
 
 - 🪟 **Overlay de escritorio**: muestra los pasos de la estrategia arriba a la derecha, encima del juego. Es transparente y los clics pasan al juego.
 - ⏱️ **Reloj sincronizado**: le das _Start_ al empezar la partida y avanza según la velocidad del juego (1.7 por defecto).
+- 🔎 **Detección automática (opcional)**: con tu perfil de AoE2 Companion, detecta la partida, elige civs, mapa y estrategia, y arranca el reloj solo. No lee nada del juego.
 - 🗺️ **Sugerencias**: elegís mapa, civilización, rival y posición, y te sugiere estrategias.
-- 🌐 **Web y comunidad**: creá, compartí y votá estrategias.
+- 🌐 **Web y comunidad**: creá, compartí, votá y comentá estrategias, hacé tus variantes y mirá el winrate que reportan los jugadores.
+- 🌎 **Español e inglés** en el overlay; esquina, monitor y diseño (normal, compacto o detallado) a elección.
 
 <p align="center">
   <a href="https://github.com/sk8erlucas/aoe2-overlay/releases/latest"><img alt="Último release" src="https://img.shields.io/github/v/release/sk8erlucas/aoe2-overlay?label=descargar&color=d4002f"></a>
@@ -22,7 +24,7 @@ Overlay open source de **estrategias de apertura (build orders)** para **Age of 
 
 <p align="center"><a href="https://youtu.be/B-13galXHyM">▶ Mirá el video demo (40 s)</a></p>
 
-> 🚧 En desarrollo temprano. Mirá el [roadmap](docs/README.md) y los [cambios por versión](CHANGELOG.md).
+> ✅ **Terminado y listo para usar.** Las mejoras nuevas quedan para cuando haya más usuarios: ver [mantenimiento](docs/mantenimiento.md), el [roadmap](docs/README.md) y los [cambios por versión](CHANGELOG.md). Los PR e issues siguen siendo bienvenidos.
 
 ## Instalación
 
@@ -30,6 +32,8 @@ Overlay open source de **estrategias de apertura (build orders)** para **Age of 
 2. Ejecutalo. No pide permisos de administrador. Como el instalador todavía no está firmado, Windows puede mostrar el aviso de SmartScreen: **Más información → Ejecutar de todas formas**.
 3. Abrí AoE2 Overlay: aparece arriba a la derecha. Elegí mapa y civilización, tocá una sugerencia y **▶ Jugar**.
 4. Al empezar la partida, `Ctrl+Alt+P` arranca el reloj. `Ctrl+Alt+O` cambia entre modo juego (los clics pasan al juego) y modo edición.
+
+Opcional: en **Ajustes → Detección automática** buscá tu nombre del juego y el overlay hace todo solo al empezar cada partida.
 
 Desde la 0.3.1 el overlay se actualiza solo: cuando hay una versión nueva, avisa en **Ajustes**.
 

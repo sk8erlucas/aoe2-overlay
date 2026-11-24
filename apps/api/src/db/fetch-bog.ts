@@ -1,6 +1,6 @@
 /**
  * Baja las estrategias publicadas de Build Order Guide, elige las mejores por civilización y las
- * deja listas para `import:community` (ver docs/fase-9-estrategias-comunidad.md).
+ * deja listas para `import:community` (ver docs/completed/fase-9-estrategias-comunidad.md).
  *
  * Uso:
  *   pnpm --filter @age-overlay/api fetch:bog [--per-civ 2] [--min-ratings 3] [--refresh]

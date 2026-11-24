@@ -34,6 +34,7 @@ import {
   resetPosition,
   setGameMode,
   setPlacement,
+  setTrayLang,
   showOverlay,
   toggleVisibility,
   type HotkeyError,
@@ -113,6 +114,10 @@ function Overlay({ initialSettings }: { initialSettings: Settings }) {
     setSettings(next);
     void saveSettings(next);
   }, []);
+
+  useEffect(() => {
+    void setTrayLang(settings.lang);
+  }, [settings.lang]);
 
   // --- Esquina y monitor: al arrancar solo se informan (la ventana recuerda dónde quedó);
   // si el usuario los cambia en Ajustes, se mueve ahí. ---
